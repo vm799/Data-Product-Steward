@@ -6,7 +6,7 @@ from state_manager import initialize_state
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
 from components.canvas import render_canvas
-from components.helpers import render_step_nav
+from components.helpers import render_step_nav, render_step_complete
 
 initialize_state()
 inject_custom_css()
@@ -24,6 +24,7 @@ product = st.session_state.product
 form_col, canvas_col = st.columns([5, 3])
 
 with form_col:
+    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     st.markdown("#### Add Transformation Step")
     st.caption(
         "Each step describes one transformation in your pipeline. "
@@ -95,6 +96,12 @@ with form_col:
                     st.rerun()
     else:
         st.info("No transformations defined yet. Add your first processing step above.")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Step complete prompt ──────────────────────────────
+    step_done = len(product.get("transformations", [])) > 0
+    render_step_complete(6, step_done)
 
 with canvas_col:
     render_canvas()

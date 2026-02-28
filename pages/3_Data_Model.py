@@ -6,7 +6,7 @@ from state_manager import initialize_state
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
 from components.canvas import render_canvas
-from components.helpers import render_step_nav
+from components.helpers import render_step_nav, render_step_complete
 
 initialize_state()
 inject_custom_css()
@@ -20,6 +20,7 @@ product = st.session_state.product
 form_col, canvas_col = st.columns([5, 3])
 
 with form_col:
+    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     st.markdown("#### Create Entity")
     st.caption("An entity is a table in your data product. E.g. INVESTOR, POSITION, TRADE.")
 
@@ -104,6 +105,12 @@ with form_col:
                     st.rerun()
     else:
         st.info("No entities yet. Create your first entity above to start building the data model.")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Step complete prompt ──────────────────────────────
+    step_done = any(len(e.get("attributes", [])) > 0 for e in product.get("entities", []))
+    render_step_complete(3, step_done)
 
 with canvas_col:
     render_canvas()

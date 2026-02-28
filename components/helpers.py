@@ -28,6 +28,26 @@ STEP_NAMES = [
 ]
 
 
+def render_step_complete(current_step: int, is_complete: bool):
+    """Show a 'step complete' prompt with link to next step when done."""
+    if not is_complete:
+        return
+    st.markdown(
+        '<div class="step-complete-prompt">'
+        '<div class="step-complete-prompt-title">✅ Step complete</div>'
+        '<div class="step-complete-prompt-desc">Nice work — continue to the next step</div>'
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    if current_step < 7:
+        st.page_link(
+            PAGE_MAP[current_step + 1],
+            label=f"Continue to {STEP_NAMES[current_step]} →",
+        )
+    else:
+        st.page_link("streamlit_app.py", label="⌂ Back to Wizard Agent")
+
+
 def render_step_nav(current_step: int):
     """Render prev / dashboard / next navigation footer at bottom of a wizard page."""
     st.divider()

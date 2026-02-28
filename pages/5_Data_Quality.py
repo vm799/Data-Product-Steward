@@ -6,7 +6,7 @@ from state_manager import initialize_state, mark_step_complete
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
 from components.canvas import render_canvas
-from components.helpers import render_step_nav
+from components.helpers import render_step_nav, render_step_complete
 
 initialize_state()
 inject_custom_css()
@@ -25,6 +25,7 @@ qr = product.get("quality_rules", {})
 form_col, canvas_col = st.columns([5, 3])
 
 with form_col:
+    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     st.caption(
         "These thresholds define what 'good enough' means. "
         "If a metric drops below threshold, monitoring alerts fire. "
@@ -100,6 +101,12 @@ with form_col:
         m2.metric("Accuracy", f"{saved.get('accuracy', 0)}%")
         m3.metric("Timeliness", f"{saved.get('timeliness_hours', '—')}h")
         m4.metric("Uniqueness", f"{saved.get('uniqueness', 0)}%")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Step complete prompt ──────────────────────────────
+    step_done = bool(product.get("quality_rules", {}).get("completeness"))
+    render_step_complete(5, step_done)
 
 with canvas_col:
     render_canvas()
