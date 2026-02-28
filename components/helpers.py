@@ -4,6 +4,56 @@ Each step has: why it matters (in plain English), practical tips, and what it fe
 Written for someone with zero data engineering experience.
 """
 
+import streamlit as st
+
+# ── Page file paths for navigation ─────────────────────────────────────
+PAGE_MAP = {
+    1: "pages/1_Business_Context.py",
+    2: "pages/2_Data_Sources.py",
+    3: "pages/3_Data_Model.py",
+    4: "pages/4_Governance_Security.py",
+    5: "pages/5_Data_Quality.py",
+    6: "pages/6_Transformations.py",
+    7: "pages/7_Review_Export.py",
+}
+
+STEP_NAMES = [
+    "Business Context",
+    "Data Sources",
+    "Data Model",
+    "Governance & Security",
+    "Data Quality",
+    "Transformations",
+    "Review & Export",
+]
+
+
+def render_step_nav(current_step: int):
+    """Render prev / dashboard / next navigation footer at bottom of a wizard page."""
+    st.divider()
+    prev_col, dash_col, next_col = st.columns(3)
+
+    with prev_col:
+        if current_step > 1:
+            st.page_link(
+                PAGE_MAP[current_step - 1],
+                label=f"← {STEP_NAMES[current_step - 2]}",
+            )
+        else:
+            st.page_link("streamlit_app.py", label="← Dashboard")
+
+    with dash_col:
+        st.page_link("streamlit_app.py", label="⌂ Dashboard")
+
+    with next_col:
+        if current_step < 7:
+            st.page_link(
+                PAGE_MAP[current_step + 1],
+                label=f"{STEP_NAMES[current_step]} →",
+            )
+        else:
+            st.page_link("streamlit_app.py", label="⌂ Dashboard")
+
 STEP_GUIDES = {
     1: {
         "title": "Business Context — Why?",

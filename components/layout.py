@@ -577,6 +577,185 @@ def _css() -> str:
         color: #5A6478 !important;
         margin-bottom: 0.2rem;
     }
+
+    /* ═══════════════════════════════════════════════════
+       LANDING PAGE — value prop + deliverables grid
+       ═══════════════════════════════════════════════════ */
+    .landing-tagline {
+        font-size: 1.6rem;
+        color: #2DD4BF;
+        font-weight: 600;
+        max-width: 580px;
+        margin: 0 auto 1.5rem auto;
+        line-height: 1.5;
+    }
+    .landing-stat-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 1.5rem auto;
+        max-width: 650px;
+    }
+    .landing-stat-card {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 0.75rem;
+        padding: 1.2rem 1.5rem;
+        text-align: center;
+        flex: 1;
+    }
+    .landing-stat-card.before { border-color: rgba(239,68,68,0.3); }
+    .landing-stat-card.after { border-color: rgba(45,212,191,0.3); }
+    .landing-stat-num {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #2DD4BF;
+        line-height: 1.2;
+    }
+    .before .landing-stat-num { color: #EF4444; }
+    .landing-stat-label {
+        font-size: 0.95rem;
+        color: #8B95A5;
+        margin-top: 0.2rem;
+    }
+    .landing-arrow {
+        font-size: 2.5rem;
+        color: #2DD4BF;
+        flex-shrink: 0;
+    }
+    .landing-deliv-title {
+        text-align: center;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #E8ECF1;
+        margin: 1.5rem 0 0.6rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .landing-deliv-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+    .landing-deliv-chip {
+        background: rgba(45,212,191,0.08);
+        border: 1px solid rgba(45,212,191,0.2);
+        border-radius: 2rem;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.92rem;
+        color: #2DD4BF;
+        font-family: 'Share Tech Mono', monospace !important;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SIDEBAR MOCKUP — for onboarding guide page
+       ═══════════════════════════════════════════════════ */
+    .sidebar-mockup {
+        background: rgba(8,12,22,0.85);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 0.75rem;
+        padding: 1rem 1rem 1rem 2.4rem;
+        max-width: 340px;
+        font-size: 0.92rem;
+    }
+    .sm-section { position: relative; padding: 0.4rem 0; }
+    .sm-callout {
+        position: absolute; left: -1.8rem; top: 0.4rem;
+        width: 22px; height: 22px; border-radius: 50%;
+        background: #2DD4BF; color: #06080D;
+        font-size: 0.7rem; font-weight: 700;
+        display: inline-flex; align-items: center; justify-content: center;
+    }
+    .sm-brand { font-family: 'Share Tech Mono', monospace !important; font-size: 0.68rem; color: #5A6478; letter-spacing: 0.1em; }
+    .sm-title { font-size: 1.05rem; font-weight: 700; color: #E8ECF1; }
+    .sm-divider { border-top: 1px solid rgba(255,255,255,0.08); margin: 0.35rem 0; }
+    .sm-label { font-size: 0.88rem; font-weight: 600; color: #E8ECF1; margin-bottom: 0.2rem; }
+    .sm-bar { background: rgba(45,212,191,0.08); height: 5px; border-radius: 3px; margin-bottom: 0.15rem; }
+    .sm-bar-fill { background: linear-gradient(135deg, #2DD4BF, #22D3EE); height: 100%; width: 28%; border-radius: 3px; }
+    .sm-bar-text { font-size: 0.72rem; color: #5A6478; }
+    .sm-step { padding: 0.15rem 0; color: #8B95A5; font-size: 0.85rem; }
+    .sm-step.done { color: #5A6478; }
+    .sm-step.current { color: #E8ECF1; font-weight: 600; }
+    .sm-tip { background: rgba(45,212,191,0.06); border-left: 2px solid #2DD4BF; padding: 0.3rem 0.5rem; border-radius: 0 0.3rem 0.3rem 0; font-size: 0.78rem; color: #8B95A5; }
+
+    /* ── Explain annotations beside mockup ──────────── */
+    .sm-explain-item {
+        display: flex; gap: 0.6rem; align-items: flex-start;
+        margin-bottom: 0.7rem; font-size: 1.05rem; line-height: 1.6; color: #C8D0DC;
+    }
+    .sm-explain-item b { color: #E8ECF1 !important; }
+    .sm-explain-num {
+        flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+        background: #2DD4BF; color: #06080D;
+        font-size: 0.7rem; font-weight: 700;
+        display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CANVAS MOCKUP — for onboarding guide page
+       ═══════════════════════════════════════════════════ */
+    .canvas-mockup {
+        background: rgba(45,212,191,0.03);
+        border: 1px solid rgba(45,212,191,0.15);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        min-height: 380px;
+        animation: canvasPulse 3s ease-in-out infinite;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FLASHING ARROW — "start here" / "next step"
+       ═══════════════════════════════════════════════════ */
+    @keyframes flashArrow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+    .flash-arrow {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #2DD4BF !important;
+        animation: flashArrow 1.2s ease-in-out infinite;
+        text-shadow: 0 0 8px rgba(45,212,191,0.5);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       PAGE LINK STYLING — theme overrides
+       ═══════════════════════════════════════════════════ */
+    [data-testid="stPageLink"] a {
+        background: rgba(255,255,255,0.04) !important;
+        border: 1px solid rgba(255,255,255,0.10) !important;
+        border-radius: 0.5rem !important;
+        color: #E8ECF1 !important;
+        font-size: 1.05rem !important;
+        padding: 0.4rem 0.8rem !important;
+        text-decoration: none !important;
+    }
+    [data-testid="stPageLink"] a:hover {
+        background: rgba(45,212,191,0.08) !important;
+        border-color: #2DD4BF !important;
+    }
+    /* Sidebar page links — more compact */
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] a {
+        background: transparent !important;
+        border: none !important;
+        padding: 0.2rem 0.4rem !important;
+        font-size: 0.95rem !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] a:hover {
+        background: rgba(45,212,191,0.08) !important;
+        border-radius: 0.3rem;
+    }
+
+    /* ── Guide subtitle ───────────────────────────────── */
+    .guide-subtitle {
+        font-size: 1.1rem;
+        color: #8B95A5;
+        margin-bottom: 0.5rem;
+    }
 </style>
 """
 

@@ -62,3 +62,12 @@ def get_progress(product):
     pct = int(done / total * 100) if total > 0 else 0
 
     return {"steps": steps, "done": done, "total": total, "pct": pct}
+
+
+def get_next_step(product):
+    """Return 1-indexed number of the first incomplete step, or None if all done."""
+    progress = get_progress(product)
+    for i, done in enumerate(progress["steps"].values()):
+        if not done:
+            return i + 1
+    return None
