@@ -880,30 +880,85 @@ def _css() -> str:
         color: #2DD4BF;
         flex-shrink: 0;
     }
-    .landing-deliv-title {
-        text-align: center;
+    /* ── Deliverable panel (landing right side) ──────── */
+    .deliv-panel-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #E8ECF1 !important;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+    .deliv-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 0.6rem;
+        padding: 0.6rem 1rem;
+        margin-bottom: 0.4rem;
+        opacity: 0.4;
+        transition: all 0.35s ease;
+    }
+    .deliv-card.deliv-active {
+        background: rgba(45,212,191,0.06);
+        border-color: rgba(45,212,191,0.35);
+        padding: 1.1rem 1.2rem;
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(45,212,191,0.12);
+        transform: scale(1.04);
+    }
+    .deliv-card-name {
         font-size: 1.15rem;
-        font-weight: 600;
-        color: #E8ECF1;
-        margin: 1.5rem 0 0.6rem 0;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    .landing-deliv-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem;
-        justify-content: center;
-        margin-bottom: 1.5rem;
-    }
-    .landing-deliv-chip {
-        background: rgba(45,212,191,0.08);
-        border: 1px solid rgba(45,212,191,0.2);
-        border-radius: 2rem;
-        padding: 0.35rem 0.9rem;
-        font-size: 0.92rem;
-        color: #2DD4BF;
+        font-weight: 700;
+        color: #8B95A5;
         font-family: 'Share Tech Mono', monospace !important;
+    }
+    .deliv-card.deliv-active .deliv-card-name {
+        color: #2DD4BF !important;
+        font-size: 1.35rem;
+    }
+    .deliv-card-desc {
+        font-size: 0.95rem;
+        color: #5A6478;
+        display: none;
+    }
+    .deliv-card.deliv-active .deliv-card-desc {
+        display: block;
+        color: #C8D0DC;
+        font-size: 1.05rem;
+        margin-top: 0.3rem;
+        line-height: 1.5;
+    }
+
+    /* ── Wizard step page links — full width clickable ─ */
+    .wiz-link-done a {
+        background: rgba(45,212,191,0.04) !important;
+        border: 1px solid rgba(45,212,191,0.12) !important;
+        border-radius: 0.5rem !important;
+        padding: 0.7rem 1rem !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        color: #2DD4BF !important;
+        margin-bottom: 0.4rem !important;
+        display: block !important;
+    }
+    .wiz-link-done a:hover {
+        background: rgba(45,212,191,0.08) !important;
+        border-color: #2DD4BF !important;
+    }
+    .wiz-link-pending a {
+        background: transparent !important;
+        border: 1px solid rgba(255,255,255,0.04) !important;
+        border-radius: 0.4rem !important;
+        padding: 0.45rem 1rem !important;
+        font-size: 1rem !important;
+        color: #5A6478 !important;
+        opacity: 0.6;
+        margin-bottom: 0.2rem !important;
+        display: block !important;
+    }
+    .wiz-link-pending a:hover {
+        opacity: 1;
+        background: rgba(255,255,255,0.03) !important;
+        border-color: rgba(255,255,255,0.10) !important;
     }
 
     /* ═══════════════════════════════════════════════════

@@ -29,53 +29,96 @@ if product.get("name") and st.session_state.onboard < 3:
 # ═══════════════════════════════════════════════════════════════════════
 # PAGE 0 — LANDING (concise value prop + deliverables)
 # ═══════════════════════════════════════════════════════════════════════
+# (name, description, step_number that produces it)
+_DELIVERABLES = [
+    ("Snowflake DDL", "Production-ready CREATE TABLE, GRANT, and ALTER scripts", 3),
+    ("Masking Policies", "Auto-generated from PII tags — column-level security", 4),
+    ("Secure Views", "Row-level security for Restricted classification data", 4),
+    ("dbt Models", "schema.yml, source defs, transformation SQL — deploy immediately", 6),
+    ("Collibra Metadata", "JSON import for your data governance catalogue", 7),
+    ("Full Documentation", "Markdown spec with lineage, ownership, and SLAs", 7),
+]
+
+
 def _landing():
-    st.markdown(
-        '<div class="landing">'
-        + DATA_BOT_SVG
-        + "<h1>Data Product Builder</h1>"
-        '<div class="landing-tagline">'
-        "7 weeks of manual work → 1 guided session"
-        "</div>"
-        "</div>",
-        unsafe_allow_html=True,
-    )
+    if "deliv_idx" not in st.session_state:
+        st.session_state.deliv_idx = 0
 
-    # Before / After stat cards
-    st.markdown(
-        '<div class="landing-stat-row">'
-        '<div class="landing-stat-card before">'
-        '<div class="landing-stat-num">11</div>'
-        '<div class="landing-stat-label">iterations across teams</div>'
-        "</div>"
-        '<div class="landing-arrow">→</div>'
-        '<div class="landing-stat-card after">'
-        '<div class="landing-stat-num">1</div>'
-        '<div class="landing-stat-label">guided wizard session</div>'
-        "</div>"
-        "</div>",
-        unsafe_allow_html=True,
-    )
+    left_col, right_col = st.columns([3, 2])
 
-    # Deliverables grid
-    st.markdown(
-        '<div class="landing-deliv-title">What you walk away with</div>'
-        '<div class="landing-deliv-grid">'
-        '<div class="landing-deliv-chip">Snowflake DDL</div>'
-        '<div class="landing-deliv-chip">Masking Policies</div>'
-        '<div class="landing-deliv-chip">Secure Views</div>'
-        '<div class="landing-deliv-chip">dbt Models</div>'
-        '<div class="landing-deliv-chip">Collibra Metadata</div>'
-        '<div class="landing-deliv-chip">Full Documentation</div>'
-        "</div>",
-        unsafe_allow_html=True,
-    )
+    with left_col:
+        st.markdown(
+            '<div class="landing">'
+            + DATA_BOT_SVG
+            + "<h1>Data Product Builder</h1>"
+            '<div class="landing-tagline">'
+            "7 weeks of manual work → 1 guided session"
+            "</div>"
+            "</div>",
+            unsafe_allow_html=True,
+        )
 
-    _, btn_col, _ = st.columns([2, 1, 2])
-    with btn_col:
-        if st.button("Begin", use_container_width=True):
-            st.session_state.onboard = 1
-            st.rerun()
+        # Before / After stat cards
+        st.markdown(
+            '<div class="landing-stat-row">'
+            '<div class="landing-stat-card before">'
+            '<div class="landing-stat-num">11</div>'
+            '<div class="landing-stat-label">iterations across teams</div>'
+            "</div>"
+            '<div class="landing-arrow">→</div>'
+            '<div class="landing-stat-card after">'
+            '<div class="landing-stat-num">1</div>'
+            '<div class="landing-stat-label">guided wizard session</div>'
+            "</div>"
+            "</div>",
+            unsafe_allow_html=True,
+        )
+
+        _, btn_col, _ = st.columns([1, 2, 1])
+        with btn_col:
+            if st.button("Begin →", use_container_width=True):
+                st.session_state.onboard = 1
+                st.rerun()
+
+    with right_col:
+        st.markdown('<div class="canvas-panel" style="min-height:600px;">', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="canvas-label">[ DELIVERABLES ]</div>'
+            '<div class="deliv-panel-title">What you walk away with</div>',
+            unsafe_allow_html=True,
+        )
+
+        didx = st.session_state.deliv_idx
+
+        # Build deliverable cards — active one is highlighted and large
+        for i, (name, desc, step_num) in enumerate(_DELIVERABLES):
+            active = "deliv-active" if i == didx else ""
+            st.markdown(
+                f'<div class="deliv-card {active}">'
+                f'<div class="deliv-card-name">{name}</div>'
+                f'<div class="deliv-card-desc">{desc}</div>'
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+            # Active deliverable shows link to the step that produces it
+            if i == didx:
+                st.page_link(
+                    PAGE_MAP[step_num],
+                    label=f"Built in Step {step_num}: {STEP_NAMES[step_num - 1]} →",
+                )
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+        # Prev / Next to scroll through deliverables
+        p_col, _, n_col = st.columns([1, 2, 1])
+        with p_col:
+            if st.button("← Prev", key="deliv_prev", use_container_width=True):
+                st.session_state.deliv_idx = (didx - 1) % len(_DELIVERABLES)
+                st.rerun()
+        with n_col:
+            if st.button("Next →", key="deliv_next", use_container_width=True):
+                st.session_state.deliv_idx = (didx + 1) % len(_DELIVERABLES)
+                st.rerun()
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -332,25 +375,18 @@ def _dashboard():
     main_col, canvas_col = st.columns([7, 3])
 
     with main_col:
-        # ── Completed steps (enlarged tick + teal accent) ──
         for i, (name, desc) in enumerate(_STEPS_INFO, 1):
             done = step_done_list[i - 1]
             is_next = i == next_step
 
             if done:
-                # Completed — big tick, teal card
-                st.markdown(
-                    f'<div class="wiz-step-done">'
-                    f'<span class="wiz-step-done-tick">✅</span>'
-                    f'<span class="wiz-step-done-name">{name}</span>'
-                    f'<span class="wiz-step-done-desc">{desc}</span>'
-                    f"</div>",
-                    unsafe_allow_html=True,
+                st.page_link(
+                    PAGE_MAP[i],
+                    label=f"✅  {name}  —  {desc}",
+                    use_container_width=True,
                 )
-                st.page_link(PAGE_MAP[i], label=f"↻ Revisit {name}")
-
             elif is_next:
-                # Next step — HERO card, orange accent, large
+                # Hero card HTML for visual punch, then full-width link
                 st.markdown(
                     f'<div class="wiz-step-hero">'
                     f'<div class="wiz-step-hero-num">STEP {i} OF 7</div>'
@@ -360,32 +396,17 @@ def _dashboard():
                     f"</div>",
                     unsafe_allow_html=True,
                 )
-                st.page_link(PAGE_MAP[i], label=f"Open {name} →")
-
-            else:
-                # Future — small, dimmed
-                st.markdown(
-                    f'<div class="wiz-step-pending">'
-                    f'<span class="wiz-step-pending-num">{i}</span>'
-                    f'<span class="wiz-step-pending-name">{name}</span>'
-                    f"</div>",
-                    unsafe_allow_html=True,
+                st.page_link(
+                    PAGE_MAP[i],
+                    label=f"▶  Open {name}",
+                    use_container_width=True,
                 )
-
-        # ── Deliverables ──────────────────────────────────
-        st.markdown("")
-        st.markdown("### What Gets Generated")
-        st.markdown(
-            '<div class="deliv-row">'
-            '<div class="deliv-item"><b>Snowflake</b>'
-            "DDL, masking policies, secure views, GRANTs</div>"
-            '<div class="deliv-item"><b>dbt</b>'
-            "schema.yml, source defs, transformation SQL</div>"
-            '<div class="deliv-item"><b>Governance</b>'
-            "Collibra JSON, Markdown docs, versioned definition</div>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
+            else:
+                st.page_link(
+                    PAGE_MAP[i],
+                    label=f"{i}.  {name}",
+                    use_container_width=True,
+                )
 
     with canvas_col:
         has_data = product.get("name")
