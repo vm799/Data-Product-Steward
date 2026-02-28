@@ -18,6 +18,7 @@ step_header(
     "4️⃣ Governance & Security",
     "Set data classification, retention, and compliance. These directly shape the security artifacts generated.",
 )
+render_step_nav(4)
 
 product = st.session_state.product
 
@@ -123,5 +124,3 @@ with form_col:
 
 with canvas_col:
     render_canvas()
-
-render_step_nav(4)

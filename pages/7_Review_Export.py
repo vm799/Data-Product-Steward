@@ -23,6 +23,7 @@ step_header(
     "7️⃣ Review & Export",
     "Validate your data product definition and generate deployment-ready artifacts.",
 )
+render_step_nav(7)
 
 product = st.session_state.product
 progress = get_progress(product)
@@ -162,5 +163,3 @@ if results["valid"] and progress["pct"] >= 85:
     mark_step_complete("review")
     st.success("Data product definition is complete and ready for deployment.")
     st.balloons()
-
-render_step_nav(7)

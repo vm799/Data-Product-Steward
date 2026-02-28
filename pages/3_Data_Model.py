@@ -13,6 +13,7 @@ inject_custom_css()
 render_sidebar(step=3)
 
 step_header(3, "3️⃣ Data Model", "Design entities (tables) and their attributes (columns) with PII classification.")
+render_step_nav(3)
 
 product = st.session_state.product
 
@@ -111,5 +112,3 @@ with form_col:
 
 with canvas_col:
     render_canvas()
-
-render_step_nav(3)
