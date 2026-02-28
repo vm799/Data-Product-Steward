@@ -99,6 +99,13 @@ def render_sidebar(step: int = None):
 
             st.page_link(PAGE_MAP[i], label=label)
 
+        # ── Product Canvas link ──────────────────────────
+        st.divider()
+        st.page_link(
+            "pages/8_Product_Canvas.py",
+            label="📋 Product Canvas",
+        )
+
         # ── Step guide ─────────────────────────────────────
         if step is not None and step in STEP_GUIDES:
             st.divider()

@@ -430,6 +430,14 @@ def _dashboard():
                 use_container_width=True,
             )
 
+    # ── Product Canvas link ─────────────────────────────────────
+    st.divider()
+    st.page_link(
+        "pages/8_Product_Canvas.py",
+        label="📋  Product Canvas — Live Contract View",
+        use_container_width=True,
+    )
+
 
 # ═══════════════════════════════════════════════════════════════════════
 # ROUTER

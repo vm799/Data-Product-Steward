@@ -1376,6 +1376,22 @@ def _css() -> str:
         color: #8B95A5;
         margin-bottom: 0.5rem;
     }
+
+    /* ═══════════════════════════════════════════════════
+       PRODUCT CANVAS PAGE — sign-off section
+       ═══════════════════════════════════════════════════ */
+    .cv-signoff {
+        background: rgba(45,212,191,0.04);
+        border: 2px solid rgba(45,212,191,0.25);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 1rem;
+    }
+    .cv-signoff-approved {
+        background: rgba(45,212,191,0.08);
+        border-color: #2DD4BF;
+    }
 </style>
 """
 
