@@ -62,11 +62,15 @@ def render_sidebar(step: int = None):
     progress = get_progress(product)
 
     with st.sidebar:
-        # ── Branding ───────────────────────────────────────
+        # ── Sidebar label + branding ──────────────────────
+        st.markdown(
+            '<div class="sidebar-label">// navigation & tools</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown("# Data Product Builder")
         st.caption(
-            "Progress tracker, tips for each step, and a glossary. "
-            "Navigate between steps using the page links above."
+            "Progress tracker, tips, and glossary. "
+            "Click Dashboard above to return here."
         )
 
         st.divider()

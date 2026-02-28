@@ -26,17 +26,6 @@ st.caption(
     "generates Snowflake DDL, dbt models, masking policies, and Collibra metadata."
 )
 
-# Helpers ribbon
-st.markdown(
-    '<div class="helpers-ribbon">'
-    '<span class="helper-tag">Progress Tracker — sidebar</span>'
-    '<span class="helper-tag">Step-by-Step Tips — sidebar</span>'
-    '<span class="helper-tag">Glossary — sidebar</span>'
-    '<span class="helper-tag">Live Canvas — right panel</span>'
-    "</div>",
-    unsafe_allow_html=True,
-)
-
 # ═══════════════════════════════════════════════════════════════════════
 # RETURNING USER
 # ═══════════════════════════════════════════════════════════════════════
@@ -64,33 +53,13 @@ if product.get("name"):
 main_col, canvas_col = st.columns([5, 3])
 
 with main_col:
+    st.markdown('<div class="wizard-panel">', unsafe_allow_html=True)
+
     st.markdown(
         "A **Data Product** in asset management is a governed dataset built "
         "for a specific business purpose — investor positions, risk exposures, "
         "regulatory reporting. This builder walks you through every decision "
         "to take one from idea to production."
-    )
-
-    # Layout zones — fused row
-    st.markdown(
-        '<div class="zone-row">'
-        '<div class="zone-cell zone-nav">'
-        '<div class="zone-cell-label">Left</div>'
-        '<div class="zone-cell-title">Sidebar</div>'
-        "Progress, tips, glossary"
-        "</div>"
-        '<div class="zone-cell zone-wiz">'
-        '<div class="zone-cell-label">Center</div>'
-        '<div class="zone-cell-title">Wizard</div>'
-        "Fill forms, save, move forward"
-        "</div>"
-        '<div class="zone-cell zone-cvs">'
-        '<div class="zone-cell-label">Right</div>'
-        '<div class="zone-cell-title">Live Canvas</div>'
-        "Blueprint — updates as you build"
-        "</div>"
-        "</div>",
-        unsafe_allow_html=True,
     )
 
     # 7 steps
@@ -143,6 +112,8 @@ with main_col:
         "</div>",
         unsafe_allow_html=True,
     )
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with canvas_col:
     render_canvas()
