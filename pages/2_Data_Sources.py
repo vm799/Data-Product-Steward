@@ -17,10 +17,9 @@ step_header(2, "2️⃣ Data Sources", "Register every source system that feeds 
 product = st.session_state.product
 
 # ── Two-panel layout ────────────────────────────────────────────────────
-form_col, canvas_col = st.columns([5, 3])
+form_col, canvas_col = st.columns([7, 3])
 
 with form_col:
-    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     st.markdown("#### Add a Data Source")
     st.caption("Each source needs an owner and metadata. External sources trigger governance alerts automatically.")
 
@@ -119,8 +118,6 @@ with form_col:
                 st.warning(alert)
     else:
         st.info("No sources registered yet. Add at least one source above.")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
     # ── Step complete prompt ──────────────────────────────
     step_done = len(product["sources"]) > 0

@@ -22,10 +22,9 @@ product = st.session_state.product
 qr = product.get("quality_rules", {})
 
 # ── Two-panel layout ────────────────────────────────────────────────────
-form_col, canvas_col = st.columns([5, 3])
+form_col, canvas_col = st.columns([7, 3])
 
 with form_col:
-    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     st.caption(
         "These thresholds define what 'good enough' means. "
         "If a metric drops below threshold, monitoring alerts fire. "
@@ -101,8 +100,6 @@ with form_col:
         m2.metric("Accuracy", f"{saved.get('accuracy', 0)}%")
         m3.metric("Timeliness", f"{saved.get('timeliness_hours', '—')}h")
         m4.metric("Uniqueness", f"{saved.get('uniqueness', 0)}%")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
     # ── Step complete prompt ──────────────────────────────
     step_done = bool(product.get("quality_rules", {}).get("completeness"))

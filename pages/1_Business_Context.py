@@ -17,10 +17,9 @@ step_header(1, "1️⃣ Business Context", "Define the purpose, ownership, and r
 product = st.session_state.product
 
 # ── Two-panel layout: Form | Canvas ─────────────────────────────────────
-form_col, canvas_col = st.columns([5, 3])
+form_col, canvas_col = st.columns([7, 3])
 
 with form_col:
-    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     product["name"] = st.text_input(
         "Data Product Name",
         value=product["name"],
@@ -90,8 +89,6 @@ with form_col:
         st.warning("**Business Domain** must be selected.")
     if not product["objective"]:
         st.warning("**Business Objective** is required for production readiness.")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
     # ── Step complete prompt ──────────────────────────────
     step_done = bool(product["name"] and product["domain"] and product["objective"])

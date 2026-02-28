@@ -251,19 +251,17 @@ def _css() -> str:
         box-shadow: 0 8px 32px rgba(0,0,0,0.20);
     }
 
-    /* ── Glowing form panel — wraps the active form ──── */
+    /* ── Glowing form column — first column in the [7,3] layout ──── */
     @keyframes formGlow {
-        0%   { box-shadow: 0 0 12px rgba(45,212,191,0.08), 0 0 30px rgba(45,212,191,0.04); border-color: rgba(45,212,191,0.15); }
-        50%  { box-shadow: 0 0 24px rgba(45,212,191,0.20), 0 0 50px rgba(45,212,191,0.10); border-color: rgba(45,212,191,0.35); }
-        100% { box-shadow: 0 0 12px rgba(45,212,191,0.08), 0 0 30px rgba(45,212,191,0.04); border-color: rgba(45,212,191,0.15); }
+        0%   { box-shadow: 0 0 12px rgba(45,212,191,0.06), 0 0 30px rgba(45,212,191,0.03); border-color: rgba(45,212,191,0.12); }
+        50%  { box-shadow: 0 0 20px rgba(45,212,191,0.15), 0 0 40px rgba(45,212,191,0.08); border-color: rgba(45,212,191,0.30); }
+        100% { box-shadow: 0 0 12px rgba(45,212,191,0.06), 0 0 30px rgba(45,212,191,0.03); border-color: rgba(45,212,191,0.12); }
     }
-    .form-glow {
-        background: rgba(255,255,255,0.03);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(45,212,191,0.15);
+    [data-testid="stColumns"] > [data-testid="stColumn"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(45,212,191,0.12);
         border-radius: 0.75rem;
-        padding: 1.5rem;
+        padding: 1rem;
         animation: formGlow 3s ease-in-out infinite;
     }
 

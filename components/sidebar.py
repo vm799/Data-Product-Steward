@@ -91,9 +91,9 @@ def render_sidebar(step: int = None):
             is_next = i == next_step
 
             if is_current:
-                label = f"{icon} ▶ {step_name} ← here"
+                label = f"{icon} ▶ {step_name}"
             elif is_next:
-                label = f"{icon} {step_name} → next"
+                label = f"🔶 {step_name}"
             else:
                 label = f"{icon} {step_name}"
 

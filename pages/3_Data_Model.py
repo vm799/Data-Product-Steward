@@ -17,10 +17,9 @@ step_header(3, "3️⃣ Data Model", "Design entities (tables) and their attribu
 product = st.session_state.product
 
 # ── Two-panel layout ────────────────────────────────────────────────────
-form_col, canvas_col = st.columns([5, 3])
+form_col, canvas_col = st.columns([7, 3])
 
 with form_col:
-    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     st.markdown("#### Create Entity")
     st.caption("An entity is a table in your data product. E.g. INVESTOR, POSITION, TRADE.")
 
@@ -105,8 +104,6 @@ with form_col:
                     st.rerun()
     else:
         st.info("No entities yet. Create your first entity above to start building the data model.")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
     # ── Step complete prompt ──────────────────────────────
     step_done = any(len(e.get("attributes", [])) > 0 for e in product.get("entities", []))
