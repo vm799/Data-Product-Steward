@@ -2,7 +2,6 @@ import streamlit as st
 from state_manager import initialize_state, get_progress, get_next_step
 from components.layout import inject_custom_css, DATA_BOT_SVG
 from components.sidebar import render_sidebar
-from components.canvas import render_canvas
 from components.helpers import PAGE_MAP, STEP_NAMES
 
 st.set_page_config(
@@ -27,9 +26,8 @@ if product.get("name") and st.session_state.onboard < 3:
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# PAGE 0 — LANDING (concise value prop + deliverables)
+# PAGE 0 — LANDING (auto-scroll deliverables, orange focus)
 # ═══════════════════════════════════════════════════════════════════════
-# (name, description, step_number that produces it)
 _DELIVERABLES = [
     ("Snowflake DDL", "Production-ready CREATE TABLE, GRANT, and ALTER scripts", 3),
     ("Masking Policies", "Auto-generated from PII tags — column-level security", 4),
@@ -41,8 +39,15 @@ _DELIVERABLES = [
 
 
 def _landing():
-    if "deliv_idx" not in st.session_state:
-        st.session_state.deliv_idx = 0
+    # ── Direction arrows at the very top of the page ──────────────
+    st.markdown(
+        '<div class="landing-top-arrows">'
+        '<span class="landing-top-arr-left">&#9664;</span>'
+        '<span class="landing-top-arr-label">SCROLL DELIVERABLES</span>'
+        '<span class="landing-top-arr-right">&#9654;</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
 
     left_col, right_col = st.columns([3, 2])
 
@@ -81,61 +86,30 @@ def _landing():
                 st.rerun()
 
     with right_col:
-        didx = st.session_state.deliv_idx
-
-        # Direction arrows at the very top
-        p_col, label_col, n_col = st.columns([1, 3, 1])
-        with p_col:
-            st.markdown('<div class="arrow-prev">', unsafe_allow_html=True)
-            if st.button("←", key="deliv_prev", use_container_width=True):
-                st.session_state.deliv_idx = (didx - 1) % len(_DELIVERABLES)
-                st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
-        with label_col:
-            st.markdown(
-                f'<div style="text-align:center;color:#5A6478;font-size:0.85rem;'
-                f'padding-top:0.45rem;">{didx + 1} / {len(_DELIVERABLES)}</div>',
-                unsafe_allow_html=True,
-            )
-        with n_col:
-            st.markdown('<div class="arrow-next">', unsafe_allow_html=True)
-            if st.button("→", key="deliv_next", use_container_width=True):
-                st.session_state.deliv_idx = (didx + 1) % len(_DELIVERABLES)
-                st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
-
-        st.markdown('<div class="canvas-panel" style="min-height:500px;">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="canvas-label">[ DELIVERABLES ]</div>'
             '<div class="deliv-panel-title">What you walk away with</div>',
             unsafe_allow_html=True,
         )
 
-        # Build deliverable cards — active one is highlighted and large
+        # Build all deliverable cards — CSS auto-cycles the orange focus
+        cards_html = '<div class="deliv-carousel">'
         for i, (name, desc, step_num) in enumerate(_DELIVERABLES):
-            active = "deliv-active" if i == didx else ""
-            st.markdown(
-                f'<div class="deliv-card {active}">'
+            cards_html += (
+                f'<div class="deliv-card deliv-auto" style="--d:{i};">'
                 f'<div class="deliv-card-name">{name}</div>'
                 f'<div class="deliv-card-desc">{desc}</div>'
-                f"</div>",
-                unsafe_allow_html=True,
+                f'<div class="deliv-card-step">Built in Step {step_num}: {STEP_NAMES[step_num - 1]}</div>'
+                f"</div>"
             )
-            # Active deliverable shows link to the step that produces it
-            if i == didx:
-                st.page_link(
-                    PAGE_MAP[step_num],
-                    label=f"Built in Step {step_num}: {STEP_NAMES[step_num - 1]} →",
-                )
+        cards_html += "</div>"
 
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown(cards_html, unsafe_allow_html=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# PAGE 1 — SIDEBAR GUIDE (step-through walkthrough)
+# PAGE 1 — SIDEBAR GUIDE (inline descriptions next to each feature)
 # ═══════════════════════════════════════════════════════════════════════
 
-# Sidebar section data: (number, title, description)
 _SB_SECTIONS = [
     (
         "1",
@@ -175,12 +149,6 @@ _SB_SECTIONS = [
 
 
 def _sidebar_guide():
-    if "sb_guide_idx" not in st.session_state:
-        st.session_state.sb_guide_idx = 0
-
-    idx = st.session_state.sb_guide_idx
-    total = len(_SB_SECTIONS)
-
     st.markdown(
         '<div class="guide-page">'
         '<div class="guide-step-num">1 / 2</div>'
@@ -190,99 +158,112 @@ def _sidebar_guide():
         unsafe_allow_html=True,
     )
 
-    mockup_col, explain_col = st.columns([2, 3])
+    # ── Build mockup HTML with INLINE descriptions ───────────────
+    mockup_html = '<div class="sidebar-mockup sm-inline">'
 
-    # ── Build mockup HTML with active/dimmed sections ───
-    def _cls(section_idx):
-        return "active" if section_idx == idx else ""
+    # 1 — Dashboard link
+    mockup_html += (
+        '<div class="sm-section-inline">'
+        '<div class="sm-section-content">'
+        '<span class="sm-callout">1</span>'
+        '<div class="sm-brand">⌂ DASHBOARD</div>'
+        '</div>'
+        '<div class="sm-inline-desc">'
+        '<span class="sm-inline-title">Dashboard Link</span>'
+        f'{_SB_SECTIONS[0][2]}'
+        '</div>'
+        '</div>'
+        '<div class="sm-divider"></div>'
+    )
 
-    with mockup_col:
-        st.markdown(
-            '<div class="sidebar-mockup">'
-            # 1 — Dashboard link
-            f'<div class="sm-section {_cls(0)}">'
-            '<span class="sm-callout">1</span>'
-            '<div class="sm-brand">⌂ DASHBOARD</div>'
-            "</div>"
-            '<div class="sm-divider"></div>'
-            # 2 — Progress
-            f'<div class="sm-section {_cls(1)}">'
-            '<span class="sm-callout">2</span>'
-            '<div class="sm-label">Progress</div>'
-            '<div class="sm-bar"><div class="sm-bar-fill"></div></div>'
-            '<div class="sm-bar-text">28% — 2/7 steps</div>'
-            "</div>"
-            '<div class="sm-divider"></div>'
-            # 3 — Step list
-            f'<div class="sm-section {_cls(2)}">'
-            '<span class="sm-callout">3</span>'
-            '<div class="sm-step done">✅ Business Context</div>'
-            '<div class="sm-step done">✅ Data Sources</div>'
-            '<div class="sm-step current">⬜ ▶ Data Model ← here</div>'
-            '<div class="sm-step">⬜ Governance &amp; Security → next</div>'
-            '<div class="sm-step">⬜ Data Quality</div>'
-            '<div class="sm-step">⬜ Transformations</div>'
-            '<div class="sm-step">⬜ Review &amp; Export</div>'
-            "</div>"
-            '<div class="sm-divider"></div>'
-            # 4 — Tips
-            f'<div class="sm-section {_cls(3)}">'
-            '<span class="sm-callout">4</span>'
-            '<div class="sm-label">Data Model — Why?</div>'
-            '<div class="sm-tip">Tables &amp; columns define your product '
-            "structure. PII tagging auto-generates masking...</div>"
-            "</div>"
-            '<div class="sm-divider"></div>'
-            # 5 — Glossary
-            f'<div class="sm-section {_cls(4)}">'
-            '<span class="sm-callout">5</span>'
-            '<div class="sm-label">Glossary</div>'
-            '<div class="sm-tip">PII &middot; DDL &middot; SLA &middot; dbt '
-            "&middot; Lineage &middot; Masking Policy &middot; ...</div>"
-            "</div>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
+    # 2 — Progress
+    mockup_html += (
+        '<div class="sm-section-inline">'
+        '<div class="sm-section-content">'
+        '<span class="sm-callout">2</span>'
+        '<div class="sm-label">Progress</div>'
+        '<div class="sm-bar"><div class="sm-bar-fill"></div></div>'
+        '<div class="sm-bar-text">28% — 2/7 steps</div>'
+        '</div>'
+        '<div class="sm-inline-desc">'
+        '<span class="sm-inline-title">Progress Bar</span>'
+        f'{_SB_SECTIONS[1][2]}'
+        '</div>'
+        '</div>'
+        '<div class="sm-divider"></div>'
+    )
 
-    # ── Focused explanation for current section ────────
-    num, title, desc = _SB_SECTIONS[idx]
+    # 3 — Step list
+    mockup_html += (
+        '<div class="sm-section-inline">'
+        '<div class="sm-section-content">'
+        '<span class="sm-callout">3</span>'
+        '<div class="sm-step done">✅ Business Context</div>'
+        '<div class="sm-step done">✅ Data Sources</div>'
+        '<div class="sm-step current">⬜ ▶ Data Model ← here</div>'
+        '<div class="sm-step">⬜ Governance &amp; Security</div>'
+        '<div class="sm-step">⬜ Data Quality</div>'
+        '<div class="sm-step">⬜ Transformations</div>'
+        '<div class="sm-step">⬜ Review &amp; Export</div>'
+        '</div>'
+        '<div class="sm-inline-desc">'
+        '<span class="sm-inline-title">Step List</span>'
+        f'{_SB_SECTIONS[2][2]}'
+        '</div>'
+        '</div>'
+        '<div class="sm-divider"></div>'
+    )
 
-    with explain_col:
-        st.markdown(
-            f'<div class="sm-explain-focus">'
-            f'<div class="sm-explain-counter">SECTION {num} OF {total}</div>'
-            f'<div class="sm-explain-focus-num">{num}</div>'
-            f'<div class="sm-explain-focus-title">{title}</div>'
-            f'<div class="sm-explain-focus-desc">{desc}</div>'
-            "</div>",
-            unsafe_allow_html=True,
-        )
+    # 4 — Tips
+    mockup_html += (
+        '<div class="sm-section-inline">'
+        '<div class="sm-section-content">'
+        '<span class="sm-callout">4</span>'
+        '<div class="sm-label">Data Model — Why?</div>'
+        '<div class="sm-tip">Tables &amp; columns define your product '
+        'structure. PII tagging auto-generates masking...</div>'
+        '</div>'
+        '<div class="sm-inline-desc">'
+        '<span class="sm-inline-title">Step Guide</span>'
+        f'{_SB_SECTIONS[3][2]}'
+        '</div>'
+        '</div>'
+        '<div class="sm-divider"></div>'
+    )
 
-    # ── Navigation buttons ─────────────────────────────
+    # 5 — Glossary
+    mockup_html += (
+        '<div class="sm-section-inline">'
+        '<div class="sm-section-content">'
+        '<span class="sm-callout">5</span>'
+        '<div class="sm-label">Glossary</div>'
+        '<div class="sm-tip">PII &middot; DDL &middot; SLA &middot; dbt '
+        '&middot; Lineage &middot; Masking Policy &middot; ...</div>'
+        '</div>'
+        '<div class="sm-inline-desc">'
+        '<span class="sm-inline-title">Glossary</span>'
+        f'{_SB_SECTIONS[4][2]}'
+        '</div>'
+        '</div>'
+    )
+
+    mockup_html += '</div>'
+
+    st.markdown(mockup_html, unsafe_allow_html=True)
+
+    # ── Navigation buttons ─────────────────────────────────────
     st.markdown("")
     _, back_col, _, fwd_col, _ = st.columns([1, 1, 1, 1, 1])
 
     with back_col:
-        if idx == 0:
-            if st.button("← Landing", use_container_width=True):
-                st.session_state.sb_guide_idx = 0
-                st.session_state.onboard = 0
-                st.rerun()
-        else:
-            if st.button("← Back", use_container_width=True):
-                st.session_state.sb_guide_idx = idx - 1
-                st.rerun()
+        if st.button("← Landing", use_container_width=True):
+            st.session_state.onboard = 0
+            st.rerun()
 
     with fwd_col:
-        if idx < total - 1:
-            if st.button("Next →", use_container_width=True):
-                st.session_state.sb_guide_idx = idx + 1
-                st.rerun()
-        else:
-            if st.button("Canvas Guide →", use_container_width=True):
-                st.session_state.sb_guide_idx = 0
-                st.session_state.onboard = 2
-                st.rerun()
+        if st.button("Canvas Guide →", use_container_width=True):
+            st.session_state.onboard = 2
+            st.rerun()
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -301,7 +282,6 @@ def _canvas_guide():
     mockup_col, explain_col = st.columns([3, 2])
 
     with mockup_col:
-        # Canvas mockup with typewriter demo
         st.markdown(
             '<div class="canvas-mockup">'
             '<div class="canvas-label">[ LIVE CANVAS ]</div>'
@@ -358,7 +338,7 @@ def _canvas_guide():
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# PAGE 3 — WIZARD AGENT (hierarchy-driven step list)
+# PAGE 3 — WIZARD AGENT (full-width step list, no canvas)
 # ═══════════════════════════════════════════════════════════════════════
 
 _STEPS_INFO = [
@@ -382,59 +362,37 @@ def _dashboard():
     next_step = get_next_step(product)
     step_done_list = list(progress["steps"].values())
 
-    main_col, canvas_col = st.columns([7, 3])
+    for i, (name, desc) in enumerate(_STEPS_INFO, 1):
+        done = step_done_list[i - 1]
+        is_next = i == next_step
 
-    with main_col:
-        for i, (name, desc) in enumerate(_STEPS_INFO, 1):
-            done = step_done_list[i - 1]
-            is_next = i == next_step
-
-            if done:
-                st.page_link(
-                    PAGE_MAP[i],
-                    label=f"✅  {name}  —  {desc}",
-                    use_container_width=True,
-                )
-            elif is_next:
-                # Hero card HTML for visual punch, then full-width link
-                st.markdown(
-                    f'<div class="wiz-step-hero">'
-                    f'<div class="wiz-step-hero-num">STEP {i} OF 7</div>'
-                    f'<div class="wiz-step-hero-name">{name}</div>'
-                    f'<div class="wiz-step-hero-desc">{desc}</div>'
-                    f'<span class="wiz-step-hero-arrow">→ START HERE</span>'
-                    f"</div>",
-                    unsafe_allow_html=True,
-                )
-                st.page_link(
-                    PAGE_MAP[i],
-                    label=f"▶  Open {name}",
-                    use_container_width=True,
-                )
-            else:
-                st.page_link(
-                    PAGE_MAP[i],
-                    label=f"{i}.  {name}",
-                    use_container_width=True,
-                )
-
-    with canvas_col:
-        has_data = product.get("name")
-        if has_data:
-            render_canvas()
+        if done:
+            st.page_link(
+                PAGE_MAP[i],
+                label=f"✅  {name}  —  {desc}",
+                use_container_width=True,
+            )
+        elif is_next:
+            st.markdown(
+                f'<div class="wiz-step-hero">'
+                f'<div class="wiz-step-hero-num">STEP {i} OF 7</div>'
+                f'<div class="wiz-step-hero-name">{name}</div>'
+                f'<div class="wiz-step-hero-desc">{desc}</div>'
+                f'<span class="wiz-step-hero-arrow">→ START HERE</span>'
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+            st.page_link(
+                PAGE_MAP[i],
+                label=f"▶  Open {name}",
+                use_container_width=True,
+            )
         else:
-            st.markdown('<div class="canvas-panel">', unsafe_allow_html=True)
-            st.markdown(
-                '<div class="canvas-label">[ LIVE CANVAS ]</div>'
-                '<div class="canvas-heading">Data Product Blueprint</div>',
-                unsafe_allow_html=True,
+            st.page_link(
+                PAGE_MAP[i],
+                label=f"{i}.  {name}",
+                use_container_width=True,
             )
-            st.markdown(
-                '<div class="wiz-canvas-empty">No data yet — '
-                "complete Step 1 to begin</div>",
-                unsafe_allow_html=True,
-            )
-            st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════
