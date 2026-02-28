@@ -1,6 +1,7 @@
 """
 Live Data Product Canvas — persistent right-side panel.
 Shows the evolving product definition and downloadable deliverables.
+Theme-aware glassmorphism styling.
 """
 
 import json
@@ -68,19 +69,29 @@ def render_canvas():
     if product.get("regulatory_scope"):
         st.caption("Regulatory: " + ", ".join(product["regulatory_scope"]))
 
+    # ── Quality Snapshot ────────────────────────────────────────────
+    qr = product.get("quality_rules", {})
+    if qr.get("completeness"):
+        st.caption(
+            f"Quality: {qr.get('completeness', 0)}% complete · "
+            f"{qr.get('accuracy', 0)}% accurate"
+        )
+
+    # ── Transformations Snapshot ────────────────────────────────────
+    transforms = product.get("transformations", [])
+    if transforms:
+        st.caption(f"Transforms: {len(transforms)} step(s) defined")
+
     # ── Deliverables Checklist ──────────────────────────────────────
     st.divider()
     st.markdown("**📦 Deliverables**")
 
     has_model = any(len(e.get("attributes", [])) > 0 for e in entities)
-    has_gov = bool(product.get("classification") and product.get("retention_policy"))
-    has_quality = bool(product.get("quality_rules"))
-    has_transforms = len(product.get("transformations", [])) > 0
 
     deliverables = [
         ("Snowflake DDL", has_model),
         ("Masking Policies", product.get("pii", False) and has_model),
-        ("Secure Views", has_gov and has_model),
+        ("Secure Views", bool(product.get("classification")) and has_model),
         ("dbt Models", has_model),
         ("Collibra Import", bool(name)),
         ("Documentation", bool(name)),
@@ -94,7 +105,6 @@ def render_canvas():
     st.divider()
 
     with st.expander("📥 Download Now", expanded=False):
-        # Documentation — always available if name exists
         from core.document_engine import DocumentEngine
 
         doc = DocumentEngine(product)
@@ -106,7 +116,6 @@ def render_canvas():
             key="_cv_docs",
         )
 
-        # DDL — available if model exists
         if has_model:
             from core.snowflake_generator import SnowflakeGenerator
 
@@ -130,7 +139,6 @@ def render_canvas():
                 key="_cv_dbt",
             )
 
-        # Full JSON — always available
         st.download_button(
             "Full Definition (.json)",
             data=json.dumps(product, indent=2, default=str),

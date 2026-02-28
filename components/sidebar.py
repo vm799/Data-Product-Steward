@@ -1,5 +1,5 @@
 """
-Sidebar: progress tracker + step-specific contextual guide + glossary.
+Sidebar: theme toggle + progress tracker + step-specific guide + glossary.
 """
 
 import streamlit as st
@@ -24,7 +24,7 @@ GLOSSARY = {
 
 def render_sidebar(step: int = None):
     """
-    Render the sidebar with progress, step guide, and glossary.
+    Render the sidebar with theme toggle, progress, step guide, and glossary.
 
     Args:
         step: Current step number (1-7). If provided, shows contextual guide.
@@ -33,7 +33,15 @@ def render_sidebar(step: int = None):
     progress = get_progress(product)
 
     with st.sidebar:
-        # ── Progress ────────────────────────────────────────────
+        # ── Theme toggle ───────────────────────────────────────
+        st.toggle(
+            "🌙 Dark Mode",
+            key="dark_mode",
+        )
+
+        st.divider()
+
+        # ── Progress ───────────────────────────────────────────
         st.markdown("# 🏛️ Data Product Steward")
         st.progress(progress["pct"] / 100)
         st.caption(

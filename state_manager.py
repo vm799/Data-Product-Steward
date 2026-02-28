@@ -30,6 +30,8 @@ def initialize_state():
         }
     if "steps_completed" not in st.session_state:
         st.session_state.steps_completed = set()
+    if "dark_mode" not in st.session_state:
+        st.session_state.dark_mode = False
 
 
 def mark_step_complete(step_key):
