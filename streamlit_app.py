@@ -81,14 +81,31 @@ def _landing():
                 st.rerun()
 
     with right_col:
-        st.markdown('<div class="canvas-panel" style="min-height:600px;">', unsafe_allow_html=True)
+        didx = st.session_state.deliv_idx
+
+        # Direction arrows at the very top
+        p_col, label_col, n_col = st.columns([1, 3, 1])
+        with p_col:
+            if st.button("←", key="deliv_prev", use_container_width=True):
+                st.session_state.deliv_idx = (didx - 1) % len(_DELIVERABLES)
+                st.rerun()
+        with label_col:
+            st.markdown(
+                f'<div style="text-align:center;color:#5A6478;font-size:0.85rem;'
+                f'padding-top:0.45rem;">{didx + 1} / {len(_DELIVERABLES)}</div>',
+                unsafe_allow_html=True,
+            )
+        with n_col:
+            if st.button("→", key="deliv_next", use_container_width=True):
+                st.session_state.deliv_idx = (didx + 1) % len(_DELIVERABLES)
+                st.rerun()
+
+        st.markdown('<div class="canvas-panel" style="min-height:500px;">', unsafe_allow_html=True)
         st.markdown(
             '<div class="canvas-label">[ DELIVERABLES ]</div>'
             '<div class="deliv-panel-title">What you walk away with</div>',
             unsafe_allow_html=True,
         )
-
-        didx = st.session_state.deliv_idx
 
         # Build deliverable cards — active one is highlighted and large
         for i, (name, desc, step_num) in enumerate(_DELIVERABLES):
@@ -108,17 +125,6 @@ def _landing():
                 )
 
         st.markdown("</div>", unsafe_allow_html=True)
-
-        # Prev / Next to scroll through deliverables
-        p_col, _, n_col = st.columns([1, 2, 1])
-        with p_col:
-            if st.button("← Prev", key="deliv_prev", use_container_width=True):
-                st.session_state.deliv_idx = (didx - 1) % len(_DELIVERABLES)
-                st.rerun()
-        with n_col:
-            if st.button("Next →", key="deliv_next", use_container_width=True):
-                st.session_state.deliv_idx = (didx + 1) % len(_DELIVERABLES)
-                st.rerun()
 
 
 # ═══════════════════════════════════════════════════════════════════════
