@@ -1,127 +1,82 @@
 """
-Theme — dark glassmorphism.
+Theme — dark glassmorphism + retro hacker aesthetic.
 
-Deep gradient background, frosted-glass panels, luminous teal accents.
-No flat block colours anywhere. Depth through blur, translucency, and glow.
+Deep gradient background, frosted-glass panels, Share Tech Mono font,
+pulsing teal canvas glow. No flat block colours.
 """
 
 import streamlit as st
 
-# ── Palette ─────────────────────────────────────────────────────────────
-# Single dark palette. Light toggle adjusts intensity, not a full swap.
-P = {
-    # Background gradient endpoints
-    "bg_from": "#06080D",
-    "bg_to": "#0B1220",
-    "bg_accent": "#091018",
-    # Glass surfaces
-    "glass": "rgba(255,255,255,0.04)",
-    "glass_hover": "rgba(255,255,255,0.07)",
-    "glass_border": "rgba(255,255,255,0.08)",
-    "glass_strong": "rgba(255,255,255,0.06)",
-    "glass_strong_border": "rgba(255,255,255,0.12)",
-    # Text
-    "text": "#E8ECF1",
-    "text_secondary": "#8B95A5",
-    "text_dim": "#5A6478",
-    # Accent — teal/cyan
-    "accent": "#2DD4BF",
-    "accent_secondary": "#22D3EE",
-    "accent_glow": "rgba(45,212,191,0.15)",
-    "accent_glow_strong": "rgba(45,212,191,0.25)",
-    "accent_dim": "rgba(45,212,191,0.08)",
-    "accent_text": "#2DD4BF",
-    # Gradient
-    "gradient": "linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%)",
-    "gradient_subtle": "linear-gradient(135deg, rgba(45,212,191,0.12) 0%, rgba(34,211,238,0.06) 100%)",
-    # Sidebar
-    "sidebar_bg": "rgba(8,12,22,0.85)",
-    "sidebar_border": "rgba(255,255,255,0.06)",
-    # Canvas
-    "canvas_glass": "rgba(45,212,191,0.04)",
-    "canvas_border": "rgba(45,212,191,0.15)",
-    "canvas_glow": "0 0 30px rgba(45,212,191,0.08), inset 0 1px 0 rgba(45,212,191,0.10)",
-    # Status
-    "success": "#10B981",
-    "warn": "#F59E0B",
-    "error": "#EF4444",
-    # Input
-    "input_bg": "rgba(255,255,255,0.04)",
-    "input_border": "rgba(255,255,255,0.10)",
-    "input_focus": "rgba(45,212,191,0.30)",
-}
-
 
 def _css() -> str:
-    t = P
-    return f"""
+    return """
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
     /* ═══════════════════════════════════════════════════
-       DATA PRODUCT BUILDER — GLASSMORPHISM
+       GLOBAL — font, background, reset
        ═══════════════════════════════════════════════════ */
+    .stApp, .stApp * {
+        font-family: 'Share Tech Mono', monospace !important;
+    }
+    .stApp {
+        background: linear-gradient(160deg, #06080D 0%, #0B1220 50%, #091018 100%) !important;
+        color: #E8ECF1;
+    }
 
-    /* ── Dark gradient background ───────────────────── */
-    .stApp {{
-        background: linear-gradient(160deg, {t["bg_from"]} 0%, {t["bg_to"]} 50%, {t["bg_accent"]} 100%) !important;
-        color: {t["text"]};
-    }}
-
-    /* ── Kill whitespace, hide default header ───────── */
-    .main .block-container {{
+    /* ── Kill top whitespace ────────────────────────── */
+    .main .block-container {
         padding: 0.6rem 1.5rem 2rem 1.5rem !important;
         max-width: 100%;
-    }}
-    [data-testid="stHeader"] {{
+    }
+    [data-testid="stHeader"] {
         background: transparent !important;
         height: 0 !important;
         min-height: 0 !important;
         overflow: hidden;
-    }}
+    }
 
-    /* ── Rename "streamlit_app" → "Dashboard" ───────── */
-    [data-testid="stSidebarNav"] li:first-child span {{
-        font-size: 0 !important;
-    }}
-    [data-testid="stSidebarNav"] li:first-child span::after {{
-        content: "Dashboard";
-        font-size: 1.05rem;
-    }}
-
-    /* ── Typography ─────────────────────────────────── */
-    [data-testid="stAppViewContainer"] > .main {{
-        font-size: 1.15rem;
+    /* ═══════════════════════════════════════════════════
+       TYPOGRAPHY — retro terminal
+       ═══════════════════════════════════════════════════ */
+    [data-testid="stAppViewContainer"] > .main {
+        font-size: 1.12rem;
         line-height: 1.7;
-        color: {t["text"]};
-    }}
-    h1 {{
-        font-size: 2rem !important;
+        color: #E8ECF1;
+    }
+    h1 {
+        font-size: 1.9rem !important;
         font-weight: 600 !important;
-        letter-spacing: -0.03em;
-        color: {t["text"]} !important;
-    }}
-    h2 {{
-        font-size: 1.6rem !important;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #2DD4BF !important;
+    }
+    h2 {
+        font-size: 1.5rem !important;
         font-weight: 600 !important;
-        letter-spacing: -0.02em;
-        color: {t["text"]} !important;
-    }}
-    h3 {{
-        font-size: 1.3rem !important;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #2DD4BF !important;
+    }
+    h3 {
+        font-size: 1.25rem !important;
         font-weight: 500 !important;
-        color: {t["text"]} !important;
-    }}
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: #2DD4BF !important;
+    }
     [data-testid="stMarkdownContainer"] p,
-    [data-testid="stMarkdownContainer"] li {{
-        color: {t["text"]};
-        font-size: 1.1rem;
-    }}
-    [data-testid="stMarkdownContainer"] strong {{
-        color: {t["text"]};
-    }}
-    .stCaption, [data-testid="stCaptionContainer"] {{
-        color: {t["text_secondary"]} !important;
-        font-size: 0.95rem !important;
-    }}
+    [data-testid="stMarkdownContainer"] li {
+        color: #E8ECF1;
+        font-size: 1.08rem;
+    }
+    [data-testid="stMarkdownContainer"] strong {
+        color: #E8ECF1;
+    }
+    .stCaption, [data-testid="stCaptionContainer"] {
+        color: #8B95A5 !important;
+        font-size: 0.92rem !important;
+    }
 
     /* ── Form labels ────────────────────────────────── */
     .stTextInput label p,
@@ -130,439 +85,383 @@ def _css() -> str:
     .stTextArea label p,
     .stSlider label p,
     .stNumberInput label p,
-    .stCheckbox label p {{
-        font-size: 1.05rem !important;
+    .stCheckbox label p {
+        font-size: 1.02rem !important;
         font-weight: 500 !important;
-        color: {t["text"]} !important;
-    }}
+        color: #E8ECF1 !important;
+    }
 
     /* ── Glass inputs ───────────────────────────────── */
     .stTextInput input,
     .stTextArea textarea,
-    .stNumberInput input {{
-        background: {t["input_bg"]} !important;
-        border: 1px solid {t["input_border"]} !important;
+    .stNumberInput input {
+        background: rgba(255,255,255,0.04) !important;
+        border: 1px solid rgba(255,255,255,0.10) !important;
         border-radius: 0.5rem !important;
-        color: {t["text"]} !important;
-        font-size: 1.05rem !important;
+        color: #E8ECF1 !important;
+        font-size: 1.02rem !important;
         backdrop-filter: blur(8px);
-    }}
+    }
     .stTextInput input:focus,
     .stTextArea textarea:focus,
-    .stNumberInput input:focus {{
-        border-color: {t["accent"]} !important;
-        box-shadow: 0 0 0 2px {t["input_focus"]} !important;
-    }}
+    .stNumberInput input:focus {
+        border-color: #2DD4BF !important;
+        box-shadow: 0 0 0 2px rgba(45,212,191,0.25) !important;
+    }
     .stSelectbox [data-baseweb="select"],
-    .stMultiSelect [data-baseweb="select"] {{
-        background: {t["input_bg"]} !important;
-        border-color: {t["input_border"]} !important;
-    }}
+    .stMultiSelect [data-baseweb="select"] {
+        background: rgba(255,255,255,0.04) !important;
+        border-color: rgba(255,255,255,0.10) !important;
+    }
     .stSelectbox [data-baseweb="select"] > div,
-    .stMultiSelect [data-baseweb="select"] > div {{
-        background: {t["input_bg"]} !important;
-        color: {t["text"]} !important;
-    }}
+    .stMultiSelect [data-baseweb="select"] > div {
+        background: rgba(255,255,255,0.04) !important;
+        color: #E8ECF1 !important;
+    }
 
-    /* ── Glass metric cards ─────────────────────────── */
-    [data-testid="stMetric"] {{
-        background: {t["glass"]};
+    /* ── Glass metrics ──────────────────────────────── */
+    [data-testid="stMetric"] {
+        background: rgba(255,255,255,0.04);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         padding: 0.85rem 1rem;
         border-radius: 0.75rem;
-        border: 1px solid {t["glass_border"]};
+        border: 1px solid rgba(255,255,255,0.08);
         box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-    }}
-    [data-testid="stMetric"] label {{
-        color: {t["text_secondary"]} !important;
-        font-size: 0.88rem !important;
-    }}
-    [data-testid="stMetric"] [data-testid="stMetricValue"] {{
-        color: {t["accent_text"]} !important;
+    }
+    [data-testid="stMetric"] label {
+        color: #8B95A5 !important;
+        font-size: 0.85rem !important;
+    }
+    [data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: #2DD4BF !important;
         font-weight: 700 !important;
-    }}
+    }
 
     /* ── Progress bar ───────────────────────────────── */
-    .stProgress > div > div > div {{
-        background: {t["gradient"]} !important;
-    }}
-    .stProgress > div > div {{
-        background: {t["accent_dim"]} !important;
-    }}
+    .stProgress > div > div > div {
+        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
+    }
+    .stProgress > div > div {
+        background: rgba(45,212,191,0.08) !important;
+    }
 
     /* ═══════════════════════════════════════════════════
-       SIDEBAR — frosted glass
+       CENTER WIZARD PANEL — frosted white glass
        ═══════════════════════════════════════════════════ */
-    section[data-testid="stSidebar"] {{
-        background: {t["sidebar_bg"]} !important;
+    .wizard-panel {
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255,255,255,0.10);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.20);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SIDEBAR — frosted dark glass
+       ═══════════════════════════════════════════════════ */
+    section[data-testid="stSidebar"] {
+        background: rgba(8,12,22,0.85) !important;
         backdrop-filter: blur(20px) !important;
         -webkit-backdrop-filter: blur(20px) !important;
-        border-right: 1px solid {t["sidebar_border"]} !important;
-        font-size: 1.05rem;
-    }}
-    section[data-testid="stSidebar"] * {{
-        color: {t["text_secondary"]} !important;
-    }}
+        border-right: 1px solid rgba(255,255,255,0.06) !important;
+        font-size: 1.02rem;
+    }
+    section[data-testid="stSidebar"] * {
+        color: #8B95A5 !important;
+    }
     section[data-testid="stSidebar"] h1,
     section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3 {{
-        color: {t["text"]} !important;
-    }}
-    section[data-testid="stSidebar"] h1 {{
-        font-size: 1.4rem !important;
+    section[data-testid="stSidebar"] h3 {
+        color: #E8ECF1 !important;
+    }
+    section[data-testid="stSidebar"] h1 {
+        font-size: 1.35rem !important;
         font-weight: 600 !important;
-    }}
-    section[data-testid="stSidebar"] h3 {{
-        font-size: 1.15rem !important;
+        letter-spacing: 0.04em;
+    }
+    section[data-testid="stSidebar"] h3 {
+        font-size: 1.1rem !important;
         font-weight: 500 !important;
-    }}
+    }
     section[data-testid="stSidebar"] .stCaption *,
-    section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {{
-        color: {t["text_dim"]} !important;
-    }}
-    section[data-testid="stSidebar"] hr {{
-        border-color: {t["glass_border"]} !important;
-    }}
+    section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {
+        color: #5A6478 !important;
+    }
+    section[data-testid="stSidebar"] hr {
+        border-color: rgba(255,255,255,0.08) !important;
+    }
     section[data-testid="stSidebar"] .streamlit-expanderHeader p,
-    section[data-testid="stSidebar"] .stToggle label span p {{
-        color: {t["text_secondary"]} !important;
-        font-size: 1.05rem !important;
-    }}
-    section[data-testid="stSidebar"] .stProgress > div > div > div {{
-        background: {t["gradient"]} !important;
-    }}
+    section[data-testid="stSidebar"] .stToggle label span p {
+        color: #8B95A5 !important;
+        font-size: 1.02rem !important;
+    }
+    section[data-testid="stSidebar"] .stProgress > div > div > div {
+        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
+    }
+
+    /* ── "Dashboard" home link — retro ──────────────── */
+    [data-testid="stSidebarNav"] li:first-child span {
+        font-size: 0 !important;
+    }
+    [data-testid="stSidebarNav"] li:first-child span::after {
+        content: "> DASHBOARD_";
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 1.05rem;
+        letter-spacing: 0.08em;
+        color: #2DD4BF !important;
+        text-shadow: 0 0 8px rgba(45,212,191,0.4);
+    }
+    [data-testid="stSidebarNav"] li:first-child:hover span::after {
+        text-shadow: 0 0 14px rgba(45,212,191,0.7);
+        color: #5EEAD4 !important;
+    }
 
     /* ── Guide card ─────────────────────────────────── */
-    .guide-card {{
-        background: {t["accent_dim"]};
-        border-left: 2px solid {t["accent"]};
+    .guide-card {
+        background: rgba(45,212,191,0.06);
+        border-left: 2px solid #2DD4BF;
         padding: 0.75rem 0.85rem;
         border-radius: 0 0.4rem 0.4rem 0;
-        font-size: 0.98rem;
+        font-size: 0.95rem;
         line-height: 1.55;
         margin-bottom: 0.5rem;
-    }}
-    .guide-card, .guide-card * {{
-        color: {t["text_secondary"]} !important;
-    }}
+    }
+    .guide-card, .guide-card * {
+        color: #8B95A5 !important;
+    }
 
     /* ═══════════════════════════════════════════════════
-       CANVAS — glass with teal glow, NOT solid block
+       CANVAS — glass + pulsing teal glow
        ═══════════════════════════════════════════════════ */
-    .canvas-panel {{
-        background: {t["canvas_glass"]};
+    @keyframes canvasPulse {
+        0%   { box-shadow: 0 0 20px rgba(45,212,191,0.06), 0 0 40px rgba(45,212,191,0.03), inset 0 1px 0 rgba(45,212,191,0.08); border-color: rgba(45,212,191,0.15); }
+        50%  { box-shadow: 0 0 35px rgba(45,212,191,0.18), 0 0 70px rgba(45,212,191,0.08), inset 0 1px 0 rgba(45,212,191,0.15); border-color: rgba(45,212,191,0.35); }
+        100% { box-shadow: 0 0 20px rgba(45,212,191,0.06), 0 0 40px rgba(45,212,191,0.03), inset 0 1px 0 rgba(45,212,191,0.08); border-color: rgba(45,212,191,0.15); }
+    }
+    .canvas-panel {
+        background: rgba(45,212,191,0.03);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid {t["canvas_border"]};
+        border: 1px solid rgba(45,212,191,0.15);
         border-radius: 0.75rem;
         padding: 1.25rem;
         min-height: 480px;
-        box-shadow: {t["canvas_glow"]};
-    }}
+        animation: canvasPulse 3s ease-in-out infinite;
+    }
     .canvas-panel, .canvas-panel p, .canvas-panel li,
-    .canvas-panel span, .canvas-panel strong, .canvas-panel b {{
-        color: {t["text"]} !important;
-    }}
+    .canvas-panel span, .canvas-panel strong, .canvas-panel b {
+        color: #E8ECF1 !important;
+    }
     .canvas-panel .stCaption *,
-    .canvas-panel [data-testid="stCaptionContainer"] * {{
-        color: {t["text_secondary"]} !important;
-    }}
-    .canvas-panel hr {{
-        border-color: {t["glass_border"]} !important;
-    }}
-    .canvas-panel [data-testid="stMetric"] {{
-        background: {t["glass"]};
-        border: 1px solid {t["glass_border"]};
+    .canvas-panel [data-testid="stCaptionContainer"] * {
+        color: #8B95A5 !important;
+    }
+    .canvas-panel hr {
+        border-color: rgba(255,255,255,0.08) !important;
+    }
+    .canvas-panel [data-testid="stMetric"] {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
         box-shadow: none;
-    }}
-    .canvas-panel [data-testid="stMetric"] label {{
-        color: {t["text_secondary"]} !important;
-    }}
-    .canvas-panel [data-testid="stMetric"] [data-testid="stMetricValue"] {{
-        color: {t["accent_text"]} !important;
-    }}
-    .canvas-panel .stDownloadButton button {{
-        background: {t["glass_strong"]} !important;
-        color: {t["text"]} !important;
-        border: 1px solid {t["glass_strong_border"]} !important;
-    }}
-    .canvas-panel .stDownloadButton button:hover {{
-        background: {t["glass_hover"]} !important;
-    }}
-    .canvas-panel .streamlit-expanderHeader {{
-        background: {t["glass"]} !important;
-        color: {t["text"]} !important;
-    }}
-    .canvas-panel .streamlit-expanderHeader p {{
-        color: {t["text"]} !important;
-    }}
+    }
+    .canvas-panel [data-testid="stMetric"] label {
+        color: #8B95A5 !important;
+    }
+    .canvas-panel [data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: #2DD4BF !important;
+    }
+    .canvas-panel .stDownloadButton button {
+        background: rgba(255,255,255,0.06) !important;
+        color: #E8ECF1 !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+    }
+    .canvas-panel .stDownloadButton button:hover {
+        background: rgba(255,255,255,0.10) !important;
+    }
+    .canvas-panel .streamlit-expanderHeader {
+        background: rgba(255,255,255,0.04) !important;
+        color: #E8ECF1 !important;
+    }
+    .canvas-panel .streamlit-expanderHeader p {
+        color: #E8ECF1 !important;
+    }
 
-    /* ── Canvas typography ───────────────────────────── */
-    .canvas-title {{
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.12em;
+    /* ── LIVE CANVAS label — pulsing glow ───────────── */
+    @keyframes labelPulse {
+        0%   { text-shadow: 0 0 8px rgba(45,212,191,0.5), 0 0 16px rgba(45,212,191,0.25); }
+        50%  { text-shadow: 0 0 14px rgba(45,212,191,0.8), 0 0 28px rgba(45,212,191,0.4); }
+        100% { text-shadow: 0 0 8px rgba(45,212,191,0.5), 0 0 16px rgba(45,212,191,0.25); }
+    }
+    .canvas-label {
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: {t["accent_text"]} !important;
+        color: #2DD4BF !important;
         margin-bottom: 0.15rem;
-    }}
-    .canvas-heading {{
-        font-size: 1.2rem;
+        animation: labelPulse 2s ease-in-out infinite;
+    }
+    .canvas-heading {
+        font-size: 1.15rem;
         font-weight: 600;
-        color: {t["text"]} !important;
+        letter-spacing: 0.03em;
+        color: #E8ECF1 !important;
         margin-bottom: 0.2rem;
-    }}
-    .canvas-explain {{
-        color: {t["text_secondary"]} !important;
-        font-size: 0.95rem;
+    }
+    .canvas-explain {
+        color: #8B95A5 !important;
+        font-size: 0.92rem;
         line-height: 1.55;
         margin-bottom: 0.8rem;
-    }}
-    .canvas-body {{
-        background: {t["glass"]};
-        border: 1px solid {t["glass_border"]};
+    }
+    .canvas-body {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
         border-radius: 0.5rem;
         padding: 0.8rem 1rem;
-        font-size: 1rem;
-        color: {t["text"]};
-    }}
+        font-size: 0.98rem;
+        color: #E8ECF1;
+    }
 
     /* ── Step badge ──────────────────────────────────── */
-    .step-badge {{
+    .step-badge {
         display: inline-block;
-        background: {t["accent_dim"]};
-        color: {t["accent_text"]};
+        background: rgba(45,212,191,0.08);
+        color: #2DD4BF;
         padding: 0.2rem 0.75rem;
         border-radius: 1rem;
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         font-weight: 600;
         margin-bottom: 0.3rem;
         letter-spacing: 0.02em;
-    }}
+    }
 
-    /* ── Expander ────────────────────────────────────── */
-    .streamlit-expanderHeader {{
-        background: {t["glass"]} !important;
+    /* ── Expander / Tabs / Alerts ────────────────────── */
+    .streamlit-expanderHeader {
+        background: rgba(255,255,255,0.04) !important;
         border-radius: 0.5rem !important;
-        color: {t["text"]} !important;
-    }}
-
-    /* ── Tabs ────────────────────────────────────────── */
-    .stTabs [data-baseweb="tab-list"] {{
-        gap: 0.5rem;
-    }}
-    .stTabs [data-baseweb="tab"] {{
-        color: {t["text_secondary"]} !important;
+        color: #E8ECF1 !important;
+    }
+    .stTabs [data-baseweb="tab-list"] { gap: 0.5rem; }
+    .stTabs [data-baseweb="tab"] {
+        color: #8B95A5 !important;
         border-radius: 0.5rem 0.5rem 0 0;
-    }}
-    .stTabs [aria-selected="true"] {{
-        color: {t["accent"]} !important;
-        border-bottom-color: {t["accent"]} !important;
-    }}
-
-    /* ── Code / Alerts ──────────────────────────────── */
-    .stCodeBlock {{
-        border-radius: 0.5rem !important;
-    }}
-    .stAlert {{
-        border-radius: 0.5rem !important;
-    }}
-
-    /* ── Dividers ────────────────────────────────────── */
-    hr {{
-        border-color: {t["glass_border"]} !important;
-    }}
+    }
+    .stTabs [aria-selected="true"] {
+        color: #2DD4BF !important;
+        border-bottom-color: #2DD4BF !important;
+    }
+    .stCodeBlock { border-radius: 0.5rem !important; }
+    .stAlert { border-radius: 0.5rem !important; }
+    hr { border-color: rgba(255,255,255,0.08) !important; }
 
     /* ── Buttons ─────────────────────────────────────── */
-    .stDownloadButton button {{
-        background: {t["gradient"]} !important;
+    .stDownloadButton button {
+        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
         color: #06080D !important;
         border: none !important;
         border-radius: 0.5rem !important;
         font-weight: 600 !important;
-    }}
-    .stDownloadButton button:hover {{
-        opacity: 0.9;
-    }}
-    .stFormSubmitButton button {{
-        background: {t["gradient"]} !important;
+    }
+    .stDownloadButton button:hover { opacity: 0.9; }
+    .stFormSubmitButton button {
+        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
         color: #06080D !important;
         border: none !important;
         border-radius: 0.5rem !important;
         font-weight: 600 !important;
         padding: 0.5rem 2rem !important;
-    }}
-    .stButton > button {{
-        border: 1px solid {t["glass_strong_border"]} !important;
-        color: {t["accent_text"]} !important;
+    }
+    .stButton > button {
+        border: 1px solid rgba(255,255,255,0.12) !important;
+        color: #2DD4BF !important;
         border-radius: 0.5rem !important;
         background: transparent !important;
-    }}
-    .stButton > button:hover {{
-        background: {t["accent_dim"]} !important;
-        border-color: {t["accent"]} !important;
-    }}
+    }
+    .stButton > button:hover {
+        background: rgba(45,212,191,0.08) !important;
+        border-color: #2DD4BF !important;
+    }
 
     /* ═══════════════════════════════════════════════════
-       HOME PAGE — editorial components
+       HOME PAGE — journey + deliverables
        ═══════════════════════════════════════════════════ */
-
-    /* ── Helpers ribbon ─────────────────────────────── */
-    .helpers-ribbon {{
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        margin: 0.3rem 0 0.6rem 0;
-    }}
-    .helper-tag {{
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        background: {t["glass"]};
-        border: 1px solid {t["glass_border"]};
-        padding: 0.25rem 0.65rem;
-        border-radius: 2rem;
-        font-size: 0.82rem;
-        font-weight: 500;
-        color: {t["text_secondary"]};
-        backdrop-filter: blur(8px);
-    }}
-
-    /* ── Layout zone row ────────────────────────────── */
-    .zone-row {{
-        display: flex;
-        gap: 0;
-        margin: 0.5rem 0 1rem 0;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        border: 1px solid {t["glass_border"]};
-    }}
-    .zone-cell {{
-        flex: 1;
-        padding: 0.7rem 0.85rem;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }}
-    .zone-cell-label {{
-        font-size: 0.65rem;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        opacity: 0.5;
-        margin-bottom: 0.2rem;
-    }}
-    .zone-cell-title {{
-        font-weight: 600;
-        font-size: 0.95rem;
-        margin-bottom: 0.1rem;
-    }}
-    .zone-nav {{
-        background: {t["sidebar_bg"]};
-        backdrop-filter: blur(12px);
-    }}
-    .zone-nav, .zone-nav * {{
-        color: {t["text_secondary"]} !important;
-    }}
-    .zone-wiz {{
-        background: {t["glass"]};
-        border-left: 1px solid {t["glass_border"]};
-        border-right: 1px solid {t["glass_border"]};
-    }}
-    .zone-cvs {{
-        background: {t["canvas_glass"]};
-        border-left: 1px solid {t["canvas_border"]};
-    }}
-    .zone-cvs, .zone-cvs * {{
-        color: {t["text"]} !important;
-    }}
-
-    /* ── Journey list ───────────────────────────────── */
-    .journey-list {{
-        margin: 0.4rem 0;
-    }}
-    .journey-item {{
+    .journey-list { margin: 0.4rem 0; }
+    .journey-item {
         display: flex;
         align-items: baseline;
         gap: 0.6rem;
         padding: 0.4rem 0;
-        border-bottom: 1px solid {t["glass_border"]};
-        font-size: 1.02rem;
-    }}
-    .journey-item:last-child {{
-        border-bottom: none;
-    }}
-    .journey-num {{
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        font-size: 1rem;
+    }
+    .journey-item:last-child { border-bottom: none; }
+    .journey-num {
         flex-shrink: 0;
-        width: 24px;
-        height: 24px;
+        width: 24px; height: 24px;
         border-radius: 50%;
-        background: {t["glass_strong"]};
-        border: 1px solid {t["glass_strong_border"]};
-        color: {t["text_secondary"]} !important;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #8B95A5 !important;
         display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.72rem;
-        font-weight: 600;
-    }}
-    .journey-num.done {{
-        background: {t["accent_dim"]};
-        border-color: {t["accent"]};
-        color: {t["accent_text"]} !important;
-    }}
-    .journey-name {{
+        align-items: center; justify-content: center;
+        font-size: 0.72rem; font-weight: 600;
+    }
+    .journey-num.done {
+        background: rgba(45,212,191,0.10);
+        border-color: #2DD4BF;
+        color: #2DD4BF !important;
+    }
+    .journey-name {
         font-weight: 600;
         min-width: 130px;
-        color: {t["text"]};
-    }}
-    .journey-desc {{
-        color: {t["text_secondary"]};
-        font-size: 0.95rem;
-    }}
-
-    /* ── Deliverables row ───────────────────────────── */
-    .deliv-row {{
-        display: flex;
-        gap: 0.75rem;
-        margin: 0.4rem 0;
-    }}
-    .deliv-item {{
+        color: #E8ECF1;
+    }
+    .journey-desc {
+        color: #8B95A5;
+        font-size: 0.92rem;
+    }
+    .deliv-row {
+        display: flex; gap: 0.75rem; margin: 0.4rem 0;
+    }
+    .deliv-item {
         flex: 1;
-        background: {t["glass"]};
-        border: 1px solid {t["glass_border"]};
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
         border-radius: 0.5rem;
         padding: 0.7rem 0.85rem;
-        font-size: 0.92rem;
-        line-height: 1.45;
+        font-size: 0.9rem; line-height: 1.45;
         backdrop-filter: blur(8px);
-    }}
-    .deliv-item b {{
-        display: block;
-        margin-bottom: 0.15rem;
-        color: {t["text"]};
-    }}
-    .deliv-item {{
-        color: {t["text_secondary"]};
-    }}
-
-    /* ── CTA ─────────────────────────────────────────── */
-    .cta-line {{
+        color: #8B95A5;
+    }
+    .deliv-item b { display: block; margin-bottom: 0.15rem; color: #E8ECF1; }
+    .cta-line {
         margin-top: 0.6rem;
         padding: 0.65rem 1rem;
-        border-left: 2px solid {t["accent"]};
-        font-size: 1.02rem;
-        color: {t["text_secondary"]};
-    }}
-    .cta-line b {{
-        color: {t["text"]};
-    }}
+        border-left: 2px solid #2DD4BF;
+        font-size: 1rem;
+        color: #8B95A5;
+    }
+    .cta-line b { color: #E8ECF1; }
+
+    /* ── Sidebar label ──────────────────────────────── */
+    .sidebar-label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #5A6478 !important;
+        margin-bottom: 0.2rem;
+    }
 </style>
 """
 
 
 def inject_custom_css():
-    """Inject glassmorphism theme CSS."""
+    """Inject retro hacker glassmorphism theme."""
     st.markdown(_css(), unsafe_allow_html=True)
 
 

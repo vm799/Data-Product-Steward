@@ -16,7 +16,7 @@ def render_canvas():
 
     # ── Label + heading ────────────────────────────────────────
     st.markdown(
-        '<div class="canvas-title">Live Canvas</div>'
+        '<div class="canvas-label">[ LIVE CANVAS ]</div>'
         '<div class="canvas-heading">Data Product Blueprint</div>',
         unsafe_allow_html=True,
     )
