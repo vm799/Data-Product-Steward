@@ -39,15 +39,25 @@ _DELIVERABLES = [
 
 
 def _landing():
+    render_sidebar()
+
     # ── Direction arrows at the very top of the page ──────────────
-    st.markdown(
-        '<div class="landing-top-arrows">'
-        '<span class="landing-top-arr-left">&#9664;</span>'
-        '<span class="landing-top-arr-label">SCROLL DELIVERABLES</span>'
-        '<span class="landing-top-arr-right">&#9654;</span>'
-        '</div>',
-        unsafe_allow_html=True,
-    )
+    arr_l, arr_label, arr_r = st.columns([1, 3, 1])
+    with arr_l:
+        st.markdown(
+            '<div class="arrow-prev-top">←</div>',
+            unsafe_allow_html=True,
+        )
+    with arr_label:
+        st.markdown(
+            '<div class="arrow-top-label">AUTO-SCROLLING DELIVERABLES</div>',
+            unsafe_allow_html=True,
+        )
+    with arr_r:
+        st.markdown(
+            '<div class="arrow-next-top">→</div>',
+            unsafe_allow_html=True,
+        )
 
     left_col, right_col = st.columns([3, 2])
 
@@ -149,6 +159,8 @@ _SB_SECTIONS = [
 
 
 def _sidebar_guide():
+    render_sidebar()
+
     st.markdown(
         '<div class="guide-page">'
         '<div class="guide-step-num">1 / 2</div>'
@@ -270,6 +282,8 @@ def _sidebar_guide():
 # PAGE 2 — CANVAS GUIDE (visual mockup with typewriter demo)
 # ═══════════════════════════════════════════════════════════════════════
 def _canvas_guide():
+    render_sidebar()
+
     st.markdown(
         '<div class="guide-page">'
         '<div class="guide-step-num">2 / 2</div>'

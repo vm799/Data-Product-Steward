@@ -903,38 +903,45 @@ def _css() -> str:
         color: #2DD4BF;
         flex-shrink: 0;
     }
-    /* ── Top-of-page direction arrows ─────────────── */
-    .landing-top-arrows {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
-        padding: 0.5rem 0 0.8rem 0;
-    }
-    .landing-top-arr-left {
-        font-size: 1.4rem;
+    /* ── Top-of-page direction arrows (prominent) ─── */
+    .arrow-prev-top {
+        font-size: 2.4rem;
+        font-weight: 700;
         color: #2DD4BF;
+        text-align: center;
+        padding: 0.3rem 0;
+        background: rgba(45,212,191,0.08);
+        border: 1px solid rgba(45,212,191,0.25);
+        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
         animation: arrowBounceL 1.5s ease-in-out infinite;
     }
-    .landing-top-arr-right {
-        font-size: 1.4rem;
+    .arrow-next-top {
+        font-size: 2.4rem;
+        font-weight: 700;
         color: #F97316;
+        text-align: center;
+        padding: 0.3rem 0;
+        background: rgba(249,115,22,0.08);
+        border: 1px solid rgba(249,115,22,0.25);
+        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
         animation: arrowBounceR 1.5s ease-in-out infinite;
     }
-    .landing-top-arr-label {
+    .arrow-top-label {
         font-family: 'Share Tech Mono', monospace !important;
-        font-size: 0.72rem;
+        font-size: 0.78rem;
         letter-spacing: 0.18em;
         text-transform: uppercase;
         color: #5A6478;
+        text-align: center;
+        padding-top: 0.8rem;
     }
     @keyframes arrowBounceL {
         0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(-6px); }
+        50% { transform: translateX(-8px); }
     }
     @keyframes arrowBounceR {
         0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(6px); }
+        50% { transform: translateX(8px); }
     }
 
     /* ── Deliverable panel (landing right side) ──────── */
