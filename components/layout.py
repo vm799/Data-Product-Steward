@@ -643,6 +643,91 @@ def _css() -> str:
         letter-spacing: 0.02em;
     }
 
+    /* ═══════════════════════════════════════════════════
+       STEP INDICATOR BAR — top-of-page wizard progress
+       ═══════════════════════════════════════════════════ */
+    .step-bar-wrap {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0.75rem 0 0.5rem;
+        gap: 0;
+    }
+    .step-pip {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        min-width: 3rem;
+    }
+    .pip-circle {
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+        background: rgba(255,255,255,0.04);
+        border: 2px solid rgba(255,255,255,0.10);
+        color: #555;
+        transition: all 0.3s;
+    }
+    .pip-label {
+        font-size: 0.62rem;
+        color: #555;
+        font-family: 'Share Tech Mono', monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+    }
+    /* Current step — solid orange */
+    .step-pip.current .pip-circle {
+        background: #F97316;
+        border-color: #F97316;
+        color: #fff;
+        box-shadow: 0 0 14px rgba(249,115,22,0.5);
+    }
+    .step-pip.current .pip-label {
+        color: #F97316;
+        font-weight: 700;
+    }
+    /* Completed step — teal */
+    .step-pip.done .pip-circle {
+        background: rgba(45,212,191,0.12);
+        border-color: #2DD4BF;
+        color: #2DD4BF;
+    }
+    .step-pip.done .pip-label {
+        color: #2DD4BF;
+    }
+    /* Next step — orange outline + pulse */
+    .step-pip.next-up .pip-circle {
+        border-color: #F97316;
+        color: #F97316;
+        animation: pulse-next 2s ease-in-out infinite;
+    }
+    .step-pip.next-up .pip-label {
+        color: #F97316;
+    }
+    /* Connector lines */
+    .pip-line {
+        width: 1.5rem;
+        height: 2px;
+        background: rgba(255,255,255,0.08);
+        margin-top: 1.1rem;
+        flex-shrink: 0;
+    }
+    .pip-line.done {
+        background: #2DD4BF;
+    }
+    @keyframes pulse-next {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.35); }
+        50% { box-shadow: 0 0 0 7px rgba(249,115,22,0); }
+    }
+
     /* ── Expander / Tabs / Alerts ────────────────────── */
     .streamlit-expanderHeader { background: rgba(255,255,255,0.04) !important; border-radius: 0.5rem !important; color: #E8ECF1 !important; }
     .stTabs [data-baseweb="tab-list"] { gap: 0.5rem; }

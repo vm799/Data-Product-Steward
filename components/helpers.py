@@ -5,6 +5,7 @@ Written for someone with zero data engineering experience.
 """
 
 import streamlit as st
+from state_manager import get_progress, get_next_step
 
 # ── Page file paths for navigation ─────────────────────────────────────
 PAGE_MAP = {
@@ -49,7 +50,46 @@ def render_step_complete(current_step: int, is_complete: bool):
 
 
 def render_step_nav(current_step: int):
-    """Render prev / dashboard / next navigation bar at top of a wizard page."""
+    """Render step indicator bar with prev/next navigation at top of page."""
+    product = st.session_state.product
+    progress = get_progress(product)
+    next_step = get_next_step(product)
+
+    short = ["Context", "Sources", "Model", "Govern", "Quality", "Transform", "Review"]
+    step_list = list(progress["steps"].keys())
+
+    # ── Build step indicator HTML ────────────────────────
+    items = ""
+    for i in range(7):
+        done = progress["steps"][step_list[i]]
+        is_current = (i + 1) == current_step
+        is_next = (i + 1) == next_step and not is_current
+
+        if is_current:
+            cls = "current"
+        elif done:
+            cls = "done"
+        elif is_next:
+            cls = "next-up"
+        else:
+            cls = ""
+
+        items += (
+            f'<div class="step-pip {cls}">'
+            f'<div class="pip-circle">{i + 1}</div>'
+            f'<div class="pip-label">{short[i]}</div>'
+            f"</div>"
+        )
+        if i < 6:
+            conn_cls = "done" if done else ""
+            items += f'<div class="pip-line {conn_cls}"></div>'
+
+    st.markdown(
+        f'<div class="step-bar-wrap">{items}</div>',
+        unsafe_allow_html=True,
+    )
+
+    # ── Prev / Home / Next buttons ───────────────────────
     prev_col, dash_col, next_col = st.columns(3)
 
     with prev_col:

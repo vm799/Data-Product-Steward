@@ -12,12 +12,12 @@ initialize_state()
 inject_custom_css()
 render_sidebar(step=4)
 
+render_step_nav(4)
 step_header(
     4,
     "4️⃣ Governance & Security",
     "Set data classification, retention, and compliance. These directly shape the security artifacts generated.",
 )
-render_step_nav(4)
 
 product = st.session_state.product
 

@@ -11,12 +11,12 @@ initialize_state()
 inject_custom_css()
 render_sidebar(step=6)
 
+render_step_nav(6)
 step_header(
     6,
     "6️⃣ Transformations",
     "Document the processing steps that produce your data product. This creates audit trails and dbt models.",
 )
-render_step_nav(6)
 
 product = st.session_state.product
 

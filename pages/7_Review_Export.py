@@ -18,12 +18,12 @@ initialize_state()
 inject_custom_css()
 render_sidebar(step=7)
 
+render_step_nav(7)
 step_header(
     7,
     "7️⃣ Review & Export",
     "Validate your data product definition and generate deployment-ready artifacts.",
 )
-render_step_nav(7)
 
 product = st.session_state.product
 progress = get_progress(product)
