@@ -51,24 +51,6 @@ def _landing():
         unsafe_allow_html=True,
     )
 
-    # ── Direction arrows at the very top of the page ──────────────
-    arr_l, arr_label, arr_r = st.columns([1, 3, 1])
-    with arr_l:
-        st.markdown(
-            '<div class="arrow-prev-top">←</div>',
-            unsafe_allow_html=True,
-        )
-    with arr_label:
-        st.markdown(
-            '<div class="arrow-top-label">AUTO-SCROLLING DELIVERABLES</div>',
-            unsafe_allow_html=True,
-        )
-    with arr_r:
-        st.markdown(
-            '<div class="arrow-next-top">→</div>',
-            unsafe_allow_html=True,
-        )
-
     left_col, right_col = st.columns([3, 2])
 
     with left_col:
@@ -78,6 +60,11 @@ def _landing():
             + "<h1>Data Product Builder</h1>"
             '<div class="landing-tagline">'
             "7 weeks of manual work → 1 guided session"
+            "</div>"
+            '<div class="landing-value">'
+            "A guided wizard that turns business requirements into production-ready "
+            "Snowflake DDL, dbt models, masking policies, and governance metadata — "
+            "so data teams ship compliant data products in hours, not weeks."
             "</div>"
             "</div>",
             unsafe_allow_html=True,
