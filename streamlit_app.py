@@ -1,6 +1,6 @@
 import streamlit as st
 from state_manager import initialize_state, get_progress
-from components.layout import inject_custom_css
+from components.layout import inject_custom_css, DATA_BOT_SVG
 from components.sidebar import render_sidebar
 from components.canvas import render_canvas
 
@@ -32,12 +32,12 @@ def _landing():
     # No sidebar on landing — clean single focus
     st.markdown(
         '<div class="landing">'
-        '<div class="landing-icon">📊</div>'
-        "<h1>Data Product Builder</h1>"
+        + DATA_BOT_SVG
+        + "<h1>Data Product Builder</h1>"
         '<div class="landing-sub">'
-        "Build production-ready, governed data products for asset management."
-        "<br>Snowflake DDL, dbt models, masking policies, Collibra metadata — "
-        "generated from a guided wizard."
+        "Build production-ready, governed data products for asset management. "
+        "Snowflake DDL, dbt models, masking policies, and Collibra metadata — "
+        "all generated from a guided wizard."
         "</div>"
         "</div>",
         unsafe_allow_html=True,
