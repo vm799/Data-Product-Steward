@@ -1,13 +1,12 @@
 """
-GDP Data Product Steward - Configuration
-Central configuration for the application.
+GDP Data Product Steward — Configuration
 """
 
 APP_CONFIG = {
     "title": "GDP Data Product Steward",
-    "icon": "🏗️",
+    "icon": "🏛️",
     "layout": "wide",
-    "version": "0.1.0",
+    "version": "1.0.0",
 }
 
 STEPS = [
@@ -20,6 +19,17 @@ STEPS = [
     {"key": "review_export", "label": "Review & Export", "page": 7},
 ]
 
+CLASSIFICATION_OPTIONS = ["Public", "Internal", "Confidential", "Restricted"]
+
+RETENTION_OPTIONS = ["30 Days", "90 Days", "1 Year", "3 Years", "7 Years", "Indefinite"]
+
+QUALITY_THRESHOLDS = {
+    "completeness": 95,
+    "accuracy": 99,
+    "timeliness_hours": 24,
+    "uniqueness": 100,
+}
+
 SCORING_WEIGHTS = {
     "business_context": 0.15,
     "data_sources": 0.15,
@@ -27,11 +37,4 @@ SCORING_WEIGHTS = {
     "governance_security": 0.20,
     "data_quality": 0.20,
     "transformations": 0.15,
-}
-
-QUALITY_THRESHOLDS = {
-    "completeness": 0.95,
-    "accuracy": 0.99,
-    "timeliness_hours": 24,
-    "uniqueness": 1.0,
 }
