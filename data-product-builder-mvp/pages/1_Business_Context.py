@@ -1,59 +1,66 @@
-"""
-Step 1: Business Context
-Define the purpose, domain, stakeholders, and business value of the data product.
-"""
-
 import streamlit as st
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from state_manager import StateManager
 
-StateManager.initialize()
+st.header("1️⃣ Business Context")
 
-st.header("Step 1: Business Context")
-st.markdown("Define the business purpose and ownership of your data product.")
+product = st.session_state.product
 
-with st.form("business_context_form"):
-    product_name = st.text_input(
-        "Data Product Name",
-        value=StateManager.get("business_context", {}).get("product_name", ""),
-    )
-    description = st.text_area(
-        "Description",
-        value=StateManager.get("business_context", {}).get("description", ""),
-    )
-    domain = st.selectbox(
-        "Business Domain",
-        options=["Finance", "Marketing", "Operations", "Sales", "HR", "Product", "Other"],
-        index=0,
-    )
-    owner = st.text_input(
-        "Data Product Owner",
-        value=StateManager.get("business_context", {}).get("owner", ""),
-    )
-    stakeholders = st.text_area(
-        "Key Stakeholders (comma-separated)",
-        value=StateManager.get("business_context", {}).get("stakeholders", ""),
-    )
-    business_value = st.text_area(
-        "Business Value Statement",
-        value=StateManager.get("business_context", {}).get("business_value", ""),
-    )
-    use_cases = st.text_area(
-        "Primary Use Cases (one per line)",
-        value=StateManager.get("business_context", {}).get("use_cases", ""),
-    )
+# Product Name
+product["name"] = st.text_input(
+    "Data Product Name",
+    value=product["name"],
+    help="Clear, descriptive name. E.g. Investor_Position_Summary"
+)
 
-    submitted = st.form_submit_button("Save Business Context")
-    if submitted:
-        StateManager.set("business_context", {
-            "product_name": product_name,
-            "description": description,
-            "domain": domain,
-            "owner": owner,
-            "stakeholders": stakeholders,
-            "business_value": business_value,
-            "use_cases": use_cases,
-        })
-        StateManager.mark_step_completed("business_context")
-        st.success("Business context saved.")
+# Domain Selection
+domain_options = ["HR", "Finance", "Risk", "Trading", "InfoSec", "Operations"]
+product["domain"] = st.selectbox(
+    "Business Domain",
+    domain_options,
+    index=domain_options.index(product["domain"]) if product["domain"] in domain_options else 0
+)
+
+# Geographic Scope
+geo_options = ["UK", "US", "UK & US", "Global"]
+product["geo_scope"] = st.selectbox(
+    "Geographic Scope",
+    geo_options
+)
+
+# Business Objective
+product["objective"] = st.text_area(
+    "Business Objective",
+    value=product["objective"],
+    help="What decision or process does this data product enable?"
+)
+
+# Regulatory Logic (Non-AI Rule Based)
+regulatory = []
+
+if product["geo_scope"] in ["UK", "UK & US", "Global"]:
+    regulatory.append("FCA")
+    regulatory.append("GDPR")
+
+if product["geo_scope"] in ["US", "UK & US", "Global"]:
+    regulatory.append("SEC")
+
+if product["domain"] == "Trading":
+    regulatory.append("MiFID II")
+
+if product["domain"] == "HR":
+    regulatory.append("Employee Privacy Laws")
+
+product["regulatory_scope"] = regulatory
+
+st.subheader("Detected Regulatory Considerations")
+st.write(", ".join(regulatory) if regulatory else "None detected")
+
+# Consumers
+product["consumers"] = st.text_input(
+    "Primary Consumers",
+    value=product.get("consumers", ""),
+    help="E.g. Risk Analysts, Portfolio Managers, HR Ops"
+)
+
+# Basic Validation Warning
+if not product["objective"]:
+    st.warning("⚠ Business Objective is required for production readiness.")

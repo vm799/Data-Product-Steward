@@ -7,6 +7,8 @@ def initialize_state():
             "domain": "",
             "objective": "",
             "regulatory_scope": [],
+            "geo_scope": "",
+            "consumers": "",
             "sources": [],
             "entities": [],
             "classification": "",
