@@ -5,13 +5,13 @@ from components.progress_tracker import render_progress
 from components.canvas_preview import render_canvas
 
 st.set_page_config(
-    page_title="Data Product Builder",
+    page_title="GDP Data Product Steward",
     layout="wide",
 )
 
 initialize_state()
 
-st.title("🚀 Data Product Builder")
+st.title("🚀 GDP Data Product Steward")
 st.caption("Governed. Structured. Production-Ready.")
 
 left, center, right = st.columns([1, 2, 1])
