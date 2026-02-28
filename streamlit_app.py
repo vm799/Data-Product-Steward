@@ -1,122 +1,88 @@
 import streamlit as st
-import pandas as pd
-import json
+from state_manager import initialize_state, get_progress
+from components.sidebar import render_sidebar
 
-# --- 100/100 DETERMINISTIC KNOWLEDGE BASE (2026 Standards) ---
-DOMAIN_STEWARDS = {
-    "Equities": {"lead": "Equity Data Desk", "email": "eq-data@firm.com", "licensing": "High"},
-    "Fixed Income": {"lead": "FI Governance Team", "email": "fi-gov@firm.com", "licensing": "High"},
-    "ESG / Sustainable": {"lead": "ESG Excellence Centre", "email": "esg-office@firm.com", "licensing": "Medium"},
-    "Multi-Asset": {"lead": "Portfolio Solutions Group", "email": "psg-data@firm.com", "licensing": "Medium"},
-    "Operations": {"lead": "Global Ops Stewardship", "email": "ops-stewards@firm.com", "licensing": "Low"}
-}
+st.set_page_config(
+    page_title="GDP Data Product Steward",
+    page_icon="🏛️",
+    layout="wide",
+)
 
-REG_ENGINE = {
-    "BCBS 239": {"lineage": "Attribute-Level (Mandatory)", "retention": "10 Years", "snowflake_tier": "Critical"},
-    "DORA / Digital Resilience": {"lineage": "System-Level", "retention": "7 Years", "snowflake_tier": "High"},
-    "SFDR (ESG)": {"lineage": "Source-to-Metric", "retention": "Permanent", "snowflake_tier": "Medium"},
-    "None / Internal": {"lineage": "Table-Level", "retention": "3 Years", "snowflake_tier": "Standard"}
-}
+initialize_state()
+render_sidebar()
 
-st.set_page_config(layout="wide", page_title="100/100 DP Architect")
+product = st.session_state.product
+progress = get_progress(product)
 
-# --- STATE MANAGEMENT ---
-if 'step' not in st.session_state: st.session_state.step = "Qualify"
-if 'data' not in st.session_state: st.session_state.data = {}
+# ── Header ──────────────────────────────────────────────────────────────
+st.title("🏛️ GDP Data Product Steward")
+st.caption("Governed. Structured. Production-Ready.")
 
-def go_to(next_step):
-    st.session_state.step = next_step
-    st.rerun()
+# ── Dashboard Metrics ───────────────────────────────────────────────────
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Completion", f"{progress['pct']}%")
+col2.metric("Entities", len(product.get("entities", [])))
+col3.metric("Sources", len(product.get("sources", [])))
+pii_label = "Yes" if product.get("pii") else "No"
+col4.metric("PII Detected", pii_label)
 
-# --- UI HEADER ---
-st.title("🥇 The 100/100 Data Product Architect")
-st.markdown("### Asset Management Governance Engine (2026 Compliance Standard)")
+st.divider()
 
-# --- SIDEBAR: THE LAYMAN'S TRANSLATOR ---
-with st.sidebar:
-    st.header("📖 Layman's Help")
-    if st.session_state.step == "Qualify":
-        st.write("**What is a Data Product?** It's like a utility. If you need data once, don't build this. If the whole desk needs it daily, you need a Data Product.")
-    elif st.session_state.step == "Govern":
-        st.write("**MNPI:** If you know a trade is happening before it's public, that's MNPI. We must lock Snowflake tight for this.")
-    st.divider()
-    st.info("Status: " + st.session_state.step.upper())
+# ── Live Canvas ─────────────────────────────────────────────────────────
+if product.get("name"):
+    st.subheader("📋 Live Data Product Canvas")
 
-# --- MAIN ENGINE STEPS ---
-col1, col2 = st.columns([2, 1])
+    left, right = st.columns(2)
 
-with col1:
-    # STEP 1: QUALIFICATION & DOMAIN
-    if st.session_state.step == "Qualify":
-        st.header("1. Selection & Intent")
-        domain = st.selectbox("Which Business Domain does this serve?", list(DOMAIN_STEWARDS.keys()))
-        intent = st.radio("Primary Purpose", ["Alpha Generation", "Regulatory Reporting", "Operational Oversight"])
-        
-        if st.button("Proceed to Governance Lockdown"):
-            st.session_state.data['domain'] = domain
-            st.session_state.data['steward'] = DOMAIN_STEWARDS[domain]
-            st.session_state.data['intent'] = intent
-            go_to("Govern")
+    with left:
+        st.markdown(f"**Product Name:** {product['name']}")
+        st.markdown(f"**Domain:** {product.get('domain', '—')}")
+        st.markdown(f"**Geographic Scope:** {product.get('geo_scope', '—')}")
+        st.markdown(f"**Classification:** {product.get('classification') or '—'}")
+        if product.get("regulatory_scope"):
+            st.markdown(f"**Regulatory:** {', '.join(product['regulatory_scope'])}")
 
-    # STEP 2: GOVERNANCE (LOCKDOWN)
-    elif st.session_state.step == "Govern":
-        st.header("2. Regulatory & Security Controls")
-        reg = st.selectbox("Applicable Regulation", list(REG_ENGINE.keys()))
-        security = st.multiselect("Data Classifications", ["PII (Client Info)", "MNPI (Inside Info)", "Market Data (Third Party)"])
-        
-        if st.button("Finalize Stewardship & Payload"):
-            st.session_state.data['reg'] = reg
-            st.session_state.data['security'] = security
-            st.session_state.data['reg_specs'] = REG_ENGINE[reg]
-            go_to("Finalize")
+    with right:
+        st.markdown(f"**Consumers:** {product.get('consumers') or '—'}")
+        st.markdown(f"**Retention:** {product.get('retention_policy') or '—'}")
+        st.markdown(f"**PII:** {'Yes' if product.get('pii') else 'No'}")
+        if product.get("compliance_frameworks"):
+            st.markdown(f"**Compliance:** {', '.join(product['compliance_frameworks'])}")
 
-    # STEP 3: THE GOLD MEDAL OUTPUT
-    elif st.session_state.step == "Finalize":
-        st.success("Requirements Locked. No further iterations permitted for v1.0.")
-        st.balloons()
-        
-        # DISPLAY CANVAS
-        st.header("💎 Data Product Canvas v1.0")
-        res = st.session_state.data
-        
-        st.subheader("Accountability (Stewardship)")
-        st.info(f"**Assigned Steward:** {res['steward']['lead']} ({res['steward']['email']})")
+    # Entity summary
+    if product.get("entities"):
+        st.markdown("---")
+        st.markdown("**Entities:**")
+        for ent in product["entities"]:
+            attr_count = len(ent.get("attributes", []))
+            pii_count = sum(1 for a in ent.get("attributes", []) if a.get("pii"))
+            suffix = f" ({pii_count} PII)" if pii_count else ""
+            st.markdown(f"- `{ent['name']}` — {attr_count} attributes{suffix}")
 
-        # GENERATE TECHNICAL PAYLOADS
-        st.divider()
-        st.subheader("🚀 Target System Ingestion Payloads")
-        
-        payload = {
-            "SNOWFLAKE": {
-                "tags": {
-                    "DATA_DOMAIN": res['domain'],
-                    "SECURITY_CLASS": "SENSITIVE" if res['security'] else "INTERNAL",
-                    "REG_SCOPE": res['reg'],
-                    "MNPI_FLAG": "TRUE" if "MNPI (Inside Info)" in res['security'] else "FALSE"
-                },
-                "masking_policy": "TAG_BASED_PII_MASK" if "PII (Client Info)" in res['security'] else "NONE"
-            },
-            "COLLIBRA": {
-                "Asset_Name": f"{res['domain']}_DP_v1",
-                "Community": res['domain'],
-                "Domain": "Data Products",
-                "Steward": res['steward']['lead']
-            },
-            "SOLIDATUS": {
-                "Lineage_Type": res['reg_specs']['lineage'],
-                "Bi_Temporal": "Enabled" if "BCBS 239" in res['reg'] else "Standard"
-            }
-        }
-        st.json(payload)
-        
-        if st.button("Reset Engine"):
-            st.session_state.clear()
-            st.rerun()
+    # Sources summary
+    if product.get("sources"):
+        st.markdown("**Sources:**")
+        for src in product["sources"]:
+            st.markdown(f"- `{src['name']}` — {src['type']} · {src['frequency']}")
 
-# --- LIVE PREVIEW COLUMN ---
-with col2:
-    st.markdown("#### 🏗️ Live Canvas State")
-    if st.session_state.data:
-        st.write(st.session_state.data)
-    else:
-        st.write("Awaiting input...")
+else:
+    # Getting started
+    st.subheader("Getting Started")
+    st.markdown(
+        """
+        This wizard guides you through building a **complete, governed data product definition**.
+        Navigate using the sidebar pages:
+
+        | Step | Page | What You Define |
+        |------|------|-----------------|
+        | 1 | **Business Context** | Purpose, domain, stakeholders, regulatory scope |
+        | 2 | **Data Sources** | Source systems, ownership, SLAs, risk flags |
+        | 3 | **Data Model** | Entities, attributes, data types, PII tagging |
+        | 4 | **Governance & Security** | Classification, retention, compliance frameworks |
+        | 5 | **Data Quality** | Completeness, accuracy, timeliness thresholds |
+        | 6 | **Transformations** | Processing steps and transformation logic |
+        | 7 | **Review & Export** | Validate and generate Snowflake DDL, dbt, Collibra metadata |
+
+        👈 **Start with Business Context** from the sidebar.
+        """
+    )

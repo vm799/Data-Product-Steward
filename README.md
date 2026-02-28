@@ -1,32 +1,59 @@
-# 🏛️ Asset Management Data Product Architect (v1.0.0)
-**Automated Governance & Requirements Lockdown Engine**
+# GDP Data Product Steward
 
-## 🎯 Purpose
-To collapse the traditional 11-week Data Product (DP) requirement cycle into a **30-minute deterministic session**. This engine enforces firm-wide standards for **Snowflake**, **Collibra**, and **Solidatus** through a "Governance-as-Code" approach, ensuring 100% compliance with BCBS 239 and DORA regulations before a single line of ETL is written.
+**Governed. Structured. Production-Ready.**
 
-## 🛠️ Logic Engine Overview
-The architect uses a **State-Machine Architecture** to prevent scope creep:
-1. **Qualification Gate:** Determines if the request is a "Product" or a "Project."
-2. **Deterministic Governance:** If `Regulation == BCBS 239`, then `Lineage = Attribute-Level`. No manual override.
-3. **Automated Stewardship:** Logic-based assignment of accountability via `DOMAIN_STEWARDS` mapping.
-4. **Target-State Payloads:** Generates JSON configurations for:
-   - **Snowflake:** Tag-based masking, RLS policies, and warehouse sizing.
-   - **Collibra:** Business metadata, community mapping, and certification status.
-   - **Solidatus:** Bi-temporal lineage requirements and system dependency nodes.
+A guided wizard that collapses weeks of data product requirements gathering into a single, structured session — generating Snowflake DDL, dbt models, Collibra metadata, and governance documentation automatically.
 
-## 🚀 Deployment (GitHub Pages)
-1. Push `index.html` to the `main` branch.
-2. Enable **GitHub Pages** in Settings.
-3. Accessible immediately via `https://[org].github.io/dp-architect-gold/`.
+## Structure
 
-## 🔒 Security & Compliance
-- **MNPI Detection:** Automatically triggers Tier-0 security protocols.
-- **Audit Log:** Every "Lockdown" session generates a version-controlled JSON contract in GitHub.
+```
+├── streamlit_app.py          # Main entry point & dashboard
+├── state_manager.py          # Unified session state management
+├── config.py                 # Central configuration
+├── requirements.txt
+├── pages/
+│   ├── 1_Business_Context.py # Domain, objective, regulatory detection
+│   ├── 2_Data_Sources.py     # Source systems, SLAs, risk flags
+│   ├── 3_Data_Model.py       # Entities, attributes, PII tagging
+│   ├── 4_Governance_Security.py # Classification, retention, compliance
+│   ├── 5_Data_Quality.py     # Quality thresholds & monitoring
+│   ├── 6_Transformations.py  # Processing logic & steps
+│   └── 7_Review_Export.py    # Validation, scoring, artifact generation
+├── components/
+│   └── sidebar.py            # Shared progress tracker & glossary
+└── core/
+    ├── snowflake_generator.py # DDL, masking policies, secure views, grants
+    ├── dbt_generator.py       # dbt model SQL & schema.yml
+    ├── collibra_generator.py  # Collibra-compatible metadata import
+    ├── document_engine.py     # Markdown documentation
+    ├── validation_engine.py   # Completeness & policy validation
+    └── scoring_engine.py      # Weighted readiness scoring
+```
 
+## Getting Started
 
+```bash
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```
 
-Sent from Yahoo Mail for iPhone
+## What It Replaces
 
+| Before | After |
+|--------|-------|
+| 4+ workshops | 1 guided session |
+| 6 spreadsheet versions | Structured session state |
+| Manual DDL writing | Auto-generated Snowflake DDL |
+| Governance chasing definitions | PII auto-detection + masking policies |
+| Separate Collibra onboarding | Collibra import JSON generated |
+| Manual dbt scaffolding | dbt models + schema.yml generated |
 
+## Generated Artifacts
 
-
+- **Snowflake DDL** — CREATE TABLE with types, nullability, comments
+- **Masking Policies** — Auto-generated for PII attributes
+- **Secure Views** — Enforced for Restricted/Confidential classification
+- **Access Grants** — Role-based GRANT statements
+- **dbt Models** — SQL models + schema.yml with tests
+- **Collibra Metadata** — Bulk import JSON (product, entity, attribute level)
+- **Documentation** — Complete Markdown specification
