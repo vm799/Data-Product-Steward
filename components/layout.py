@@ -2,7 +2,7 @@
 Theme system — Navy/Teal dual-theme with glassmorphism.
 Asset management aesthetic: institutional trust, modern precision.
 
-Light: White base, navy text, teal accent, dark navy sidebar
+Light: White base, navy text, teal accent, medium-navy sidebar
 Dark:  Deep navy base, light text, bright teal accent, glassmorphism
 """
 
@@ -22,18 +22,28 @@ LIGHT = {
     "accent_light": "rgba(13, 148, 136, 0.08)",
     "gradient": "linear-gradient(135deg, #0D9488 0%, #0891B2 100%)",
     "gold": "#B8860B",
-    "sidebar_bg": "#0B1426",
-    "sidebar_text": "#C8D6E5",
+    # Sidebar — readable medium navy, NOT near-black
+    "sidebar_bg": "#1E3A5F",
+    "sidebar_text": "#E8EDF2",
     "sidebar_heading": "#FFFFFF",
-    "guide_bg": "rgba(13, 148, 136, 0.07)",
-    "guide_border": "#0D9488",
+    "sidebar_muted": "#A3BFDB",
+    "sidebar_divider": "rgba(255, 255, 255, 0.15)",
+    # Guide card
+    "guide_bg": "rgba(45, 212, 191, 0.12)",
+    "guide_border": "#2DD4BF",
+    "guide_text": "#E8EDF2",
+    # Step badge
     "step_badge_bg": "rgba(13, 148, 136, 0.10)",
     "step_badge_text": "#0D9488",
+    # Metrics
     "metric_bg": "rgba(13, 148, 136, 0.05)",
     "metric_border": "rgba(13, 148, 136, 0.12)",
     "divider": "#E5E8EB",
     "input_bg": "#FFFFFF",
     "input_border": "#D1D5DB",
+    # Canvas right panel — light teal tint
+    "canvas_panel_bg": "#F0FAF9",
+    "canvas_panel_border": "#0D9488",
 }
 
 DARK = {
@@ -49,18 +59,28 @@ DARK = {
     "accent_light": "rgba(45, 212, 191, 0.10)",
     "gradient": "linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%)",
     "gold": "#D4A574",
-    "sidebar_bg": "#060E1A",
-    "sidebar_text": "#8B9DB5",
-    "sidebar_heading": "#E2E8F0",
-    "guide_bg": "rgba(45, 212, 191, 0.08)",
+    # Sidebar — visible dark navy, not black
+    "sidebar_bg": "#132A43",
+    "sidebar_text": "#D1DBE8",
+    "sidebar_heading": "#F0F4F8",
+    "sidebar_muted": "#7A94B0",
+    "sidebar_divider": "rgba(255, 255, 255, 0.10)",
+    # Guide card
+    "guide_bg": "rgba(45, 212, 191, 0.10)",
     "guide_border": "#2DD4BF",
+    "guide_text": "#D1DBE8",
+    # Step badge
     "step_badge_bg": "rgba(45, 212, 191, 0.12)",
     "step_badge_text": "#2DD4BF",
+    # Metrics
     "metric_bg": "rgba(45, 212, 191, 0.06)",
     "metric_border": "rgba(45, 212, 191, 0.15)",
     "divider": "rgba(255, 255, 255, 0.06)",
     "input_bg": "#162236",
     "input_border": "rgba(255, 255, 255, 0.10)",
+    # Canvas right panel — darker navy with teal border
+    "canvas_panel_bg": "#0D1E33",
+    "canvas_panel_border": "rgba(45, 212, 191, 0.30)",
 }
 
 
@@ -192,37 +212,79 @@ def _build_css(t: dict) -> str:
         background: {t["accent_light"]} !important;
     }}
 
-    /* ── Sidebar ───────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════
+       SIDEBAR — readable navy, larger font, high contrast
+       ═══════════════════════════════════════════════════════════ */
     section[data-testid="stSidebar"] {{
         background: {t["sidebar_bg"]} !important;
-        font-size: 1rem;
+        font-size: 1.05rem;
     }}
-    section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-    section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li {{
+    /* Force ALL text in sidebar to be readable */
+    section[data-testid="stSidebar"] * {{
         color: {t["sidebar_text"]} !important;
     }}
+    /* Headings brighter */
     section[data-testid="stSidebar"] h1,
     section[data-testid="stSidebar"] h2,
     section[data-testid="stSidebar"] h3 {{
         color: {t["sidebar_heading"]} !important;
     }}
     section[data-testid="stSidebar"] h1 {{
-        font-size: 1.4rem !important;
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
     }}
     section[data-testid="stSidebar"] h3 {{
-        font-size: 1.15rem !important;
+        font-size: 1.2rem !important;
+        font-weight: 600 !important;
     }}
-    section[data-testid="stSidebar"] .stCaption,
-    section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {{
-        color: {t["text_muted"]} !important;
+    /* Muted text */
+    section[data-testid="stSidebar"] .stCaption *,
+    section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {{
+        color: {t["sidebar_muted"]} !important;
     }}
+    /* Dividers */
     section[data-testid="stSidebar"] hr {{
-        border-color: rgba(255, 255, 255, 0.08) !important;
+        border-color: {t["sidebar_divider"]} !important;
     }}
-
-    /* ── Sidebar toggle ────────────────────────────────────────── */
+    /* Expander header text */
+    section[data-testid="stSidebar"] .streamlit-expanderHeader p {{
+        color: {t["sidebar_text"]} !important;
+        font-size: 1.05rem !important;
+    }}
+    /* Toggle label */
     section[data-testid="stSidebar"] .stToggle label span p {{
         color: {t["sidebar_text"]} !important;
+        font-size: 1.05rem !important;
+    }}
+    /* Progress bar in sidebar */
+    section[data-testid="stSidebar"] .stProgress > div > div > div {{
+        background: {t["gradient"]} !important;
+    }}
+
+    /* ── Guide card (sidebar) — visible teal accent ──────────── */
+    .guide-card {{
+        background: {t["guide_bg"]};
+        border-left: 3px solid {t["guide_border"]};
+        padding: 0.8rem;
+        border-radius: 0 0.4rem 0.4rem 0;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        margin-bottom: 0.5rem;
+    }}
+    .guide-card, .guide-card * {{
+        color: {t["guide_text"]} !important;
+    }}
+
+    /* ═══════════════════════════════════════════════════════════
+       CANVAS RIGHT PANEL — distinct tinted background
+       Targets the last column in the top-level column split
+       ═══════════════════════════════════════════════════════════ */
+    .canvas-panel {{
+        background: {t["canvas_panel_bg"]};
+        border-left: 2px solid {t["canvas_panel_border"]};
+        border-radius: 0 0.75rem 0.75rem 0;
+        padding: 1rem;
+        min-height: 400px;
     }}
 
     /* ── Step badge ────────────────────────────────────────────── */
@@ -241,11 +303,11 @@ def _build_css(t: dict) -> str:
     /* ── Canvas header — teal gradient ─────────────────────────── */
     .canvas-header {{
         background: {t["gradient"]};
-        color: white;
+        color: white !important;
         padding: 0.65rem 1rem;
         border-radius: 0.6rem 0.6rem 0 0;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 1.05rem;
         margin-bottom: 0;
     }}
     .canvas-body {{
@@ -258,18 +320,6 @@ def _build_css(t: dict) -> str:
         padding: 0.8rem 1rem;
         font-size: 0.95rem;
         color: {t["text"]};
-    }}
-
-    /* ── Guide card (sidebar) ──────────────────────────────────── */
-    .guide-card {{
-        background: {t["guide_bg"]};
-        border-left: 3px solid {t["guide_border"]};
-        padding: 0.8rem;
-        border-radius: 0 0.4rem 0.4rem 0;
-        font-size: 0.92rem;
-        line-height: 1.55;
-        margin-bottom: 0.5rem;
-        color: {t["sidebar_text"]};
     }}
 
     /* ── Expander ──────────────────────────────────────────────── */
