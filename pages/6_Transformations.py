@@ -17,6 +17,7 @@ step_header(
     "6️⃣ Transformations",
     "Document the processing steps that produce your data product. This creates audit trails and dbt models.",
 )
+render_step_nav(6)
 
 product = st.session_state.product
 
@@ -102,5 +103,3 @@ with form_col:
 
 with canvas_col:
     render_canvas()
-
-render_step_nav(6)

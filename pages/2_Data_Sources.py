@@ -13,6 +13,7 @@ inject_custom_css()
 render_sidebar(step=2)
 
 step_header(2, "2️⃣ Data Sources", "Register every source system that feeds into this data product.")
+render_step_nav(2)
 
 product = st.session_state.product
 
@@ -125,5 +126,3 @@ with form_col:
 
 with canvas_col:
     render_canvas()
-
-render_step_nav(2)

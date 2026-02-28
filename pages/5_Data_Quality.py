@@ -17,6 +17,7 @@ step_header(
     "5️⃣ Data Quality",
     "Set quality thresholds that become automated checks in your data pipeline.",
 )
+render_step_nav(5)
 
 product = st.session_state.product
 qr = product.get("quality_rules", {})
@@ -107,5 +108,3 @@ with form_col:
 
 with canvas_col:
     render_canvas()
-
-render_step_nav(5)

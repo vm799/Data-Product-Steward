@@ -49,8 +49,7 @@ def render_step_complete(current_step: int, is_complete: bool):
 
 
 def render_step_nav(current_step: int):
-    """Render prev / dashboard / next navigation footer at bottom of a wizard page."""
-    st.divider()
+    """Render prev / dashboard / next navigation bar at top of a wizard page."""
     prev_col, dash_col, next_col = st.columns(3)
 
     with prev_col:
@@ -60,10 +59,10 @@ def render_step_nav(current_step: int):
                 label=f"← {STEP_NAMES[current_step - 2]}",
             )
         else:
-            st.page_link("streamlit_app.py", label="← Dashboard")
+            st.page_link("streamlit_app.py", label="← Wizard Agent")
 
     with dash_col:
-        st.page_link("streamlit_app.py", label="⌂ Dashboard")
+        st.page_link("streamlit_app.py", label="⌂ Wizard Agent")
 
     with next_col:
         if current_step < 7:
@@ -72,7 +71,7 @@ def render_step_nav(current_step: int):
                 label=f"{STEP_NAMES[current_step]} →",
             )
         else:
-            st.page_link("streamlit_app.py", label="⌂ Dashboard")
+            st.page_link("streamlit_app.py", label="⌂ Wizard Agent")
 
 STEP_GUIDES = {
     1: {

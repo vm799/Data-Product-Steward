@@ -69,124 +69,9 @@ def render_canvas():
     )
 
     # ═══════════════════════════════════════════════════════════
-    # 1. BUSINESS CONTEXT
-    # ═══════════════════════════════════════════════════════════
-    _section("Business Context")
-    _field("Domain", product.get("domain"))
-    _field("Geography", product.get("geo_scope"))
-    _field("Objective", product.get("objective"))
-    _field("Consumers", product.get("consumers"))
-    if product.get("regulatory_scope"):
-        _field("Regulations", " · ".join(product["regulatory_scope"]))
-
-    # ═══════════════════════════════════════════════════════════
-    # 2. DATA SOURCES
-    # ═══════════════════════════════════════════════════════════
-    sources = product.get("sources", [])
-    _section(f"Data Sources ({len(sources)})")
-    if sources:
-        for src in sources:
-            tags = f'{src["type"]} · {src["frequency"]}'
-            if src.get("criticality") == "High":
-                tags += " · HIGH"
-            st.markdown(
-                f'<div class="cv-source-row">'
-                f'<span class="cv-source-name">{src["name"]}</span>'
-                f'<span class="cv-source-tags">{tags}</span>'
-                f'</div>'
-                f'<div class="cv-source-owner">Owner: {src.get("owner", "—")}</div>',
-                unsafe_allow_html=True,
-            )
-    else:
-        _empty_hint("No sources registered yet")
-
-    # ═══════════════════════════════════════════════════════════
-    # 3. DATA MODEL
+    # DELIVERABLES CHECKLIST — top of canvas for visibility
     # ═══════════════════════════════════════════════════════════
     entities = product.get("entities", [])
-    _section(f"Data Model ({len(entities)} entities)")
-    if entities:
-        for ent in entities:
-            attrs = ent.get("attributes", [])
-            n_pii = sum(1 for a in attrs if a.get("pii"))
-            pii_tag = f' · <span class="cv-pii-tag">PII:{n_pii}</span>' if n_pii else ""
-            st.markdown(
-                f'<div class="cv-entity-name">{ent["name"]}{pii_tag}</div>',
-                unsafe_allow_html=True,
-            )
-            for attr in attrs:
-                pii_dot = '<span class="cv-pii-dot"></span>' if attr.get("pii") else ""
-                st.markdown(
-                    f'<div class="cv-attr-row">'
-                    f'{pii_dot}'
-                    f'<span class="cv-attr-name">{attr["name"]}</span>'
-                    f'<span class="cv-attr-type">{attr.get("data_type", "")}</span>'
-                    f'</div>',
-                    unsafe_allow_html=True,
-                )
-    else:
-        _empty_hint("No entities defined yet")
-
-    # ═══════════════════════════════════════════════════════════
-    # 4. GOVERNANCE & SECURITY
-    # ═══════════════════════════════════════════════════════════
-    has_gov = product.get("classification") or product.get("retention_policy") or product.get("compliance_frameworks")
-    _section("Governance & Security")
-    if has_gov:
-        _field("Classification", product.get("classification"))
-        _field("Retention", product.get("retention_policy"))
-        if product.get("pii"):
-            st.markdown(
-                '<div class="cv-row"><span class="cv-field-label">PII</span>'
-                '<span class="cv-pii-tag" style="font-size:0.85rem;">Contains PII</span></div>',
-                unsafe_allow_html=True,
-            )
-        if product.get("compliance_frameworks"):
-            _field("Compliance", " · ".join(product["compliance_frameworks"]))
-        _field("Access Roles", product.get("access_roles"))
-        _field("Lineage", product.get("lineage_notes"))
-    else:
-        _empty_hint("Not configured yet")
-
-    # ═══════════════════════════════════════════════════════════
-    # 5. DATA QUALITY
-    # ═══════════════════════════════════════════════════════════
-    qr = product.get("quality_rules", {})
-    _section("Data Quality")
-    if qr.get("completeness"):
-        _field("Completeness", f'{qr.get("completeness", 0)}%')
-        _field("Accuracy", f'{qr.get("accuracy", 0)}%')
-        _field("Timeliness", f'{qr.get("timeliness", 0)}%')
-        _field("Uniqueness", f'{qr.get("uniqueness", 0)}%')
-        if qr.get("custom_rules"):
-            _field("Custom Rules", qr["custom_rules"])
-        if qr.get("alert_channel"):
-            _field("Alerts", qr["alert_channel"])
-    else:
-        _empty_hint("No quality thresholds set")
-
-    # ═══════════════════════════════════════════════════════════
-    # 6. TRANSFORMATIONS
-    # ═══════════════════════════════════════════════════════════
-    transforms = product.get("transformations", [])
-    _section(f"Transformations ({len(transforms)} steps)")
-    if transforms:
-        for i, t in enumerate(transforms, 1):
-            st.markdown(
-                f'<div class="cv-transform-row">'
-                f'<span class="cv-transform-num">{i}</span>'
-                f'<span class="cv-transform-name">{t.get("name", "Untitled")}</span>'
-                f'</div>'
-                f'<div class="cv-transform-desc">{t.get("description", "")}</div>',
-                unsafe_allow_html=True,
-            )
-    else:
-        _empty_hint("No transformations defined")
-
-    # ═══════════════════════════════════════════════════════════
-    # DELIVERABLES CHECKLIST
-    # ═══════════════════════════════════════════════════════════
-    st.markdown('<hr class="cv-divider">', unsafe_allow_html=True)
     has_model = any(len(e.get("attributes", [])) > 0 for e in entities)
     deliverables = [
         ("Snowflake DDL", has_model),
@@ -203,7 +88,6 @@ def render_canvas():
         st.markdown(f"{icon} {label}")
 
     # ── Downloads ──────────────────────────────────────────────
-    st.markdown('<hr class="cv-divider">', unsafe_allow_html=True)
     with st.expander("Download", expanded=False):
         from core.document_engine import DocumentEngine
 
@@ -246,5 +130,112 @@ def render_canvas():
             mime="application/json",
             key="_cv_json",
         )
+
+    # ═══════════════════════════════════════════════════════════
+    # CANVAS DATA — detailed sections below deliverables
+    # ═══════════════════════════════════════════════════════════
+    st.markdown('<hr class="cv-divider">', unsafe_allow_html=True)
+
+    # 1. BUSINESS CONTEXT
+    _section("Business Context")
+    _field("Domain", product.get("domain"))
+    _field("Geography", product.get("geo_scope"))
+    _field("Objective", product.get("objective"))
+    _field("Consumers", product.get("consumers"))
+    if product.get("regulatory_scope"):
+        _field("Regulations", " · ".join(product["regulatory_scope"]))
+
+    # 2. DATA SOURCES
+    sources = product.get("sources", [])
+    _section(f"Data Sources ({len(sources)})")
+    if sources:
+        for src in sources:
+            tags = f'{src["type"]} · {src["frequency"]}'
+            if src.get("criticality") == "High":
+                tags += " · HIGH"
+            st.markdown(
+                f'<div class="cv-source-row">'
+                f'<span class="cv-source-name">{src["name"]}</span>'
+                f'<span class="cv-source-tags">{tags}</span>'
+                f'</div>'
+                f'<div class="cv-source-owner">Owner: {src.get("owner", "—")}</div>',
+                unsafe_allow_html=True,
+            )
+    else:
+        _empty_hint("No sources registered yet")
+
+    # 3. DATA MODEL
+    _section(f"Data Model ({len(entities)} entities)")
+    if entities:
+        for ent in entities:
+            attrs = ent.get("attributes", [])
+            n_pii = sum(1 for a in attrs if a.get("pii"))
+            pii_tag = f' · <span class="cv-pii-tag">PII:{n_pii}</span>' if n_pii else ""
+            st.markdown(
+                f'<div class="cv-entity-name">{ent["name"]}{pii_tag}</div>',
+                unsafe_allow_html=True,
+            )
+            for attr in attrs:
+                pii_dot = '<span class="cv-pii-dot"></span>' if attr.get("pii") else ""
+                st.markdown(
+                    f'<div class="cv-attr-row">'
+                    f'{pii_dot}'
+                    f'<span class="cv-attr-name">{attr["name"]}</span>'
+                    f'<span class="cv-attr-type">{attr.get("data_type", "")}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+    else:
+        _empty_hint("No entities defined yet")
+
+    # 4. GOVERNANCE & SECURITY
+    has_gov = product.get("classification") or product.get("retention_policy") or product.get("compliance_frameworks")
+    _section("Governance & Security")
+    if has_gov:
+        _field("Classification", product.get("classification"))
+        _field("Retention", product.get("retention_policy"))
+        if product.get("pii"):
+            st.markdown(
+                '<div class="cv-row"><span class="cv-field-label">PII</span>'
+                '<span class="cv-pii-tag" style="font-size:0.85rem;">Contains PII</span></div>',
+                unsafe_allow_html=True,
+            )
+        if product.get("compliance_frameworks"):
+            _field("Compliance", " · ".join(product["compliance_frameworks"]))
+        _field("Access Roles", product.get("access_roles"))
+        _field("Lineage", product.get("lineage_notes"))
+    else:
+        _empty_hint("Not configured yet")
+
+    # 5. DATA QUALITY
+    qr = product.get("quality_rules", {})
+    _section("Data Quality")
+    if qr.get("completeness"):
+        _field("Completeness", f'{qr.get("completeness", 0)}%')
+        _field("Accuracy", f'{qr.get("accuracy", 0)}%')
+        _field("Timeliness", f'{qr.get("timeliness", 0)}%')
+        _field("Uniqueness", f'{qr.get("uniqueness", 0)}%')
+        if qr.get("custom_rules"):
+            _field("Custom Rules", qr["custom_rules"])
+        if qr.get("alert_channel"):
+            _field("Alerts", qr["alert_channel"])
+    else:
+        _empty_hint("No quality thresholds set")
+
+    # 6. TRANSFORMATIONS
+    transforms = product.get("transformations", [])
+    _section(f"Transformations ({len(transforms)} steps)")
+    if transforms:
+        for i, t in enumerate(transforms, 1):
+            st.markdown(
+                f'<div class="cv-transform-row">'
+                f'<span class="cv-transform-num">{i}</span>'
+                f'<span class="cv-transform-name">{t.get("name", "Untitled")}</span>'
+                f'</div>'
+                f'<div class="cv-transform-desc">{t.get("description", "")}</div>',
+                unsafe_allow_html=True,
+            )
+    else:
+        _empty_hint("No transformations defined")
 
     st.markdown("</div>", unsafe_allow_html=True)
