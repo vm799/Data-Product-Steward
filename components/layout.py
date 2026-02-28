@@ -390,6 +390,149 @@ def _build_css(t: dict) -> str:
         border-color: {t["accent"]} !important;
         color: {t["accent"]} !important;
     }}
+
+    /* ═══════════════════════════════════════════════════════════
+       ONBOARDING — Dashboard hero, zone cards, journey steps
+       ═══════════════════════════════════════════════════════════ */
+
+    /* ── Dashboard hero banner ────────────────────────────────── */
+    .dashboard-hero {{
+        background: {t["gradient"]};
+        color: white !important;
+        padding: 1.5rem 2rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+    }}
+    .dashboard-hero h1 {{
+        color: white !important;
+        margin-bottom: 0.3rem;
+    }}
+    .dashboard-hero p {{
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 1.1rem;
+        margin: 0;
+    }}
+
+    /* ── Onboarding section heading ──────────────────────────── */
+    .onboard-section {{
+        margin-bottom: 0.5rem;
+    }}
+    .onboard-section h3 {{
+        margin-bottom: 0.3rem;
+    }}
+    .onboard-section p {{
+        font-size: 1rem;
+        line-height: 1.6;
+    }}
+
+    /* ── Zone explanation cards (sidebar / wizard / canvas) ───── */
+    .zone-card {{
+        padding: 1rem;
+        border-radius: 0.6rem;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        min-height: 160px;
+        border: 1px solid {t["card_border"]};
+    }}
+    .zone-label {{
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+        opacity: 0.7;
+    }}
+    .zone-sidebar {{
+        background: {t["sidebar_bg"]};
+        color: {t["sidebar_text"]} !important;
+        border-color: {t["sidebar_bg"]};
+    }}
+    .zone-sidebar, .zone-sidebar * {{
+        color: {t["sidebar_text"]} !important;
+    }}
+    .zone-wizard {{
+        background: {t["surface"]};
+    }}
+    .zone-canvas {{
+        background: {t["canvas_panel_bg"]};
+        border-color: {t["canvas_panel_border"]};
+    }}
+
+    /* ── 7-step journey cards ────────────────────────────────── */
+    .journey-step {{
+        display: flex;
+        gap: 1rem;
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid {t["card_border"]};
+        background: {t["surface"]};
+    }}
+    .journey-step-badge {{
+        flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+    }}
+    .journey-step-badge.step-pending {{
+        background: {t["step_badge_bg"]};
+        color: {t["step_badge_text"]};
+    }}
+    .journey-step-badge.step-done {{
+        background: rgba(16, 185, 129, 0.12);
+        color: #10B981;
+        font-size: 1.2rem;
+    }}
+    .journey-step-body {{
+        flex: 1;
+    }}
+    .journey-step-title {{
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 0.2rem;
+        color: {t["text"]};
+    }}
+    .journey-step-what,
+    .journey-step-why {{
+        font-size: 0.92rem;
+        line-height: 1.5;
+        margin-bottom: 0.15rem;
+        color: {t["text"]};
+    }}
+    .journey-step-produces {{
+        font-size: 0.82rem;
+        color: {t["accent"]};
+        font-weight: 500;
+        margin-top: 0.2rem;
+    }}
+
+    /* ── Deliverable cards ────────────────────────────────────── */
+    .deliverable-card {{
+        background: {t["surface"]};
+        border: 1px solid {t["card_border"]};
+        border-radius: 0.6rem;
+        padding: 1rem;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        min-height: 120px;
+    }}
+
+    /* ── Call-to-action box ───────────────────────────────────── */
+    .cta-box {{
+        background: {t["accent_light"]};
+        border: 2px solid {t["accent"]};
+        border-radius: 0.6rem;
+        padding: 1rem 1.5rem;
+        font-size: 1.05rem;
+        text-align: center;
+    }}
 </style>
 """
 
