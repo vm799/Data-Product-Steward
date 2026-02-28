@@ -1,10 +1,10 @@
 """
-Data Product Builder MVP - Configuration
+GDP Data Product Steward - Configuration
 Central configuration for the application.
 """
 
 APP_CONFIG = {
-    "title": "Data Product Builder",
+    "title": "GDP Data Product Steward",
     "icon": "🏗️",
     "layout": "wide",
     "version": "0.1.0",

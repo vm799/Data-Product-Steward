@@ -1,4 +1,4 @@
-# Data Product Builder MVP
+# GDP Data Product Steward
 
 A guided wizard for building enterprise data products with governance, quality, and export capabilities.
 
