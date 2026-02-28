@@ -168,31 +168,32 @@ def _css() -> str:
         line-height: 1.5 !important;
     }
 
-    /* ── Frosted white inputs — dark text for readability ─ */
+    /* ── Frosted glass inputs — teal text for readability ─ */
     .stTextInput input, .stTextArea textarea, .stNumberInput input {
-        background: rgba(255,255,255,0.92) !important;
-        border: 1px solid rgba(255,255,255,0.60) !important;
+        background: rgba(255,255,255,0.06) !important;
+        border: 1px solid rgba(45,212,191,0.25) !important;
         border-radius: 0.5rem !important;
-        color: #1A1D23 !important;
+        color: #2DD4BF !important;
         font-size: 1.1rem !important;
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(12px);
     }
     .stTextInput input::placeholder, .stTextArea textarea::placeholder,
     .stNumberInput input::placeholder {
-        color: #8B95A5 !important;
+        color: rgba(45,212,191,0.40) !important;
     }
     .stTextInput input:focus, .stTextArea textarea:focus, .stNumberInput input:focus {
         border-color: #2DD4BF !important;
-        box-shadow: 0 0 0 2px rgba(45,212,191,0.35),
-                    0 0 16px rgba(45,212,191,0.15) !important;
+        box-shadow: 0 0 0 2px rgba(45,212,191,0.25),
+                    0 0 16px rgba(45,212,191,0.12) !important;
+        background: rgba(255,255,255,0.08) !important;
     }
     .stSelectbox [data-baseweb="select"], .stMultiSelect [data-baseweb="select"] {
-        background: rgba(255,255,255,0.92) !important;
-        border-color: rgba(255,255,255,0.60) !important;
+        background: rgba(255,255,255,0.06) !important;
+        border-color: rgba(45,212,191,0.25) !important;
     }
     .stSelectbox [data-baseweb="select"] > div, .stMultiSelect [data-baseweb="select"] > div {
-        background: rgba(255,255,255,0.92) !important;
-        color: #1A1D23 !important;
+        background: rgba(255,255,255,0.06) !important;
+        color: #2DD4BF !important;
     }
     /* Dropdown menu — dark background for contrast */
     [data-baseweb="popover"] [data-baseweb="menu"],
