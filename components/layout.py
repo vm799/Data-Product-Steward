@@ -251,19 +251,17 @@ def _css() -> str:
         box-shadow: 0 8px 32px rgba(0,0,0,0.20);
     }
 
-    /* ── Glowing form panel — wraps the active form ──── */
+    /* ── Glowing form column — first column in the [7,3] layout ──── */
     @keyframes formGlow {
-        0%   { box-shadow: 0 0 12px rgba(45,212,191,0.08), 0 0 30px rgba(45,212,191,0.04); border-color: rgba(45,212,191,0.15); }
-        50%  { box-shadow: 0 0 24px rgba(45,212,191,0.20), 0 0 50px rgba(45,212,191,0.10); border-color: rgba(45,212,191,0.35); }
-        100% { box-shadow: 0 0 12px rgba(45,212,191,0.08), 0 0 30px rgba(45,212,191,0.04); border-color: rgba(45,212,191,0.15); }
+        0%   { box-shadow: 0 0 12px rgba(45,212,191,0.06), 0 0 30px rgba(45,212,191,0.03); border-color: rgba(45,212,191,0.12); }
+        50%  { box-shadow: 0 0 20px rgba(45,212,191,0.15), 0 0 40px rgba(45,212,191,0.08); border-color: rgba(45,212,191,0.30); }
+        100% { box-shadow: 0 0 12px rgba(45,212,191,0.06), 0 0 30px rgba(45,212,191,0.03); border-color: rgba(45,212,191,0.12); }
     }
-    .form-glow {
-        background: rgba(255,255,255,0.03);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(45,212,191,0.15);
+    [data-testid="stColumns"] > [data-testid="stColumn"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(45,212,191,0.12);
         border-radius: 0.75rem;
-        padding: 1.5rem;
+        padding: 1rem;
         animation: formGlow 3s ease-in-out infinite;
     }
 
@@ -406,7 +404,7 @@ def _css() -> str:
         font-size: 1.25rem;
         font-weight: 700;
         color: #E8ECF1 !important;
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
         line-height: 1.3;
     }
     .canvas-explain {
@@ -423,6 +421,138 @@ def _css() -> str:
         font-size: 1.05rem;
         color: #E8ECF1;
         line-height: 1.6;
+    }
+
+    /* ── Canvas populated detail styles ──────────────── */
+    .cv-section {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #2DD4BF !important;
+        margin-top: 1rem;
+        margin-bottom: 0.3rem;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid rgba(45,212,191,0.15);
+    }
+    .cv-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0.15rem 0;
+        gap: 0.5rem;
+    }
+    .cv-field-label {
+        font-size: 0.8rem;
+        color: #8B95A5 !important;
+        white-space: nowrap;
+        min-width: 5rem;
+        flex-shrink: 0;
+    }
+    .cv-field-value {
+        font-size: 0.85rem;
+        color: #E8ECF1 !important;
+        text-align: right;
+        word-break: break-word;
+    }
+    .cv-empty {
+        font-size: 0.85rem;
+        color: rgba(139,149,165,0.5) !important;
+        font-style: italic;
+        padding: 0.2rem 0;
+    }
+    .cv-divider {
+        border: none !important;
+        border-top: 1px solid rgba(45,212,191,0.12) !important;
+        margin: 0.75rem 0 !important;
+    }
+    /* Sources */
+    .cv-source-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.25rem 0 0 0;
+    }
+    .cv-source-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #E8ECF1 !important;
+    }
+    .cv-source-tags {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.7rem;
+        color: #8B95A5 !important;
+    }
+    .cv-source-owner {
+        font-size: 0.75rem;
+        color: #8B95A5 !important;
+        padding-bottom: 0.3rem;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    /* Entities / attributes */
+    .cv-entity-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #2DD4BF !important;
+        font-family: 'Share Tech Mono', monospace !important;
+        margin-top: 0.4rem;
+        margin-bottom: 0.15rem;
+    }
+    .cv-attr-row {
+        display: flex;
+        align-items: center;
+        padding: 0.08rem 0 0.08rem 0.8rem;
+        gap: 0.4rem;
+    }
+    .cv-attr-name {
+        font-size: 0.8rem;
+        color: #E8ECF1 !important;
+    }
+    .cv-attr-type {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.7rem;
+        color: #8B95A5 !important;
+        margin-left: auto;
+    }
+    .cv-pii-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #F97316;
+        flex-shrink: 0;
+    }
+    .cv-pii-tag {
+        color: #F97316 !important;
+        font-weight: 600;
+        font-size: 0.75rem;
+    }
+    /* Transformations */
+    .cv-transform-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-top: 0.3rem;
+    }
+    .cv-transform-num {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.75rem;
+        color: #2DD4BF !important;
+        background: rgba(45,212,191,0.10);
+        border-radius: 4px;
+        padding: 0.1rem 0.35rem;
+        flex-shrink: 0;
+    }
+    .cv-transform-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #E8ECF1 !important;
+    }
+    .cv-transform-desc {
+        font-size: 0.75rem;
+        color: #8B95A5 !important;
+        padding: 0 0 0.25rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
     }
 
     /* ═══════════════════════════════════════════════════

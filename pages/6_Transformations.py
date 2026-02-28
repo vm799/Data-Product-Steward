@@ -21,10 +21,9 @@ step_header(
 product = st.session_state.product
 
 # ── Two-panel layout ────────────────────────────────────────────────────
-form_col, canvas_col = st.columns([5, 3])
+form_col, canvas_col = st.columns([7, 3])
 
 with form_col:
-    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     st.markdown("#### Add Transformation Step")
     st.caption(
         "Each step describes one transformation in your pipeline. "
@@ -96,8 +95,6 @@ with form_col:
                     st.rerun()
     else:
         st.info("No transformations defined yet. Add your first processing step above.")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
     # ── Step complete prompt ──────────────────────────────
     step_done = len(product.get("transformations", [])) > 0

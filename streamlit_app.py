@@ -329,7 +329,7 @@ def _dashboard():
     next_step = get_next_step(product)
     step_done_list = list(progress["steps"].values())
 
-    main_col, canvas_col = st.columns([5, 3])
+    main_col, canvas_col = st.columns([7, 3])
 
     with main_col:
         # ── Completed steps (enlarged tick + teal accent) ──

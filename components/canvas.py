@@ -1,23 +1,51 @@
 """
 Live Data Product Canvas — frosted glass right-side panel.
-Shows the evolving shape of the data product as the user builds it.
+Populated with every detail the user enters across all wizard steps.
 """
 
 import json
 import streamlit as st
 
 
+def _section(title: str):
+    """Render a canvas section header."""
+    st.markdown(
+        f'<div class="cv-section">{title}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def _field(label: str, value):
+    """Render a single field row — label: value."""
+    if not value:
+        return
+    st.markdown(
+        f'<div class="cv-row">'
+        f'<span class="cv-field-label">{label}</span>'
+        f'<span class="cv-field-value">{value}</span>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def _empty_hint(text: str):
+    """Dim hint when a section has no data yet."""
+    st.markdown(
+        f'<div class="cv-empty">{text}</div>',
+        unsafe_allow_html=True,
+    )
+
+
 def render_canvas():
-    """Render the live canvas — glass panel with teal glow."""
+    """Render the live canvas — glass panel populated with user data."""
     product = st.session_state.product
 
     # ── Glass panel wrapper ────────────────────────────────────
     st.markdown('<div class="canvas-panel">', unsafe_allow_html=True)
 
-    # ── Label + heading ────────────────────────────────────────
+    # ── Label ────────────────────────────────────────────────
     st.markdown(
-        '<div class="canvas-label">[ LIVE CANVAS ]</div>'
-        '<div class="canvas-heading">Data Product Blueprint</div>',
+        '<div class="canvas-label">[ LIVE CANVAS ]</div>',
         unsafe_allow_html=True,
     )
 
@@ -25,89 +53,141 @@ def render_canvas():
 
     if not name:
         st.markdown(
-            '<div class="canvas-explain">'
-            "This panel updates in real time as you complete each step. "
-            "Entities, sources, governance, and deliverables appear here."
-            "</div>",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div class="canvas-body">'
-            "Complete <b>Business Context</b> to begin building yours."
+            '<div class="canvas-heading">Data Product Blueprint</div>'
+            '<div class="cv-empty" style="margin-top:1.5rem;">'
+            "Complete <b>Business Context</b> to begin populating your canvas."
             "</div>",
             unsafe_allow_html=True,
         )
         st.markdown("</div>", unsafe_allow_html=True)
         return
 
-    # ── Subtitle ───────────────────────────────────────────────
+    # ── Product name as main title ───────────────────────────
     st.markdown(
-        '<div class="canvas-explain">'
-        "Updates as you build. Each section reflects your latest inputs."
-        "</div>",
+        f'<div class="canvas-heading">{name}</div>',
         unsafe_allow_html=True,
     )
 
-    # ── Identity ───────────────────────────────────────────────
-    parts = []
-    if product.get("domain"):
-        parts.append(product["domain"])
-    if product.get("geo_scope"):
-        parts.append(product["geo_scope"])
+    # ═══════════════════════════════════════════════════════════
+    # 1. BUSINESS CONTEXT
+    # ═══════════════════════════════════════════════════════════
+    _section("Business Context")
+    _field("Domain", product.get("domain"))
+    _field("Geography", product.get("geo_scope"))
+    _field("Objective", product.get("objective"))
+    _field("Consumers", product.get("consumers"))
+    if product.get("regulatory_scope"):
+        _field("Regulations", " · ".join(product["regulatory_scope"]))
 
-    st.markdown(f"**{name}**")
-    if parts:
-        st.caption(" · ".join(parts))
-
-    # ── Stats ──────────────────────────────────────────────────
-    entities = product.get("entities", [])
+    # ═══════════════════════════════════════════════════════════
+    # 2. DATA SOURCES
+    # ═══════════════════════════════════════════════════════════
     sources = product.get("sources", [])
-    c1, c2 = st.columns(2)
-    c1.metric("Entities", len(entities))
-    c2.metric("Sources", len(sources))
+    _section(f"Data Sources ({len(sources)})")
+    if sources:
+        for src in sources:
+            tags = f'{src["type"]} · {src["frequency"]}'
+            if src.get("criticality") == "High":
+                tags += " · HIGH"
+            st.markdown(
+                f'<div class="cv-source-row">'
+                f'<span class="cv-source-name">{src["name"]}</span>'
+                f'<span class="cv-source-tags">{tags}</span>'
+                f'</div>'
+                f'<div class="cv-source-owner">Owner: {src.get("owner", "—")}</div>',
+                unsafe_allow_html=True,
+            )
+    else:
+        _empty_hint("No sources registered yet")
 
-    # ── Entities ───────────────────────────────────────────────
+    # ═══════════════════════════════════════════════════════════
+    # 3. DATA MODEL
+    # ═══════════════════════════════════════════════════════════
+    entities = product.get("entities", [])
+    _section(f"Data Model ({len(entities)} entities)")
     if entities:
         for ent in entities:
-            n_attr = len(ent.get("attributes", []))
-            n_pii = sum(1 for a in ent.get("attributes", []) if a.get("pii"))
-            pii_tag = f" · PII:{n_pii}" if n_pii else ""
-            st.markdown(f"`{ent['name']}` — {n_attr} attrs{pii_tag}")
+            attrs = ent.get("attributes", [])
+            n_pii = sum(1 for a in attrs if a.get("pii"))
+            pii_tag = f' · <span class="cv-pii-tag">PII:{n_pii}</span>' if n_pii else ""
+            st.markdown(
+                f'<div class="cv-entity-name">{ent["name"]}{pii_tag}</div>',
+                unsafe_allow_html=True,
+            )
+            for attr in attrs:
+                pii_dot = '<span class="cv-pii-dot"></span>' if attr.get("pii") else ""
+                st.markdown(
+                    f'<div class="cv-attr-row">'
+                    f'{pii_dot}'
+                    f'<span class="cv-attr-name">{attr["name"]}</span>'
+                    f'<span class="cv-attr-type">{attr.get("data_type", "")}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+    else:
+        _empty_hint("No entities defined yet")
 
-    # ── Governance ─────────────────────────────────────────────
-    tags = []
-    if product.get("classification"):
-        tags.append(product["classification"])
-    if product.get("retention_policy"):
-        tags.append(product["retention_policy"])
-    if product.get("pii"):
-        tags.append("PII")
-    if tags:
-        st.markdown(" · ".join(tags))
+    # ═══════════════════════════════════════════════════════════
+    # 4. GOVERNANCE & SECURITY
+    # ═══════════════════════════════════════════════════════════
+    has_gov = product.get("classification") or product.get("retention_policy") or product.get("compliance_frameworks")
+    _section("Governance & Security")
+    if has_gov:
+        _field("Classification", product.get("classification"))
+        _field("Retention", product.get("retention_policy"))
+        if product.get("pii"):
+            st.markdown(
+                '<div class="cv-row"><span class="cv-field-label">PII</span>'
+                '<span class="cv-pii-tag" style="font-size:0.85rem;">Contains PII</span></div>',
+                unsafe_allow_html=True,
+            )
+        if product.get("compliance_frameworks"):
+            _field("Compliance", " · ".join(product["compliance_frameworks"]))
+        _field("Access Roles", product.get("access_roles"))
+        _field("Lineage", product.get("lineage_notes"))
+    else:
+        _empty_hint("Not configured yet")
 
-    if product.get("regulatory_scope"):
-        st.caption("Regulatory: " + ", ".join(product["regulatory_scope"]))
-
-    # ── Quality ────────────────────────────────────────────────
+    # ═══════════════════════════════════════════════════════════
+    # 5. DATA QUALITY
+    # ═══════════════════════════════════════════════════════════
     qr = product.get("quality_rules", {})
+    _section("Data Quality")
     if qr.get("completeness"):
-        st.caption(
-            f"Quality: {qr.get('completeness', 0)}% complete · "
-            f"{qr.get('accuracy', 0)}% accurate"
-        )
+        _field("Completeness", f'{qr.get("completeness", 0)}%')
+        _field("Accuracy", f'{qr.get("accuracy", 0)}%')
+        _field("Timeliness", f'{qr.get("timeliness", 0)}%')
+        _field("Uniqueness", f'{qr.get("uniqueness", 0)}%')
+        if qr.get("custom_rules"):
+            _field("Custom Rules", qr["custom_rules"])
+        if qr.get("alert_channel"):
+            _field("Alerts", qr["alert_channel"])
+    else:
+        _empty_hint("No quality thresholds set")
 
-    # ── Transforms ─────────────────────────────────────────────
+    # ═══════════════════════════════════════════════════════════
+    # 6. TRANSFORMATIONS
+    # ═══════════════════════════════════════════════════════════
     transforms = product.get("transformations", [])
+    _section(f"Transformations ({len(transforms)} steps)")
     if transforms:
-        st.caption(f"Transforms: {len(transforms)} step(s)")
+        for i, t in enumerate(transforms, 1):
+            st.markdown(
+                f'<div class="cv-transform-row">'
+                f'<span class="cv-transform-num">{i}</span>'
+                f'<span class="cv-transform-name">{t.get("name", "Untitled")}</span>'
+                f'</div>'
+                f'<div class="cv-transform-desc">{t.get("description", "")}</div>',
+                unsafe_allow_html=True,
+            )
+    else:
+        _empty_hint("No transformations defined")
 
-    # ── Deliverables ───────────────────────────────────────────
-    st.divider()
-    st.markdown("**Deliverables**")
-    st.caption("Check = ready to generate from your inputs so far.")
-
+    # ═══════════════════════════════════════════════════════════
+    # DELIVERABLES CHECKLIST
+    # ═══════════════════════════════════════════════════════════
+    st.markdown('<hr class="cv-divider">', unsafe_allow_html=True)
     has_model = any(len(e.get("attributes", [])) > 0 for e in entities)
-
     deliverables = [
         ("Snowflake DDL", has_model),
         ("Masking Policies", product.get("pii", False) and has_model),
@@ -116,14 +196,15 @@ def render_canvas():
         ("Collibra Import", bool(name)),
         ("Documentation", bool(name)),
     ]
-
+    ready_count = sum(1 for _, r in deliverables if r)
+    _section(f"Deliverables ({ready_count}/{len(deliverables)})")
     for label, ready in deliverables:
         icon = "✅" if ready else "⬜"
         st.markdown(f"{icon} {label}")
 
     # ── Downloads ──────────────────────────────────────────────
-    st.divider()
-    with st.expander("Download Now", expanded=False):
+    st.markdown('<hr class="cv-divider">', unsafe_allow_html=True)
+    with st.expander("Download", expanded=False):
         from core.document_engine import DocumentEngine
 
         doc = DocumentEngine(product)
