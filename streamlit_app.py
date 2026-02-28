@@ -245,7 +245,7 @@ def _canvas_guide():
         unsafe_allow_html=True,
     )
 
-    mockup_col, explain_col = st.columns([1, 1])
+    mockup_col, explain_col = st.columns([3, 2])
 
     with mockup_col:
         # Canvas mockup with typewriter demo
@@ -299,76 +299,81 @@ def _canvas_guide():
             st.session_state.onboard = 1
             st.rerun()
     with fwd_col:
-        if st.button("Go to Dashboard", use_container_width=True):
+        if st.button("Go to Wizard Agent →", use_container_width=True):
             st.session_state.onboard = 3
             st.rerun()
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# PAGE 3 — DASHBOARD (clickable steps + "start here" arrows)
+# PAGE 3 — WIZARD AGENT (hierarchy-driven step list)
 # ═══════════════════════════════════════════════════════════════════════
+
+_STEPS_INFO = [
+    ("Business Context", "Name it, pick domain & geography — regulations auto-detect"),
+    ("Data Sources", "Register upstream systems with owners, SLAs, criticality"),
+    ("Data Model", "Design tables & columns — tag PII to auto-generate masking"),
+    ("Governance & Security", "Classify sensitivity, set retention, assign access roles"),
+    ("Data Quality", "Set completeness/accuracy thresholds — become pipeline checks"),
+    ("Transformations", "Document processing steps — generates runnable dbt models"),
+    ("Review & Export", "Validate, fix errors, download all production artifacts"),
+]
+
+
 def _dashboard():
     render_sidebar()
 
-    st.markdown("# Dashboard")
-    st.caption(
-        "Your data product at a glance. "
-        "Click a step below to start building."
-    )
+    st.markdown("# Wizard Agent")
+    st.caption("Click a step below to start building.")
+    st.markdown('<hr class="wiz-thin-rule">', unsafe_allow_html=True)
 
-    # Metrics row
-    if product.get("name"):
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Product", product["name"])
-        c2.metric("Progress", f"{progress['pct']}%")
-        c3.metric("Entities", len(product.get("entities", [])))
-        c4.metric("Sources", len(product.get("sources", [])))
+    next_step = get_next_step(product)
+    step_done_list = list(progress["steps"].values())
 
     main_col, canvas_col = st.columns([5, 3])
 
     with main_col:
-        st.markdown('<div class="wizard-panel">', unsafe_allow_html=True)
-
-        st.markdown(
-            "A **Data Product** in asset management is a governed dataset built "
-            "for a specific business purpose — investor positions, risk exposures, "
-            "regulatory reporting."
-        )
-
-        st.markdown("### The 7 Steps")
-        st.caption("Click any step to navigate. Complete them in order for best results.")
-
-        # ── Clickable journey list ──────────────────────────
-        next_step = get_next_step(product)
-
-        steps_info = [
-            ("Business Context", "Name it, pick domain & geography — regulations auto-detect"),
-            ("Data Sources", "Register upstream systems with owners, SLAs, criticality"),
-            ("Data Model", "Design tables & columns — tag PII to auto-generate masking"),
-            ("Governance", "Classify sensitivity, set retention, assign access roles"),
-            ("Data Quality", "Set completeness/accuracy thresholds — become pipeline checks"),
-            ("Transformations", "Document processing steps — generates runnable dbt models"),
-            ("Review & Export", "Validate, fix errors, download all production artifacts"),
-        ]
-
-        for i, (name, desc) in enumerate(steps_info, 1):
-            done = list(progress["steps"].values())[i - 1]
+        # ── Completed steps (enlarged tick + teal accent) ──
+        for i, (name, desc) in enumerate(_STEPS_INFO, 1):
+            done = step_done_list[i - 1]
             is_next = i == next_step
 
-            icon = "✅" if done else f"{i}"
-            if is_next:
-                label = f"{icon}  {name} — {desc}"
-            else:
-                label = f"{icon}  {name} — {desc}"
-
-            st.page_link(PAGE_MAP[i], label=label)
-
-            if is_next:
+            if done:
+                # Completed — big tick, teal card
                 st.markdown(
-                    '<span class="flash-arrow">↑ START HERE</span>',
+                    f'<div class="wiz-step-done">'
+                    f'<span class="wiz-step-done-tick">✅</span>'
+                    f'<span class="wiz-step-done-name">{name}</span>'
+                    f'<span class="wiz-step-done-desc">{desc}</span>'
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
+                st.page_link(PAGE_MAP[i], label=f"↻ Revisit {name}")
+
+            elif is_next:
+                # Next step — HERO card, orange accent, large
+                st.markdown(
+                    f'<div class="wiz-step-hero">'
+                    f'<div class="wiz-step-hero-num">STEP {i} OF 7</div>'
+                    f'<div class="wiz-step-hero-name">{name}</div>'
+                    f'<div class="wiz-step-hero-desc">{desc}</div>'
+                    f'<span class="wiz-step-hero-arrow">→ START HERE</span>'
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
+                st.page_link(PAGE_MAP[i], label=f"Open {name} →")
+
+            else:
+                # Future — small, dimmed
+                st.markdown(
+                    f'<div class="wiz-step-pending">'
+                    f'<span class="wiz-step-pending-num">{i}</span>'
+                    f'<span class="wiz-step-pending-name">{name}</span>'
+                    f"</div>",
                     unsafe_allow_html=True,
                 )
 
+        # ── Deliverables ──────────────────────────────────
+        st.markdown("")
         st.markdown("### What Gets Generated")
         st.markdown(
             '<div class="deliv-row">'
@@ -382,10 +387,23 @@ def _dashboard():
             unsafe_allow_html=True,
         )
 
-        st.markdown("</div>", unsafe_allow_html=True)
-
     with canvas_col:
-        render_canvas()
+        has_data = product.get("name")
+        if has_data:
+            render_canvas()
+        else:
+            st.markdown('<div class="canvas-panel">', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="canvas-label">[ LIVE CANVAS ]</div>'
+                '<div class="canvas-heading">Data Product Blueprint</div>',
+                unsafe_allow_html=True,
+            )
+            st.markdown(
+                '<div class="wiz-canvas-empty">No data yet — '
+                "complete Step 1 to begin</div>",
+                unsafe_allow_html=True,
+            )
+            st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════
