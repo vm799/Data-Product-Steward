@@ -524,37 +524,96 @@ def _css() -> str:
     }
 
     /* ═══════════════════════════════════════════════════
-       DASHBOARD — journey + deliverables
+       WIZARD AGENT — step hierarchy + orange next
        ═══════════════════════════════════════════════════ */
-    .journey-list { margin: 0.4rem 0; }
-    .journey-item {
-        display: flex;
-        align-items: baseline;
-        gap: 0.7rem;
-        padding: 0.55rem 0;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-        font-size: 1.1rem;
-        line-height: 1.5;
+    .wiz-thin-rule {
+        border: none;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        margin: 0.4rem 0 1.2rem 0;
     }
-    .journey-item:last-child { border-bottom: none; }
-    .journey-num {
+
+    /* ── Hero step — the next incomplete step ────────── */
+    .wiz-step-hero {
+        background: rgba(249,115,22,0.06);
+        border: 2px solid rgba(249,115,22,0.35);
+        border-radius: 0.75rem;
+        padding: 1.6rem 1.8rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .wiz-step-hero:hover {
+        border-color: #F97316;
+        box-shadow: 0 0 20px rgba(249,115,22,0.15);
+    }
+    .wiz-step-hero-num {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.82rem; letter-spacing: 0.1em;
+        color: #F97316; font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+    }
+    .wiz-step-hero-name {
+        font-size: 1.8rem; font-weight: 700;
+        color: #E8ECF1; line-height: 1.3;
+        margin-bottom: 0.3rem;
+    }
+    .wiz-step-hero-desc {
+        font-size: 1.15rem; color: #C8D0DC;
+        line-height: 1.6;
+    }
+    .wiz-step-hero-arrow {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 1rem; font-weight: 700;
+        color: #F97316 !important;
+        animation: flashArrow 1.2s ease-in-out infinite;
+        margin-top: 0.6rem;
+        display: inline-block;
+    }
+
+    /* ── Completed step — enlarged tick, faded text ───── */
+    .wiz-step-done {
+        display: flex; align-items: center; gap: 0.8rem;
+        padding: 0.7rem 1rem;
+        background: rgba(45,212,191,0.04);
+        border: 1px solid rgba(45,212,191,0.12);
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .wiz-step-done-tick {
+        font-size: 1.6rem; flex-shrink: 0;
+    }
+    .wiz-step-done-name {
+        font-size: 1.25rem; font-weight: 600;
+        color: #2DD4BF;
+    }
+    .wiz-step-done-desc {
+        font-size: 0.95rem; color: #5A6478;
+        margin-left: auto;
+    }
+
+    /* ── Pending step — small, dimmed ────────────────── */
+    .wiz-step-pending {
+        display: flex; align-items: center; gap: 0.7rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        opacity: 0.5;
+    }
+    .wiz-step-pending:last-child { border-bottom: none; }
+    .wiz-step-pending-num {
         flex-shrink: 0;
-        width: 28px; height: 28px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.12);
-        color: #8B95A5 !important;
-        display: inline-flex;
-        align-items: center; justify-content: center;
-        font-size: 0.8rem; font-weight: 600;
+        width: 24px; height: 24px; border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #5A6478;
+        font-size: 0.72rem; font-weight: 600;
+        display: inline-flex; align-items: center; justify-content: center;
     }
-    .journey-num.done {
-        background: rgba(45,212,191,0.10);
-        border-color: #2DD4BF;
-        color: #2DD4BF !important;
+    .wiz-step-pending-name {
+        font-size: 1rem; color: #5A6478; font-weight: 500;
     }
-    .journey-name { font-weight: 600; min-width: 150px; color: #E8ECF1; font-size: 1.1rem; }
-    .journey-desc { color: #8B95A5; font-size: 1.02rem; }
+
+    /* ── Deliverables row ─────────────────────────────── */
     .deliv-row { display: flex; gap: 0.75rem; margin: 0.4rem 0; }
     .deliv-item {
         flex: 1;
@@ -566,6 +625,15 @@ def _css() -> str:
         color: #8B95A5;
     }
     .deliv-item b { display: block; margin-bottom: 0.15rem; color: #E8ECF1; font-size: 1.05rem; }
+
+    /* ── Empty canvas placeholder ─────────────────────── */
+    .wiz-canvas-empty {
+        display: flex; align-items: center; justify-content: center;
+        min-height: 400px;
+        color: #3A4250;
+        font-size: 1.15rem;
+        font-style: italic;
+    }
 
     /* ── Sidebar label (mono accent) ────────────────── */
     .sidebar-label {
