@@ -651,37 +651,106 @@ def _css() -> str:
     }
 
     /* ═══════════════════════════════════════════════════
-       SIDEBAR MOCKUP — for onboarding guide page
+       SIDEBAR MOCKUP — frosted white glass, full height
        ═══════════════════════════════════════════════════ */
     .sidebar-mockup {
-        background: rgba(8,12,22,0.85);
-        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255,255,255,0.14);
         border-radius: 0.75rem;
-        padding: 1rem 1rem 1rem 2.4rem;
-        max-width: 340px;
-        font-size: 0.92rem;
+        padding: 1.2rem 1.4rem 1.2rem 3rem;
+        min-height: 520px;
+        font-size: 1rem;
     }
-    .sm-section { position: relative; padding: 0.4rem 0; }
+    .sm-section {
+        position: relative;
+        padding: 0.6rem 0;
+        opacity: 0.28;
+        transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .sm-section.active {
+        opacity: 1;
+        transform: scale(1.02);
+    }
     .sm-callout {
-        position: absolute; left: -1.8rem; top: 0.4rem;
-        width: 22px; height: 22px; border-radius: 50%;
-        background: #2DD4BF; color: #06080D;
-        font-size: 0.7rem; font-weight: 700;
+        position: absolute; left: -2.2rem; top: 0.55rem;
+        width: 26px; height: 26px; border-radius: 50%;
+        background: rgba(255,255,255,0.12); color: #5A6478;
+        font-size: 0.75rem; font-weight: 700;
         display: inline-flex; align-items: center; justify-content: center;
+        transition: background 0.3s, color 0.3s;
     }
-    .sm-brand { font-family: 'Share Tech Mono', monospace !important; font-size: 0.68rem; color: #5A6478; letter-spacing: 0.1em; }
-    .sm-title { font-size: 1.05rem; font-weight: 700; color: #E8ECF1; }
-    .sm-divider { border-top: 1px solid rgba(255,255,255,0.08); margin: 0.35rem 0; }
-    .sm-label { font-size: 0.88rem; font-weight: 600; color: #E8ECF1; margin-bottom: 0.2rem; }
-    .sm-bar { background: rgba(45,212,191,0.08); height: 5px; border-radius: 3px; margin-bottom: 0.15rem; }
-    .sm-bar-fill { background: linear-gradient(135deg, #2DD4BF, #22D3EE); height: 100%; width: 28%; border-radius: 3px; }
-    .sm-bar-text { font-size: 0.72rem; color: #5A6478; }
-    .sm-step { padding: 0.15rem 0; color: #8B95A5; font-size: 0.85rem; }
+    .sm-section.active .sm-callout {
+        background: #2DD4BF; color: #06080D;
+        box-shadow: 0 0 10px rgba(45,212,191,0.5);
+    }
+    .sm-brand {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.78rem; color: #8B95A5;
+        letter-spacing: 0.1em;
+    }
+    .sm-title { font-size: 1.1rem; font-weight: 700; color: #E8ECF1; }
+    .sm-divider { border-top: 1px solid rgba(255,255,255,0.08); margin: 0.4rem 0; }
+    .sm-label {
+        font-size: 1rem; font-weight: 600; color: #E8ECF1;
+        margin-bottom: 0.25rem;
+    }
+    .sm-bar {
+        background: rgba(45,212,191,0.08); height: 6px;
+        border-radius: 3px; margin-bottom: 0.2rem;
+    }
+    .sm-bar-fill {
+        background: linear-gradient(135deg, #2DD4BF, #22D3EE);
+        height: 100%; width: 28%; border-radius: 3px;
+    }
+    .sm-bar-text { font-size: 0.8rem; color: #5A6478; }
+    .sm-step { padding: 0.2rem 0; color: #8B95A5; font-size: 0.95rem; }
     .sm-step.done { color: #5A6478; }
     .sm-step.current { color: #E8ECF1; font-weight: 600; }
-    .sm-tip { background: rgba(45,212,191,0.06); border-left: 2px solid #2DD4BF; padding: 0.3rem 0.5rem; border-radius: 0 0.3rem 0.3rem 0; font-size: 0.78rem; color: #8B95A5; }
+    .sm-tip {
+        background: rgba(45,212,191,0.06);
+        border-left: 2px solid #2DD4BF;
+        padding: 0.35rem 0.6rem;
+        border-radius: 0 0.3rem 0.3rem 0;
+        font-size: 0.88rem; color: #8B95A5;
+    }
 
-    /* ── Explain annotations beside mockup ──────────── */
+    /* ── Single focused explanation card ────────────── */
+    .sm-explain-focus {
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(45,212,191,0.15);
+        border-radius: 0.75rem;
+        padding: 2rem 1.8rem;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .sm-explain-focus-num {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: #2DD4BF; color: #06080D;
+        font-size: 1rem; font-weight: 700;
+        display: inline-flex; align-items: center; justify-content: center;
+        margin-bottom: 0.8rem;
+    }
+    .sm-explain-focus-title {
+        font-size: 1.35rem; font-weight: 700;
+        color: #E8ECF1; margin-bottom: 0.4rem;
+    }
+    .sm-explain-focus-desc {
+        font-size: 1.12rem; line-height: 1.75;
+        color: #C8D0DC;
+    }
+    .sm-explain-focus-desc b { color: #E8ECF1 !important; }
+    .sm-explain-counter {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.82rem; color: #5A6478;
+        letter-spacing: 0.1em; margin-bottom: 0.6rem;
+    }
+
+    /* ── Explain annotations beside mockup (legacy) ─── */
     .sm-explain-item {
         display: flex; gap: 0.6rem; align-items: flex-start;
         margin-bottom: 0.7rem; font-size: 1.05rem; line-height: 1.6; color: #C8D0DC;
