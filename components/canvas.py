@@ -1,6 +1,6 @@
 """
-Live Data Product Canvas — teal right-side panel.
-Shows the evolving shape of the data product as the user fills in each step.
+Live Data Product Canvas — frosted glass right-side panel.
+Shows the evolving shape of the data product as the user builds it.
 """
 
 import json
@@ -8,54 +8,49 @@ import streamlit as st
 
 
 def render_canvas():
-    """Render the live canvas in the right column of each page."""
+    """Render the live canvas — glass panel with teal glow."""
     product = st.session_state.product
 
-    # ── Panel wrapper — solid teal background ──────────────────
+    # ── Glass panel wrapper ────────────────────────────────────
     st.markdown('<div class="canvas-panel">', unsafe_allow_html=True)
 
-    # ── Header + explanation ────────────────────────────────────
+    # ── Label + heading ────────────────────────────────────────
     st.markdown(
-        '<div class="canvas-header">Live Data Product Canvas</div>',
+        '<div class="canvas-title">Live Canvas</div>'
+        '<div class="canvas-heading">Data Product Blueprint</div>',
         unsafe_allow_html=True,
     )
 
     name = product.get("name")
 
     if not name:
-        # Empty state — explain what this panel is and why
         st.markdown(
-            '<div class="canvas-subtitle">'
-            "This panel is your live blueprint. As you complete each step of "
-            "the wizard, your data product takes shape here in real time — "
-            "entities, sources, governance rules, and a checklist of "
-            "deployment artifacts that are ready to generate.<br><br>"
-            "When a deliverable shows a check mark, it means you've provided "
-            "enough information for the builder to generate that artifact "
-            "(DDL, masking policy, dbt model, etc.) automatically."
+            '<div class="canvas-explain">'
+            "This panel is your live blueprint. As you fill in each step, "
+            "your data product takes shape here — entities, sources, governance "
+            "rules, and a checklist showing which deployment artifacts are ready "
+            "to generate. Start with Step 1 to see it come to life."
             "</div>",
             unsafe_allow_html=True,
         )
         st.markdown(
             '<div class="canvas-body">'
-            "Complete <b>Step 1 — Business Context</b> to see your "
-            "data product appear here."
+            "Complete <b>Business Context</b> to begin."
             "</div>",
             unsafe_allow_html=True,
         )
         st.markdown("</div>", unsafe_allow_html=True)
         return
 
-    # ── Subtitle — what evolving means ─────────────────────────
+    # ── Subtitle ───────────────────────────────────────────────
     st.markdown(
-        '<div class="canvas-subtitle">'
-        "This updates live as you build. Each section below reflects "
-        "your latest inputs across all steps."
+        '<div class="canvas-explain">'
+        "Updates as you build. Each section reflects your latest inputs."
         "</div>",
         unsafe_allow_html=True,
     )
 
-    # ── Product Identity ───────────────────────────────────────
+    # ── Identity ───────────────────────────────────────────────
     parts = []
     if product.get("domain"):
         parts.append(product["domain"])
@@ -66,37 +61,36 @@ def render_canvas():
     if parts:
         st.caption(" · ".join(parts))
 
-    # ── Quick Stats ────────────────────────────────────────────
+    # ── Stats ──────────────────────────────────────────────────
     entities = product.get("entities", [])
     sources = product.get("sources", [])
-
     c1, c2 = st.columns(2)
     c1.metric("Entities", len(entities))
     c2.metric("Sources", len(sources))
 
-    # ── Entity List ────────────────────────────────────────────
+    # ── Entities ───────────────────────────────────────────────
     if entities:
         for ent in entities:
             n_attr = len(ent.get("attributes", []))
             n_pii = sum(1 for a in ent.get("attributes", []) if a.get("pii"))
-            pii_tag = f" · 🔴 {n_pii} PII" if n_pii else ""
+            pii_tag = f" · PII:{n_pii}" if n_pii else ""
             st.markdown(f"`{ent['name']}` — {n_attr} attrs{pii_tag}")
 
-    # ── Governance Snapshot ────────────────────────────────────
+    # ── Governance ─────────────────────────────────────────────
     tags = []
     if product.get("classification"):
         tags.append(product["classification"])
     if product.get("retention_policy"):
         tags.append(product["retention_policy"])
     if product.get("pii"):
-        tags.append("PII Detected")
+        tags.append("PII")
     if tags:
         st.markdown(" · ".join(tags))
 
     if product.get("regulatory_scope"):
         st.caption("Regulatory: " + ", ".join(product["regulatory_scope"]))
 
-    # ── Quality Snapshot ───────────────────────────────────────
+    # ── Quality ────────────────────────────────────────────────
     qr = product.get("quality_rules", {})
     if qr.get("completeness"):
         st.caption(
@@ -104,15 +98,15 @@ def render_canvas():
             f"{qr.get('accuracy', 0)}% accurate"
         )
 
-    # ── Transformations Snapshot ───────────────────────────────
+    # ── Transforms ─────────────────────────────────────────────
     transforms = product.get("transformations", [])
     if transforms:
-        st.caption(f"Transforms: {len(transforms)} step(s) defined")
+        st.caption(f"Transforms: {len(transforms)} step(s)")
 
-    # ── Deliverables Checklist ─────────────────────────────────
+    # ── Deliverables ───────────────────────────────────────────
     st.divider()
     st.markdown("**Deliverables**")
-    st.caption("Check marks mean enough data exists to generate that artifact.")
+    st.caption("Check = ready to generate from your inputs so far.")
 
     has_model = any(len(e.get("attributes", [])) > 0 for e in entities)
 
@@ -131,7 +125,6 @@ def render_canvas():
 
     # ── Downloads ──────────────────────────────────────────────
     st.divider()
-
     with st.expander("Download Now", expanded=False):
         from core.document_engine import DocumentEngine
 
@@ -175,5 +168,4 @@ def render_canvas():
             key="_cv_json",
         )
 
-    # Close panel wrapper
     st.markdown("</div>", unsafe_allow_html=True)

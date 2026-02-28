@@ -18,27 +18,27 @@ product = st.session_state.product
 progress = get_progress(product)
 
 # ═══════════════════════════════════════════════════════════════════════
-# HEADER — title, subtitle, helpers ribbon — no wasted vertical space
+# HEADER
 # ═══════════════════════════════════════════════════════════════════════
-st.markdown("# 📊 Data Product Builder")
+st.markdown("# Data Product Builder")
 st.caption(
     "Define, govern, and ship a production-ready data product for asset management — "
-    "this tool generates Snowflake DDL, dbt models, masking policies, and Collibra metadata."
+    "generates Snowflake DDL, dbt models, masking policies, and Collibra metadata."
 )
 
-# Helpers ribbon — show what tools are available
+# Helpers ribbon
 st.markdown(
     '<div class="helpers-ribbon">'
-    '<span class="helper-tag">📊 Progress Tracker — sidebar</span>'
-    '<span class="helper-tag">💡 Step-by-Step Tips — sidebar</span>'
-    '<span class="helper-tag">📖 Glossary of Terms — sidebar</span>'
-    '<span class="helper-tag">📋 Live Canvas — right panel</span>'
+    '<span class="helper-tag">Progress Tracker — sidebar</span>'
+    '<span class="helper-tag">Step-by-Step Tips — sidebar</span>'
+    '<span class="helper-tag">Glossary — sidebar</span>'
+    '<span class="helper-tag">Live Canvas — right panel</span>'
     "</div>",
     unsafe_allow_html=True,
 )
 
 # ═══════════════════════════════════════════════════════════════════════
-# RETURNING USER — progress bar + next step
+# RETURNING USER
 # ═══════════════════════════════════════════════════════════════════════
 if product.get("name"):
     rc1, rc2, rc3, rc4 = st.columns(4)
@@ -51,56 +51,55 @@ if product.get("name"):
     if pending:
         st.info(
             f"Welcome back — next step: **{pending[0]}**. "
-            f"Select it from the sidebar to continue."
+            f"Select it from the sidebar."
         )
     else:
         st.success(
-            "All steps complete. Head to **Review & Export** to download your artifacts."
+            "All steps complete. Head to **Review & Export** to download artifacts."
         )
 
 # ═══════════════════════════════════════════════════════════════════════
-# MAIN + CANVAS SPLIT
+# MAIN + CANVAS
 # ═══════════════════════════════════════════════════════════════════════
 main_col, canvas_col = st.columns([5, 3])
 
 with main_col:
-    # ── What is a Data Product? ─────────────────────────────────
     st.markdown(
-        "In asset management, a **Data Product** is a governed dataset built "
+        "A **Data Product** in asset management is a governed dataset built "
         "for a specific business purpose — investor positions, risk exposures, "
-        "regulatory reporting. This builder walks you through every decision to "
-        "take one from idea to production, even if you've never done it before."
+        "regulatory reporting. This builder walks you through every decision "
+        "to take one from idea to production."
     )
 
-    # ── Screen layout — single row, not 3 matching cards ────────
+    # Layout zones — fused row
     st.markdown(
         '<div class="zone-row">'
         '<div class="zone-cell zone-nav">'
         '<div class="zone-cell-label">Left</div>'
         '<div class="zone-cell-title">Sidebar</div>'
-        "Progress, tips, glossary. Navigate between steps here."
+        "Progress, tips, glossary"
         "</div>"
         '<div class="zone-cell zone-wiz">'
         '<div class="zone-cell-label">Center</div>'
         '<div class="zone-cell-title">Wizard</div>'
-        "Fill in the form for each step. Save and move forward."
+        "Fill forms, save, move forward"
         "</div>"
         '<div class="zone-cell zone-cvs">'
         '<div class="zone-cell-label">Right</div>'
         '<div class="zone-cell-title">Live Canvas</div>'
-        "Your data product blueprint — updates as you build."
+        "Blueprint — updates as you build"
         "</div>"
         "</div>",
         unsafe_allow_html=True,
     )
 
-    # ── 7 Steps — clean list, not bulky cards ───────────────────
+    # 7 steps
     st.markdown("### The 7 steps")
 
     steps_info = [
-        ("Business Context", "Name it, pick a domain, set geography — regulations auto-detect"),
-        ("Data Sources", "Register upstream systems with owners, SLAs, and criticality"),
-        ("Data Model", "Design tables and columns — tag PII to auto-generate masking"),
+        ("Business Context", "Name it, pick domain & geography — regulations auto-detect"),
+        ("Data Sources", "Register upstream systems with owners, SLAs, criticality"),
+        ("Data Model", "Design tables & columns — tag PII to auto-generate masking"),
         ("Governance", "Classify sensitivity, set retention, assign access roles"),
         ("Data Quality", "Set completeness/accuracy thresholds — become pipeline checks"),
         ("Transformations", "Document processing steps — generates runnable dbt models"),
@@ -120,36 +119,27 @@ with main_col:
             f"</div>"
         )
 
-    st.markdown(
-        f'<div class="journey-list">{items_html}</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f'<div class="journey-list">{items_html}</div>', unsafe_allow_html=True)
 
-    # ── What you get ────────────────────────────────────────────
+    # Deliverables
     st.markdown("### What gets generated")
     st.markdown(
         '<div class="deliv-row">'
-        '<div class="deliv-item">'
-        "<b>Snowflake</b>"
-        "CREATE TABLE DDL, masking policies, secure views, GRANT statements"
-        "</div>"
-        '<div class="deliv-item">'
-        "<b>dbt</b>"
-        "schema.yml with tests, source definitions, transformation model SQL"
-        "</div>"
-        '<div class="deliv-item">'
-        "<b>Governance</b>"
-        "Collibra import JSON, full Markdown docs, version-controlled definition"
-        "</div>"
+        '<div class="deliv-item"><b>Snowflake</b>'
+        "DDL, masking policies, secure views, GRANT statements</div>"
+        '<div class="deliv-item"><b>dbt</b>'
+        "schema.yml, source defs, transformation SQL</div>"
+        '<div class="deliv-item"><b>Governance</b>'
+        "Collibra JSON, Markdown docs, versioned definition</div>"
         "</div>",
         unsafe_allow_html=True,
     )
 
-    # ── CTA ─────────────────────────────────────────────────────
+    # CTA
     st.markdown(
         '<div class="cta-line">'
-        "Open the sidebar and select <b>Business Context</b> to start. "
-        "The canvas on the right will build up as you go."
+        "Select <b>Business Context</b> in the sidebar to start. "
+        "The canvas on the right builds up as you go."
         "</div>",
         unsafe_allow_html=True,
     )
