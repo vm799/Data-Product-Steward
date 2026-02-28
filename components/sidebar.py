@@ -1,5 +1,8 @@
 """
-Sidebar: theme toggle + progress tracker + step-specific guide + glossary.
+Sidebar: orientation label, theme toggle, progress tracker,
+step-specific guide, and glossary.
+
+Designed so a first-time user immediately understands what the sidebar is for.
 """
 
 import streamlit as st
@@ -7,24 +10,58 @@ from state_manager import get_progress
 from components.helpers import STEP_GUIDES
 
 GLOSSARY = {
-    "Data Product": "A curated, governed dataset built for a specific business purpose.",
-    "PII": "Personally Identifiable Information — data that can identify an individual.",
-    "Classification": "A sensitivity label: Public, Internal, Confidential, or Restricted.",
+    "Data Product": (
+        "A curated, governed dataset built for a specific business purpose — "
+        "e.g. an Investor Position Summary or a Risk Exposure Feed."
+    ),
+    "PII": (
+        "Personally Identifiable Information — any data that can identify "
+        "a real person (name, SSN, email, account number)."
+    ),
+    "Classification": (
+        "A sensitivity label that controls who can see the data: "
+        "Public, Internal, Confidential, or Restricted."
+    ),
     "Grain": "The level of detail in a table — what one row represents.",
-    "SLA": "Service Level Agreement — expected timeliness of data delivery.",
-    "dbt": "Data Build Tool — a transformation framework for analytics engineering.",
-    "Lineage": "The path data follows from source to consumption.",
-    "Retention Policy": "How long data is stored before archival or deletion.",
-    "Data Domain": "A business area (e.g. Finance, Risk) that owns the data.",
-    "Data Steward": "The person responsible for quality and governance of a data asset.",
-    "DDL": "Data Definition Language — SQL that defines database structures.",
-    "Masking Policy": "A rule that obfuscates sensitive columns for unauthorized users.",
+    "SLA": (
+        "Service Level Agreement — how quickly data must arrive. "
+        "e.g. 'refreshed within 4 hours of market close'."
+    ),
+    "dbt": (
+        "Data Build Tool — an industry-standard framework for writing "
+        "and testing data transformations in SQL."
+    ),
+    "Lineage": (
+        "The documented path data follows from source to consumption — "
+        "regulators require this for audit."
+    ),
+    "Retention Policy": (
+        "How long data is kept before archival or deletion. "
+        "Regulated firms typically need 3–7 years."
+    ),
+    "Data Domain": (
+        "A business area that owns the data — e.g. Finance, Risk, "
+        "Trading, HR, Operations."
+    ),
+    "Data Steward": (
+        "The named person responsible for the quality and governance "
+        "of a data asset. Every product needs one."
+    ),
+    "DDL": (
+        "Data Definition Language — SQL commands (CREATE TABLE, etc.) "
+        "that define database structures in Snowflake."
+    ),
+    "Masking Policy": (
+        "A Snowflake security rule that automatically hides sensitive "
+        "column values from unauthorized users."
+    ),
 }
 
 
 def render_sidebar(step: int = None):
     """
-    Render the sidebar with theme toggle, progress, step guide, and glossary.
+    Render the sidebar with orientation, theme toggle, progress,
+    step guide, and glossary.
 
     Args:
         step: Current step number (1-7). If provided, shows contextual guide.
@@ -34,25 +71,37 @@ def render_sidebar(step: int = None):
 
     with st.sidebar:
         # ── Theme toggle ───────────────────────────────────────
-        st.toggle(
-            "🌙 Dark Mode",
-            key="dark_mode",
+        st.toggle("🌙 Dark Mode", key="dark_mode")
+
+        st.divider()
+
+        # ── Branding + orientation ─────────────────────────────
+        st.markdown("# 📊 Data Product Builder")
+        st.caption(
+            "This sidebar tracks your progress, shows tips for each step, "
+            "and provides a glossary. Use the page links above to navigate."
         )
 
         st.divider()
 
-        # ── Progress ───────────────────────────────────────────
-        st.markdown("# 🏛️ Data Product Steward")
+        # ── Progress tracker ───────────────────────────────────
+        st.markdown("### Your Progress")
         st.progress(progress["pct"] / 100)
         st.caption(
-            f"**{progress['pct']}%** complete — {progress['done']}/{progress['total']} steps"
+            f"**{progress['pct']}%** complete — "
+            f"{progress['done']}/{progress['total']} steps done"
         )
 
-        st.divider()
-
-        for step_name, done in progress["steps"].items():
+        # Step checklist
+        step_names = list(progress["steps"].keys())
+        for i, step_name in enumerate(step_names, 1):
+            done = progress["steps"][step_name]
             icon = "✅" if done else "⬜"
-            st.markdown(f"{icon} {step_name}")
+            # Highlight current step
+            if step is not None and i == step:
+                st.markdown(f"**{icon} ▶ {step_name}** ← you are here")
+            else:
+                st.markdown(f"{icon} {step_name}")
 
         # ── Step Guide (contextual) ────────────────────────────
         if step is not None and step in STEP_GUIDES:
@@ -69,9 +118,24 @@ def render_sidebar(step: int = None):
                 st.markdown(f"- {tip}")
 
             st.caption(f"Feeds into: {guide['feeds']}")
+        elif step is None:
+            # Home page — show general orientation
+            st.divider()
+            st.markdown("### 💡 Getting Started")
+            st.markdown(
+                '<div class="guide-card">'
+                "Click <b>Business Context</b> in the page list above to begin "
+                "building your data product. Each step builds on the last — "
+                "work through them in order for the best results."
+                "</div>",
+                unsafe_allow_html=True,
+            )
 
         # ── Glossary ───────────────────────────────────────────
         st.divider()
-        with st.expander("📖 Glossary"):
+        st.markdown("### 📖 Glossary")
+        st.caption("Key terms explained — expand to look up any unfamiliar concept.")
+
+        with st.expander("Open Glossary", expanded=False):
             for term, defn in GLOSSARY.items():
                 st.markdown(f"**{term}:** {defn}")

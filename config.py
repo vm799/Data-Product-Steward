@@ -1,10 +1,10 @@
 """
-GDP Data Product Steward — Configuration
+Data Product Builder — Configuration
 """
 
 APP_CONFIG = {
-    "title": "GDP Data Product Steward",
-    "icon": "🏛️",
+    "title": "Data Product Builder — Asset Management",
+    "icon": "📊",
     "layout": "wide",
     "version": "1.0.0",
 }

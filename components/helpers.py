@@ -1,103 +1,123 @@
 """
 Per-step contextual guidance shown in the sidebar.
-Each step has: why it matters, practical tips, and what it feeds into.
+Each step has: why it matters (in plain English), practical tips, and what it feeds into.
+Written for someone with zero data engineering experience.
 """
 
 STEP_GUIDES = {
     1: {
-        "title": "Why Business Context?",
+        "title": "Business Context — Why?",
         "why": (
-            "Defining your domain and regulatory scope **upfront** determines which "
-            "governance policies, compliance frameworks, and security controls are "
-            "automatically applied to every artifact generated."
+            "Every data product starts with <b>who needs it</b> and <b>what it's for</b>. "
+            "Defining your business domain and geographic scope here lets the tool "
+            "<b>automatically detect which regulations apply</b> — e.g. UK data triggers "
+            "FCA and GDPR rules; Trading data triggers MiFID II. You won't need to "
+            "look these up yourself."
         ),
         "tips": [
-            "Pick a descriptive name like `Investor_Position_Summary`",
-            "Regulatory scope is auto-detected from domain + geography",
-            "Be specific about consumers — this drives access roles later",
+            "Pick a descriptive name like `Investor_Position_Summary` — this becomes the title everywhere",
+            "Regulatory scope is auto-detected: just pick domain + geography and we handle the rest",
+            "Be specific about consumers (who reads this data?) — it drives access roles later",
+            "The 'Business Objective' should be one clear sentence: what decision does this data support?",
         ],
         "feeds": "Regulatory detection, Collibra domain mapping, document header",
     },
     2: {
-        "title": "Why Register Sources?",
+        "title": "Data Sources — Why?",
         "why": (
-            "Every data product needs accountable ownership. Registering sources with "
-            "SLAs and criticality enables **automatic governance alerts** — e.g. external "
-            "sources trigger enhanced due diligence."
+            "Before you build anything, you need to document <b>where the data comes from</b>. "
+            "In asset management, data without a named owner is a compliance risk. "
+            "This step ensures every source system has <b>accountability, an SLA, and a "
+            "criticality rating</b>. The tool will flag risks automatically — like external "
+            "sources needing extra due diligence."
         ),
         "tips": [
-            "Every source needs a named Data Owner — no orphan data",
-            "High-criticality sources without SLAs get flagged automatically",
-            "External/Vendor sources require enhanced due diligence",
+            "Every source MUST have a named Data Owner — regulators check for this",
+            "High-criticality sources without SLAs get flagged as governance alerts",
+            "External or vendor data triggers 'enhanced due diligence' warnings",
+            "Volume + frequency impacts cost — the tool warns you about expensive combos",
         ],
         "feeds": "dbt source definitions, lineage documentation, risk assessment",
     },
     3: {
-        "title": "Why Build the Data Model?",
+        "title": "Data Model — Why?",
         "why": (
-            "Entities and attributes are the backbone. **PII tagging here drives "
-            "automatic masking policy generation** in Snowflake — one checkbox creates "
-            "a complete security policy."
+            "This is the backbone of your data product: the <b>tables (entities) and "
+            "columns (attributes)</b> that define its structure. The critical action here "
+            "is <b>PII tagging</b> — checking 'Contains PII' on a column automatically "
+            "creates a Snowflake masking policy that hides that value from unauthorized "
+            "users. One checkbox = complete security policy."
         ),
         "tips": [
-            "Names are auto-uppercased to match Snowflake convention",
-            "Tag ALL attributes containing personal data as PII",
-            "Descriptions become column COMMENT in the generated DDL",
+            "Names are auto-uppercased to match Snowflake naming convention",
+            "Tag EVERY column containing personal data as PII — this generates masking policies",
+            "Descriptions become SQL COMMENTs in the generated DDL — worth filling in",
+            "You can add multiple entities (tables) — each with its own set of columns",
         ],
         "feeds": "Snowflake DDL, dbt schema.yml, Collibra attributes, masking policies",
     },
     4: {
-        "title": "Why Set Governance?",
+        "title": "Governance & Security — Why?",
         "why": (
-            "Classification determines security controls: **Restricted** = secure views "
-            "+ row-level security. **Confidential** = column masking. This is not "
-            "optional — it directly shapes what gets generated."
+            "Classification determines what <b>security controls get generated</b>: "
+            "<b>Restricted</b> data gets secure views + row-level security. "
+            "<b>Confidential</b> data gets column masking. This isn't a label — it directly "
+            "controls what code is produced. Regulators audit these controls, so getting "
+            "this right is non-negotiable."
         ),
         "tips": [
-            "If PII exists, add at least GDPR or CCPA to compliance",
-            "Restricted is the strongest tier — use for MNPI and PII",
-            "Access roles map directly to Snowflake GRANT statements",
+            "If PII columns exist (from Step 3), add at least GDPR or CCPA to compliance",
+            "Restricted = strongest tier — use for MNPI (material non-public info) and PII",
+            "Access roles map directly to Snowflake GRANT statements (e.g. ANALYST_ROLE, RISK_ROLE)",
+            "Retention period: regulated firms typically need 3–7 years minimum",
         ],
         "feeds": "Masking policies, secure views, access grants, compliance metadata",
     },
     5: {
-        "title": "Why Define Quality Rules?",
+        "title": "Data Quality — Why?",
         "why": (
-            "Quality thresholds define what **'good enough'** means. These become "
-            "automated checks in your data pipeline — if completeness drops below "
-            "threshold, alerts fire."
+            "Quality thresholds define what <b>'good enough' means</b> for your data product. "
+            "These become <b>automated pipeline checks</b> — if completeness drops below "
+            "your threshold, alerts fire to your Slack or email before bad data reaches "
+            "dashboards or trading models. 95% completeness is the industry baseline."
         ),
         "tips": [
-            "95% completeness is the industry baseline — adjust to your SLAs",
-            "Set timeliness based on source SLAs from Step 2",
-            "Custom rules become dbt tests in generated models",
+            "95% completeness is standard — adjust up or down based on how critical the data is",
+            "Timeliness should match the SLAs you set in Step 2 (e.g. daily source → 24h SLA)",
+            "Custom rules become dbt tests — write things like 'amount > 0' or 'currency IN (USD, GBP)'",
+            "Set an alerting channel so quality failures notify the right people",
         ],
         "feeds": "dbt tests, monitoring rules, quality documentation",
     },
     6: {
-        "title": "Why Document Transformations?",
+        "title": "Transformations — Why?",
         "why": (
-            "Transformation logic creates an **audit trail** and enables automatic "
-            "dbt model generation. Regulators require lineage — this is how you prove it."
+            "Transformation steps document <b>how raw data becomes the final product</b>. "
+            "This creates an <b>audit trail</b> that regulators require — proof of every "
+            "change applied to the data. The SQL you write here becomes runnable "
+            "dbt models that your data engineering team can deploy immediately."
         ),
         "tips": [
-            "Reference entity names from Step 3 for lineage integrity",
-            "SQL logic becomes the body of generated dbt models",
-            "Chain steps: source -> staging -> final for clarity",
+            "Reference entity names from Step 3 — the tool suggests them for consistency",
+            "Chain transforms: raw source → staging (clean) → final (business-ready)",
+            "SQL logic becomes the body of generated dbt models — write production SQL",
+            "Every step should have a clear description explaining the business logic",
         ],
         "feeds": "dbt model SQL, transformation docs, lineage mapping",
     },
     7: {
-        "title": "Your Quality Gate",
+        "title": "Review & Export — Your Quality Gate",
         "why": (
-            "This is the final checkpoint. Validation ensures your data product "
-            "definition is **complete and consistent** before generating deployment "
-            "artifacts."
+            "This is the <b>final checkpoint</b> before generating production artifacts. "
+            "The validator checks that your data product definition is <b>complete and "
+            "consistent</b> — e.g. PII columns exist but no compliance framework is set? "
+            "That's an error. Fix all errors, then download everything."
         ),
         "tips": [
-            "Fix all errors before exporting — warnings are advisory",
-            "Download individual artifacts or the complete package",
-            "Readiness score is weighted across all previous steps",
+            "Fix all red errors before exporting — yellow warnings are advisory only",
+            "Download individual artifact packages or the complete bundle",
+            "The readiness score is weighted across all 7 steps — aim for 85%+",
+            "You can always go back to earlier steps to fix issues, then return here",
         ],
         "feeds": "Snowflake DDL, dbt models, Collibra import, docs, full JSON",
     },
