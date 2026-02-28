@@ -251,19 +251,7 @@ def _css() -> str:
         box-shadow: 0 8px 32px rgba(0,0,0,0.20);
     }
 
-    /* ── Glowing form column — first column in the [7,3] layout ──── */
-    @keyframes formGlow {
-        0%   { box-shadow: 0 0 12px rgba(45,212,191,0.06), 0 0 30px rgba(45,212,191,0.03); border-color: rgba(45,212,191,0.12); }
-        50%  { box-shadow: 0 0 20px rgba(45,212,191,0.15), 0 0 40px rgba(45,212,191,0.08); border-color: rgba(45,212,191,0.30); }
-        100% { box-shadow: 0 0 12px rgba(45,212,191,0.06), 0 0 30px rgba(45,212,191,0.03); border-color: rgba(45,212,191,0.12); }
-    }
-    [data-testid="stColumns"] > [data-testid="stColumn"]:first-child > [data-testid="stVerticalBlockBorderWrapper"] {
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(45,212,191,0.12);
-        border-radius: 0.75rem;
-        padding: 1rem;
-        animation: formGlow 3s ease-in-out infinite;
-    }
+    /* (form glow removed — full-width layout) */
 
     /* ── Step complete prompt ──────────────────────────── */
     .step-complete-prompt {
@@ -915,6 +903,40 @@ def _css() -> str:
         color: #2DD4BF;
         flex-shrink: 0;
     }
+    /* ── Top-of-page direction arrows ─────────────── */
+    .landing-top-arrows {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 0.5rem 0 0.8rem 0;
+    }
+    .landing-top-arr-left {
+        font-size: 1.4rem;
+        color: #2DD4BF;
+        animation: arrowBounceL 1.5s ease-in-out infinite;
+    }
+    .landing-top-arr-right {
+        font-size: 1.4rem;
+        color: #F97316;
+        animation: arrowBounceR 1.5s ease-in-out infinite;
+    }
+    .landing-top-arr-label {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #5A6478;
+    }
+    @keyframes arrowBounceL {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(-6px); }
+    }
+    @keyframes arrowBounceR {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(6px); }
+    }
+
     /* ── Deliverable panel (landing right side) ──────── */
     .deliv-panel-title {
         font-size: 1.4rem;
@@ -923,78 +945,77 @@ def _css() -> str:
         margin-bottom: 1rem;
         line-height: 1.3;
     }
-    .deliv-card {
+
+    /* ── Auto-cycling deliverable carousel ──────────── */
+    .deliv-carousel {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+    .deliv-card.deliv-auto {
         background: rgba(255,255,255,0.03);
         border: 1px solid rgba(255,255,255,0.06);
         border-radius: 0;
         clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-        padding: 0.6rem 1rem;
-        margin-bottom: 0.4rem;
-        opacity: 0.4;
-        transition: all 0.35s ease;
+        padding: 0.55rem 1rem;
+        opacity: 0.35;
+        transform: scale(1);
+        transition: none;
+        animation: delivCycle 18s ease-in-out infinite;
+        animation-delay: calc(var(--d) * 3s);
     }
-    .deliv-card.deliv-active {
-        background: rgba(45,212,191,0.06);
-        border-color: rgba(45,212,191,0.35);
-        clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
-        padding: 1.1rem 1.2rem;
-        opacity: 1;
-        box-shadow: inset 3px 0 0 #2DD4BF, 0 0 20px rgba(45,212,191,0.12);
-        transform: scale(1.04);
+    @keyframes delivCycle {
+        0%      { opacity: 0.35; transform: scale(1); background: rgba(255,255,255,0.03);
+                  border-color: rgba(255,255,255,0.06); box-shadow: none; padding: 0.55rem 1rem; }
+        2%      { opacity: 1; transform: scale(1.04);
+                  background: rgba(249,115,22,0.08);
+                  border-color: rgba(249,115,22,0.5);
+                  box-shadow: inset 3px 0 0 #F97316, 0 0 22px rgba(249,115,22,0.15);
+                  padding: 1rem 1.2rem; }
+        14%     { opacity: 1; transform: scale(1.04);
+                  background: rgba(249,115,22,0.08);
+                  border-color: rgba(249,115,22,0.5);
+                  box-shadow: inset 3px 0 0 #F97316, 0 0 22px rgba(249,115,22,0.15);
+                  padding: 1rem 1.2rem; }
+        18%     { opacity: 0.35; transform: scale(1); background: rgba(255,255,255,0.03);
+                  border-color: rgba(255,255,255,0.06); box-shadow: none; padding: 0.55rem 1rem; }
+        100%    { opacity: 0.35; transform: scale(1); background: rgba(255,255,255,0.03);
+                  border-color: rgba(255,255,255,0.06); box-shadow: none; padding: 0.55rem 1rem; }
     }
-    .deliv-card-name {
-        font-size: 1.15rem;
+    .deliv-card.deliv-auto .deliv-card-name {
+        font-size: 1.05rem;
         font-weight: 700;
         color: #8B95A5;
         font-family: 'Share Tech Mono', monospace !important;
+        transition: color 0.3s, font-size 0.3s;
     }
-    .deliv-card.deliv-active .deliv-card-name {
-        color: #2DD4BF !important;
-        font-size: 1.35rem;
-    }
-    .deliv-card-desc {
-        font-size: 0.95rem;
-        color: #5A6478;
-        display: none;
-    }
-    .deliv-card.deliv-active .deliv-card-desc {
-        display: block;
+    .deliv-card.deliv-auto .deliv-card-desc {
+        font-size: 0;
         color: #C8D0DC;
-        font-size: 1.05rem;
-        margin-top: 0.3rem;
+        max-height: 0;
+        overflow: hidden;
         line-height: 1.5;
+        opacity: 0;
+        transition: none;
+        animation: delivDescCycle 18s ease-in-out infinite;
+        animation-delay: calc(var(--d) * 3s);
     }
-
-    /* ── Direction arrow buttons — diff colours ─────── */
-    .arrow-prev, .arrow-next {
-        overflow: visible;
-        margin-bottom: 0.3rem;
+    .deliv-card.deliv-auto .deliv-card-step {
+        font-size: 0;
+        color: #F97316;
+        max-height: 0;
+        overflow: hidden;
+        font-family: 'Share Tech Mono', monospace !important;
+        opacity: 0;
+        animation: delivDescCycle 18s ease-in-out infinite;
+        animation-delay: calc(var(--d) * 3s);
     }
-    .arrow-prev button {
-        background: rgba(45,212,191,0.10) !important;
-        border: 1px solid rgba(45,212,191,0.3) !important;
-        color: #2DD4BF !important;
-        font-size: 1.2rem !important;
-        font-weight: 700 !important;
-        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-        border-radius: 0 !important;
-    }
-    .arrow-prev button:hover {
-        background: rgba(45,212,191,0.20) !important;
-        border-color: #2DD4BF !important;
-    }
-    .arrow-next button {
-        background: rgba(249,115,22,0.10) !important;
-        border: 1px solid rgba(249,115,22,0.3) !important;
-        color: #F97316 !important;
-        font-size: 1.2rem !important;
-        font-weight: 700 !important;
-        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-        border-radius: 0 !important;
-    }
-    .arrow-next button:hover {
-        background: rgba(249,115,22,0.20) !important;
-        border-color: #F97316 !important;
+    @keyframes delivDescCycle {
+        0%      { font-size: 0; max-height: 0; opacity: 0; margin-top: 0; }
+        2%      { font-size: 0.95rem; max-height: 80px; opacity: 1; margin-top: 0.3rem; }
+        14%     { font-size: 0.95rem; max-height: 80px; opacity: 1; margin-top: 0.3rem; }
+        18%     { font-size: 0; max-height: 0; opacity: 0; margin-top: 0; }
+        100%    { font-size: 0; max-height: 0; opacity: 0; margin-top: 0; }
     }
 
     /* ── Wizard step page links — full width clickable ─ */
@@ -1096,38 +1117,42 @@ def _css() -> str:
         font-size: 0.88rem; color: #8B95A5;
     }
 
-    /* ── Single focused explanation card ────────────── */
-    .sm-explain-focus {
-        background: rgba(255,255,255,0.04);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(45,212,191,0.15);
-        border-radius: 0.75rem;
-        padding: 2rem 1.8rem;
-        min-height: 200px;
+    /* ── Inline sidebar descriptions (beside each feature) ── */
+    .sidebar-mockup.sm-inline {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .sm-section-inline {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        gap: 1.5rem;
+        align-items: stretch;
+        padding: 0.6rem 0;
     }
-    .sm-explain-focus-num {
-        width: 36px; height: 36px; border-radius: 50%;
-        background: #2DD4BF; color: #06080D;
-        font-size: 1rem; font-weight: 700;
-        display: inline-flex; align-items: center; justify-content: center;
-        margin-bottom: 0.8rem;
+    .sm-section-content {
+        flex: 0 0 240px;
+        position: relative;
+        padding: 0.5rem 0.6rem 0.5rem 2.2rem;
     }
-    .sm-explain-focus-title {
-        font-size: 1.35rem; font-weight: 700;
-        color: #E8ECF1; margin-bottom: 0.4rem;
-    }
-    .sm-explain-focus-desc {
-        font-size: 1.12rem; line-height: 1.75;
+    .sm-inline-desc {
+        flex: 1;
+        background: rgba(249,115,22,0.05);
+        border-left: 3px solid #F97316;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+        padding: 0.7rem 1rem;
+        font-size: 0.95rem;
+        line-height: 1.6;
         color: #C8D0DC;
     }
-    .sm-explain-focus-desc b { color: #E8ECF1 !important; }
-    .sm-explain-counter {
+    .sm-inline-desc b { color: #E8ECF1 !important; }
+    .sm-inline-title {
+        display: block;
         font-family: 'Share Tech Mono', monospace !important;
-        font-size: 0.82rem; color: #5A6478;
-        letter-spacing: 0.1em; margin-bottom: 0.6rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #F97316;
+        margin-bottom: 0.25rem;
     }
 
     /* ── Explain annotations beside mockup (legacy) ─── */
