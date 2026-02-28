@@ -1,11 +1,11 @@
 """
-Sidebar: progress tracker, step-specific guide, glossary.
+Sidebar: progress tracker, clickable step navigation, step guide, glossary.
 Glass panel on dark gradient — always dark theme.
 """
 
 import streamlit as st
-from state_manager import get_progress
-from components.helpers import STEP_GUIDES
+from state_manager import get_progress, get_next_step
+from components.helpers import STEP_GUIDES, PAGE_MAP, STEP_NAMES
 
 GLOSSARY = {
     "Data Product": (
@@ -57,21 +57,20 @@ GLOSSARY = {
 
 
 def render_sidebar(step: int = None):
-    """Render sidebar with progress, step guide, and glossary."""
+    """Render sidebar with progress, clickable steps, guide, and glossary."""
     product = st.session_state.product
     progress = get_progress(product)
+    next_step = get_next_step(product)
 
     with st.sidebar:
-        # ── Sidebar label + branding ──────────────────────
+        # ── Dashboard link — always at top ────────────────
+        st.page_link("streamlit_app.py", label="⌂ DASHBOARD")
+
         st.markdown(
             '<div class="sidebar-label">// navigation & tools</div>',
             unsafe_allow_html=True,
         )
-        st.markdown("# Data Product Builder")
-        st.caption(
-            "Progress tracker, tips, and glossary. "
-            "Click Dashboard above to return here."
-        )
+        st.caption("Click any step to navigate. Progress saves automatically.")
 
         st.divider()
 
@@ -83,14 +82,22 @@ def render_sidebar(step: int = None):
             f"{progress['done']}/{progress['total']} steps"
         )
 
+        # ── Clickable step list ────────────────────────────
         step_names = list(progress["steps"].keys())
         for i, step_name in enumerate(step_names, 1):
             done = progress["steps"][step_name]
             icon = "✅" if done else "⬜"
-            if step is not None and i == step:
-                st.markdown(f"**{icon} ▶ {step_name}** ← here")
+            is_current = step is not None and i == step
+            is_next = i == next_step
+
+            if is_current:
+                label = f"{icon} ▶ {step_name} ← here"
+            elif is_next:
+                label = f"{icon} {step_name} → next"
             else:
-                st.markdown(f"{icon} {step_name}")
+                label = f"{icon} {step_name}"
+
+            st.page_link(PAGE_MAP[i], label=label)
 
         # ── Step guide ─────────────────────────────────────
         if step is not None and step in STEP_GUIDES:

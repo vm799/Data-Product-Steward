@@ -6,6 +6,7 @@ from state_manager import initialize_state, mark_step_complete
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
 from components.canvas import render_canvas
+from components.helpers import render_step_nav
 from config import CLASSIFICATION_OPTIONS, RETENTION_OPTIONS
 
 initialize_state()
@@ -118,3 +119,5 @@ with form_col:
 
 with canvas_col:
     render_canvas()
+
+render_step_nav(4)

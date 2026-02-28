@@ -6,6 +6,7 @@ from state_manager import initialize_state
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
 from components.canvas import render_canvas
+from components.helpers import render_step_nav
 
 initialize_state()
 inject_custom_css()
@@ -91,3 +92,5 @@ with form_col:
 
 with canvas_col:
     render_canvas()
+
+render_step_nav(1)

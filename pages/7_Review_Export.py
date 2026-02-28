@@ -6,6 +6,7 @@ import streamlit as st
 from state_manager import initialize_state, mark_step_complete, get_progress
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
+from components.helpers import render_step_nav
 from core.validation_engine import ValidationEngine
 from core.scoring_engine import ScoringEngine
 from core.snowflake_generator import SnowflakeGenerator
@@ -161,3 +162,5 @@ if results["valid"] and progress["pct"] >= 85:
     mark_step_complete("review")
     st.success("Data product definition is complete and ready for deployment.")
     st.balloons()
+
+render_step_nav(7)
