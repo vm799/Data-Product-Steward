@@ -79,99 +79,157 @@ def _landing():
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# PAGE 1 — SIDEBAR GUIDE (visual mockup + annotations)
+# PAGE 1 — SIDEBAR GUIDE (step-through walkthrough)
 # ═══════════════════════════════════════════════════════════════════════
+
+# Sidebar section data: (number, title, description)
+_SB_SECTIONS = [
+    (
+        "1",
+        "Dashboard Link",
+        "Always visible at the top. Click <b>⌂ Dashboard</b> from any step "
+        "to return to the overview — your progress is saved automatically.",
+    ),
+    (
+        "2",
+        "Progress Bar",
+        "Tracks <b>how far you've come</b> across all 7 steps. "
+        "The bar fills as you complete each section so you always "
+        "know what's left.",
+    ),
+    (
+        "3",
+        "Step List",
+        "Every step is a <b>clickable link</b>. Jump to any step directly — "
+        "no need to go in strict order. Completed steps show ✅, and the "
+        "next suggested step is marked.",
+    ),
+    (
+        "4",
+        "Step Guide",
+        "Context-sensitive help that <b>changes per step</b>. Shows why the "
+        "current step matters, practical tips, and what downstream artifacts "
+        "it feeds into.",
+    ),
+    (
+        "5",
+        "Glossary",
+        "Expandable reference for <b>key terms</b> — PII, DDL, SLA, "
+        "Masking Policy, and more. Look up unfamiliar concepts without "
+        "leaving the page.",
+    ),
+]
+
+
 def _sidebar_guide():
+    if "sb_guide_idx" not in st.session_state:
+        st.session_state.sb_guide_idx = 0
+
+    idx = st.session_state.sb_guide_idx
+    total = len(_SB_SECTIONS)
+
     st.markdown(
         '<div class="guide-page">'
         '<div class="guide-step-num">1 / 2</div>'
         "<h2>The Sidebar</h2>"
-        '<p class="guide-subtitle">Your command center — visible on every page</p>'
+        '<p class="guide-subtitle">Your command centre — visible on every page</p>'
         "</div>",
         unsafe_allow_html=True,
     )
 
-    mockup_col, explain_col = st.columns([1, 1])
+    mockup_col, explain_col = st.columns([2, 3])
+
+    # ── Build mockup HTML with active/dimmed sections ───
+    def _cls(section_idx):
+        return "active" if section_idx == idx else ""
 
     with mockup_col:
         st.markdown(
             '<div class="sidebar-mockup">'
             # 1 — Dashboard link
-            '<div class="sm-section">'
+            f'<div class="sm-section {_cls(0)}">'
             '<span class="sm-callout">1</span>'
             '<div class="sm-brand">⌂ DASHBOARD</div>'
             "</div>"
             '<div class="sm-divider"></div>'
             # 2 — Progress
-            '<div class="sm-section">'
+            f'<div class="sm-section {_cls(1)}">'
             '<span class="sm-callout">2</span>'
             '<div class="sm-label">Progress</div>'
             '<div class="sm-bar"><div class="sm-bar-fill"></div></div>'
             '<div class="sm-bar-text">28% — 2/7 steps</div>'
             "</div>"
+            '<div class="sm-divider"></div>'
             # 3 — Step list
-            '<div class="sm-section">'
+            f'<div class="sm-section {_cls(2)}">'
             '<span class="sm-callout">3</span>'
             '<div class="sm-step done">✅ Business Context</div>'
             '<div class="sm-step done">✅ Data Sources</div>'
             '<div class="sm-step current">⬜ ▶ Data Model ← here</div>'
-            '<div class="sm-step">⬜ Governance &amp; Security</div>'
+            '<div class="sm-step">⬜ Governance &amp; Security → next</div>'
             '<div class="sm-step">⬜ Data Quality</div>'
             '<div class="sm-step">⬜ Transformations</div>'
             '<div class="sm-step">⬜ Review &amp; Export</div>'
             "</div>"
             '<div class="sm-divider"></div>'
             # 4 — Tips
-            '<div class="sm-section">'
+            f'<div class="sm-section {_cls(3)}">'
             '<span class="sm-callout">4</span>'
             '<div class="sm-label">Data Model — Why?</div>'
-            '<div class="sm-tip">Tables &amp; columns define your product structure...</div>'
+            '<div class="sm-tip">Tables &amp; columns define your product '
+            "structure. PII tagging auto-generates masking...</div>"
             "</div>"
             '<div class="sm-divider"></div>'
             # 5 — Glossary
-            '<div class="sm-section">'
+            f'<div class="sm-section {_cls(4)}">'
             '<span class="sm-callout">5</span>'
             '<div class="sm-label">Glossary</div>'
-            '<div class="sm-tip">Key terms — expand to look up concepts</div>'
+            '<div class="sm-tip">PII &middot; DDL &middot; SLA &middot; dbt '
+            "&middot; Lineage &middot; Masking Policy &middot; ...</div>"
             "</div>"
             "</div>",
             unsafe_allow_html=True,
         )
 
+    # ── Focused explanation for current section ────────
+    num, title, desc = _SB_SECTIONS[idx]
+
     with explain_col:
         st.markdown(
-            '<div class="guide-panel">'
-            '<div class="guide-panel-label">What each section does</div>'
-            '<div class="sm-explain-item">'
-            '<span class="sm-explain-num">1</span>'
-            "<b>Dashboard</b> — click to return to the overview at any time</div>"
-            '<div class="sm-explain-item">'
-            '<span class="sm-explain-num">2</span>'
-            "<b>Progress bar</b> — tracks completion across all 7 steps</div>"
-            '<div class="sm-explain-item">'
-            '<span class="sm-explain-num">3</span>'
-            "<b>Step list</b> — click any step name to navigate directly</div>"
-            '<div class="sm-explain-item">'
-            '<span class="sm-explain-num">4</span>'
-            "<b>Step guide</b> — context-specific tips for your current step</div>"
-            '<div class="sm-explain-item">'
-            '<span class="sm-explain-num">5</span>'
-            "<b>Glossary</b> — look up unfamiliar terms without leaving</div>"
+            f'<div class="sm-explain-focus">'
+            f'<div class="sm-explain-counter">SECTION {num} OF {total}</div>'
+            f'<div class="sm-explain-focus-num">{num}</div>'
+            f'<div class="sm-explain-focus-title">{title}</div>'
+            f'<div class="sm-explain-focus-desc">{desc}</div>'
             "</div>",
             unsafe_allow_html=True,
         )
 
+    # ── Navigation buttons ─────────────────────────────
     st.markdown("")
-
     _, back_col, _, fwd_col, _ = st.columns([1, 1, 1, 1, 1])
+
     with back_col:
-        if st.button("Back", use_container_width=True):
-            st.session_state.onboard = 0
-            st.rerun()
+        if idx == 0:
+            if st.button("← Landing", use_container_width=True):
+                st.session_state.sb_guide_idx = 0
+                st.session_state.onboard = 0
+                st.rerun()
+        else:
+            if st.button("← Back", use_container_width=True):
+                st.session_state.sb_guide_idx = idx - 1
+                st.rerun()
+
     with fwd_col:
-        if st.button("Next", use_container_width=True):
-            st.session_state.onboard = 2
-            st.rerun()
+        if idx < total - 1:
+            if st.button("Next →", use_container_width=True):
+                st.session_state.sb_guide_idx = idx + 1
+                st.rerun()
+        else:
+            if st.button("Canvas Guide →", use_container_width=True):
+                st.session_state.sb_guide_idx = 0
+                st.session_state.onboard = 2
+                st.rerun()
 
 
 # ═══════════════════════════════════════════════════════════════════════
