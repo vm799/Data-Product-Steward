@@ -1,50 +1,88 @@
-"""
-Step 2: Data Sources
-Identify and configure source systems feeding the data product.
-"""
-
 import streamlit as st
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from state_manager import StateManager
 
-StateManager.initialize()
+st.header("2️⃣ Data Sources")
 
-st.header("Step 2: Data Sources")
-st.markdown("Add the source systems and datasets that feed this data product.")
+product = st.session_state.product
 
-sources = StateManager.get("data_sources", [])
+if "sources" not in product:
+    product["sources"] = []
+
+st.subheader("Add Data Source")
 
 with st.form("add_source_form"):
-    st.subheader("Add a Data Source")
-    source_name = st.text_input("Source Name")
+
+    source_name = st.text_input("Source System Name")
+
     source_type = st.selectbox(
         "Source Type",
-        options=["Database", "API", "File (CSV/Parquet)", "Streaming", "Data Lake", "Other"],
+        ["Internal", "External", "Vendor"]
     )
-    connection_details = st.text_area("Connection Details / Description")
-    schema_name = st.text_input("Schema / Dataset Name")
-    refresh_frequency = st.selectbox(
+
+    owner = st.text_input("Data Owner (Required)")
+
+    frequency = st.selectbox(
         "Refresh Frequency",
-        options=["Real-time", "Hourly", "Daily", "Weekly", "Monthly", "On-demand"],
+        ["Real-Time", "Hourly", "Daily", "Weekly", "Monthly"]
     )
 
-    add_source = st.form_submit_button("Add Source")
-    if add_source and source_name:
-        sources.append({
-            "name": source_name,
-            "type": source_type,
-            "connection_details": connection_details,
-            "schema": schema_name,
-            "refresh_frequency": refresh_frequency,
-        })
-        StateManager.set("data_sources", sources)
-        StateManager.mark_step_completed("data_sources")
-        st.success(f"Source '{source_name}' added.")
+    volume = st.selectbox(
+        "Estimated Volume",
+        ["Low (<1GB)", "Medium (1-50GB)", "High (50-500GB)", "Very High (500GB+)"]
+    )
 
-if sources:
-    st.subheader("Registered Sources")
-    for i, src in enumerate(sources):
-        st.markdown(f"**{i+1}. {src['name']}** — {src['type']} ({src['refresh_frequency']})")
+    structure = st.selectbox(
+        "Data Structure",
+        ["Structured", "Semi-Structured", "Unstructured"]
+    )
+
+    sla_required = st.checkbox("SLA Required?")
+
+    criticality = st.selectbox(
+        "Business Criticality",
+        ["Low", "Medium", "High"]
+    )
+
+    submitted = st.form_submit_button("Add Source")
+
+    if submitted:
+        if not source_name:
+            st.error("Source Name is required.")
+        elif not owner:
+            st.error("Data Owner is mandatory.")
+        else:
+            source = {
+                "name": source_name,
+                "type": source_type,
+                "owner": owner,
+                "frequency": frequency,
+                "volume": volume,
+                "structure": structure,
+                "sla_required": sla_required,
+                "criticality": criticality
+            }
+
+            product["sources"].append(source)
+            st.success("Source added successfully.")
+
+# Display Existing Sources
+st.subheader("Current Sources")
+
+if product["sources"]:
+    for i, src in enumerate(product["sources"]):
+        with st.expander(f"{src['name']}"):
+            st.write(src)
 else:
-    st.info("No data sources added yet.")
+    st.info("No sources added yet.")
+
+# Risk Warnings
+st.subheader("Governance Alerts")
+
+for src in product["sources"]:
+    if src["type"] in ["External", "Vendor"]:
+        st.warning(f"{src['name']}: External/Vendor source requires enhanced due diligence.")
+
+    if src["volume"] in ["High (50-500GB)", "Very High (500GB+)"] and src["frequency"] in ["Real-Time", "Hourly"]:
+        st.warning(f"{src['name']}: High volume + high frequency may impact Snowflake cost.")
+
+    if src["criticality"] == "High" and not src["sla_required"]:
+        st.warning(f"{src['name']}: High criticality without SLA defined.")
