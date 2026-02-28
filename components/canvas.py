@@ -1,7 +1,6 @@
 """
 Live Data Product Canvas — persistent right-side panel.
-Shows the evolving product definition and downloadable deliverables.
-Theme-aware glassmorphism styling.
+Wrapped in .canvas-panel for distinct visual separation from the wizard center.
 """
 
 import json
@@ -11,6 +10,9 @@ import streamlit as st
 def render_canvas():
     """Render the live canvas in the right column of each page."""
     product = st.session_state.product
+
+    # ── Panel wrapper — gives the right column its own background ───
+    st.markdown('<div class="canvas-panel">', unsafe_allow_html=True)
 
     # ── Canvas Header ───────────────────────────────────────────────
     st.markdown(
@@ -26,6 +28,7 @@ def render_canvas():
             "data product take shape here.</div>",
             unsafe_allow_html=True,
         )
+        st.markdown("</div>", unsafe_allow_html=True)
         return
 
     # ── Product Identity ────────────────────────────────────────────
@@ -146,3 +149,6 @@ def render_canvas():
             mime="application/json",
             key="_cv_json",
         )
+
+    # Close panel wrapper
+    st.markdown("</div>", unsafe_allow_html=True)

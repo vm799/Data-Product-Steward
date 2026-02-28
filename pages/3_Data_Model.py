@@ -52,7 +52,7 @@ with form_col:
                     "Marking PII auto-generates masking policies."
                 )
 
-                with st.form(f"attr_{entity['name']}"):
+                with st.form(f"attr_form_{idx}"):
                     c1, c2 = st.columns(2)
                     with c1:
                         attr_name = st.text_input("Attribute Name", help="Auto-uppercased.")
