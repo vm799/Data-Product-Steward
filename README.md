@@ -1,14 +1,3 @@
-
-
-Vaishali Mehmi
- 
-From:
-vaishalimehmi@yahoo.co.uk
-To:
-Vaishali Mehmi
-
-Sat 28 Feb at 09:31
-
 # 🏛️ Asset Management Data Product Architect (v1.0.0)
 **Automated Governance & Requirements Lockdown Engine**
 
