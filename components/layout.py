@@ -108,6 +108,31 @@ def _css() -> str:
         overflow: hidden;
     }
 
+    /* ── Top progress bar (always visible) ──────────── */
+    .top-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 0.25rem;
+    }
+    .top-progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #F97316 0%, #FB923C 50%, #2DD4BF 100%);
+        border-radius: 3px;
+        transition: width 0.6s ease;
+        box-shadow: 0 0 8px rgba(249,115,22,0.4);
+    }
+    .top-progress-label {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        color: #5A6478;
+        text-align: right;
+        margin-bottom: 0.6rem;
+    }
+
     /* ═══════════════════════════════════════════════════
        TYPOGRAPHY — larger, heavier
        ═══════════════════════════════════════════════════ */
@@ -903,38 +928,45 @@ def _css() -> str:
         color: #2DD4BF;
         flex-shrink: 0;
     }
-    /* ── Top-of-page direction arrows ─────────────── */
-    .landing-top-arrows {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
-        padding: 0.5rem 0 0.8rem 0;
-    }
-    .landing-top-arr-left {
-        font-size: 1.4rem;
+    /* ── Top-of-page direction arrows (prominent) ─── */
+    .arrow-prev-top {
+        font-size: 2.4rem;
+        font-weight: 700;
         color: #2DD4BF;
+        text-align: center;
+        padding: 0.3rem 0;
+        background: rgba(45,212,191,0.08);
+        border: 1px solid rgba(45,212,191,0.25);
+        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
         animation: arrowBounceL 1.5s ease-in-out infinite;
     }
-    .landing-top-arr-right {
-        font-size: 1.4rem;
+    .arrow-next-top {
+        font-size: 2.4rem;
+        font-weight: 700;
         color: #F97316;
+        text-align: center;
+        padding: 0.3rem 0;
+        background: rgba(249,115,22,0.08);
+        border: 1px solid rgba(249,115,22,0.25);
+        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
         animation: arrowBounceR 1.5s ease-in-out infinite;
     }
-    .landing-top-arr-label {
+    .arrow-top-label {
         font-family: 'Share Tech Mono', monospace !important;
-        font-size: 0.72rem;
+        font-size: 0.78rem;
         letter-spacing: 0.18em;
         text-transform: uppercase;
         color: #5A6478;
+        text-align: center;
+        padding-top: 0.8rem;
     }
     @keyframes arrowBounceL {
         0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(-6px); }
+        50% { transform: translateX(-8px); }
     }
     @keyframes arrowBounceR {
         0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(6px); }
+        50% { transform: translateX(8px); }
     }
 
     /* ── Deliverable panel (landing right side) ──────── */
@@ -1016,6 +1048,35 @@ def _css() -> str:
         14%     { font-size: 0.95rem; max-height: 80px; opacity: 1; margin-top: 0.3rem; }
         18%     { font-size: 0; max-height: 0; opacity: 0; margin-top: 0; }
         100%    { font-size: 0; max-height: 0; opacity: 0; margin-top: 0; }
+    }
+
+    /* ── Clickable deliverable card links ────────────── */
+    a.deliv-link {
+        display: block;
+        text-decoration: none !important;
+        cursor: pointer;
+    }
+    a.deliv-link:hover {
+        opacity: 1 !important;
+        border-color: #F97316 !important;
+        background: rgba(249,115,22,0.12) !important;
+        box-shadow: inset 3px 0 0 #F97316, 0 0 24px rgba(249,115,22,0.2) !important;
+        transform: scale(1.04);
+    }
+    a.deliv-link:hover .deliv-card-name {
+        color: #F97316 !important;
+    }
+    a.deliv-link:hover .deliv-card-desc {
+        font-size: 0.95rem !important;
+        max-height: 80px !important;
+        opacity: 1 !important;
+        margin-top: 0.3rem !important;
+    }
+    a.deliv-link:hover .deliv-card-step {
+        font-size: 0.85rem !important;
+        max-height: 40px !important;
+        opacity: 1 !important;
+        margin-top: 0.2rem !important;
     }
 
     /* ── Wizard step page links — full width clickable ─ */

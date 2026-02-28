@@ -39,15 +39,35 @@ _DELIVERABLES = [
 
 
 def _landing():
-    # ── Direction arrows at the very top of the page ──────────────
+    render_sidebar()
+
+    # ── Progress bar at the very top ──────────────────────────────
     st.markdown(
-        '<div class="landing-top-arrows">'
-        '<span class="landing-top-arr-left">&#9664;</span>'
-        '<span class="landing-top-arr-label">SCROLL DELIVERABLES</span>'
-        '<span class="landing-top-arr-right">&#9654;</span>'
-        '</div>',
+        f'<div class="top-progress-bar">'
+        f'<div class="top-progress-fill" style="width:{progress["pct"]}%;"></div>'
+        f'</div>'
+        f'<div class="top-progress-label">{progress["pct"]}% complete — '
+        f'{progress["done"]}/{progress["total"]} steps</div>',
         unsafe_allow_html=True,
     )
+
+    # ── Direction arrows at the very top of the page ──────────────
+    arr_l, arr_label, arr_r = st.columns([1, 3, 1])
+    with arr_l:
+        st.markdown(
+            '<div class="arrow-prev-top">←</div>',
+            unsafe_allow_html=True,
+        )
+    with arr_label:
+        st.markdown(
+            '<div class="arrow-top-label">AUTO-SCROLLING DELIVERABLES</div>',
+            unsafe_allow_html=True,
+        )
+    with arr_r:
+        st.markdown(
+            '<div class="arrow-next-top">→</div>',
+            unsafe_allow_html=True,
+        )
 
     left_col, right_col = st.columns([3, 2])
 
@@ -92,14 +112,16 @@ def _landing():
         )
 
         # Build all deliverable cards — CSS auto-cycles the orange focus
+        # Each card is a clickable link to the step that produces it
         cards_html = '<div class="deliv-carousel">'
         for i, (name, desc, step_num) in enumerate(_DELIVERABLES):
+            href = PAGE_MAP[step_num]
             cards_html += (
-                f'<div class="deliv-card deliv-auto" style="--d:{i};">'
+                f'<a class="deliv-card deliv-auto deliv-link" style="--d:{i};" href="/{href}">'
                 f'<div class="deliv-card-name">{name}</div>'
                 f'<div class="deliv-card-desc">{desc}</div>'
-                f'<div class="deliv-card-step">Built in Step {step_num}: {STEP_NAMES[step_num - 1]}</div>'
-                f"</div>"
+                f'<div class="deliv-card-step">→ Step {step_num}: {STEP_NAMES[step_num - 1]}</div>'
+                f"</a>"
             )
         cards_html += "</div>"
 
@@ -149,6 +171,8 @@ _SB_SECTIONS = [
 
 
 def _sidebar_guide():
+    render_sidebar()
+
     st.markdown(
         '<div class="guide-page">'
         '<div class="guide-step-num">1 / 2</div>'
@@ -270,6 +294,8 @@ def _sidebar_guide():
 # PAGE 2 — CANVAS GUIDE (visual mockup with typewriter demo)
 # ═══════════════════════════════════════════════════════════════════════
 def _canvas_guide():
+    render_sidebar()
+
     st.markdown(
         '<div class="guide-page">'
         '<div class="guide-step-num">2 / 2</div>'
@@ -354,6 +380,16 @@ _STEPS_INFO = [
 
 def _dashboard():
     render_sidebar()
+
+    # ── Progress bar at the very top ──────────────────────────────
+    st.markdown(
+        f'<div class="top-progress-bar">'
+        f'<div class="top-progress-fill" style="width:{progress["pct"]}%;"></div>'
+        f'</div>'
+        f'<div class="top-progress-label">{progress["pct"]}% complete — '
+        f'{progress["done"]}/{progress["total"]} steps</div>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown("# Wizard Agent")
     st.caption("Click a step below to start building.")
