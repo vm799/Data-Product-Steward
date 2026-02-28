@@ -29,13 +29,29 @@ def render_canvas():
             "This panel is your live blueprint. As you fill in each step, "
             "your data product takes shape here — entities, sources, governance "
             "rules, and a checklist showing which deployment artifacts are ready "
-            "to generate. Start with Step 1 to see it come to life."
+            "to generate."
             "</div>",
             unsafe_allow_html=True,
         )
+
+        # ── Typewriter demo — shows what a finished product looks like ──
+        st.markdown(
+            '<div class="typewriter-demo">'
+            '<div class="typewriter-line tw-dim tw-d1">// sample output</div>'
+            '<div class="typewriter-line tw-bright tw-d2">Investor_Position_Summary</div>'
+            '<div class="typewriter-line tw-dim tw-d3">Domain: Risk &middot; Region: UK</div>'
+            '<div class="typewriter-line tw-d4">Entities: 3 &middot; Sources: 2 &middot; PII: 4 cols</div>'
+            '<div class="typewriter-line tw-dim tw-d5">Classification: Confidential &middot; Retention: 7yr</div>'
+            '<div class="typewriter-line tw-check tw-d6">&check; Snowflake DDL</div>'
+            '<div class="typewriter-line tw-check tw-d7">&check; dbt Models &middot; &check; Masking Policies</div>'
+            '<div class="typewriter-line tw-check tw-d8 tw-cursor">&check; Collibra Import &middot; &check; Docs</div>'
+            "</div>",
+            unsafe_allow_html=True,
+        )
+
         st.markdown(
             '<div class="canvas-body">'
-            "Complete <b>Business Context</b> to begin."
+            "Complete <b>Business Context</b> to begin building yours."
             "</div>",
             unsafe_allow_html=True,
         )
