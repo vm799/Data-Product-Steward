@@ -1,59 +1,78 @@
-"""
-Step 3: Data Model
-Design the target schema and entity relationships for the data product.
-"""
-
 import streamlit as st
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from state_manager import StateManager
 
-StateManager.initialize()
+st.header("3️⃣ Data Model Builder")
 
-st.header("Step 3: Data Model")
-st.markdown("Define the target schema, entities, and relationships.")
+product = st.session_state.product
 
-data_model = StateManager.get("data_model", {})
-entities = data_model.get("entities", [])
+if "entities" not in product:
+    product["entities"] = []
 
-with st.form("add_entity_form"):
-    st.subheader("Add an Entity")
-    entity_name = st.text_input("Entity / Table Name")
-    entity_description = st.text_area("Entity Description")
-    columns_raw = st.text_area(
-        "Columns (name:type per line, e.g. customer_id:INTEGER)",
-        help="Enter one column per line in name:type format.",
-    )
-    primary_key = st.text_input("Primary Key Column")
-    grain = st.text_input("Grain (e.g., one row per customer per day)")
+st.subheader("Create New Entity")
 
-    add_entity = st.form_submit_button("Add Entity")
-    if add_entity and entity_name:
-        columns = []
-        for line in columns_raw.strip().splitlines():
-            parts = line.split(":")
-            if len(parts) == 2:
-                columns.append({"name": parts[0].strip(), "type": parts[1].strip()})
-        entities.append({
-            "name": entity_name,
-            "description": entity_description,
-            "columns": columns,
-            "primary_key": primary_key,
-            "grain": grain,
-        })
-        data_model["entities"] = entities
-        StateManager.set("data_model", data_model)
-        StateManager.mark_step_completed("data_model")
-        st.success(f"Entity '{entity_name}' added.")
+entity_name = st.text_input("Entity Name (Table Name)")
+create_entity = st.button("Add Entity")
 
-if entities:
-    st.subheader("Defined Entities")
-    for ent in entities:
-        with st.expander(ent["name"]):
-            st.write(f"**Description:** {ent['description']}")
-            st.write(f"**Primary Key:** {ent['primary_key']}")
-            st.write(f"**Grain:** {ent['grain']}")
-            if ent["columns"]:
-                st.table(ent["columns"])
-else:
-    st.info("No entities defined yet.")
+if create_entity:
+    if not entity_name:
+        st.error("Entity name required.")
+    else:
+        entity = {
+            "name": entity_name.upper(),
+            "attributes": []
+        }
+        product["entities"].append(entity)
+        st.success(f"Entity {entity_name} created.")
+
+st.divider()
+
+# Display Existing Entities
+for entity in product["entities"]:
+
+    with st.expander(f"📦 {entity['name']}"):
+
+        st.markdown("### Add Attribute")
+
+        with st.form(f"add_attr_{entity['name']}"):
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                attr_name = st.text_input("Attribute Name")
+                data_type = st.selectbox(
+                    "Data Type",
+                    ["STRING", "NUMBER", "FLOAT", "BOOLEAN", "DATE", "TIMESTAMP"]
+                )
+                nullable = st.checkbox("Nullable?", value=True)
+
+            with col2:
+                contains_pii = st.checkbox("Contains PII?")
+                description = st.text_input("Description")
+
+            submitted = st.form_submit_button("Add Attribute")
+
+            if submitted:
+                if not attr_name:
+                    st.error("Attribute name required.")
+                else:
+                    attribute = {
+                        "name": attr_name.upper(),
+                        "data_type": data_type,
+                        "nullable": nullable,
+                        "pii": contains_pii,
+                        "description": description
+                    }
+
+                    entity["attributes"].append(attribute)
+
+                    if contains_pii:
+                        product["pii"] = True
+
+                    st.success("Attribute added.")
+
+        st.markdown("### Current Attributes")
+
+        if entity["attributes"]:
+            for attr in entity["attributes"]:
+                st.write(attr)
+        else:
+            st.info("No attributes yet.")
