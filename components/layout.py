@@ -108,6 +108,31 @@ def _css() -> str:
         overflow: hidden;
     }
 
+    /* ── Top progress bar (always visible) ──────────── */
+    .top-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 0.25rem;
+    }
+    .top-progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #F97316 0%, #FB923C 50%, #2DD4BF 100%);
+        border-radius: 3px;
+        transition: width 0.6s ease;
+        box-shadow: 0 0 8px rgba(249,115,22,0.4);
+    }
+    .top-progress-label {
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        color: #5A6478;
+        text-align: right;
+        margin-bottom: 0.6rem;
+    }
+
     /* ═══════════════════════════════════════════════════
        TYPOGRAPHY — larger, heavier
        ═══════════════════════════════════════════════════ */
@@ -1023,6 +1048,35 @@ def _css() -> str:
         14%     { font-size: 0.95rem; max-height: 80px; opacity: 1; margin-top: 0.3rem; }
         18%     { font-size: 0; max-height: 0; opacity: 0; margin-top: 0; }
         100%    { font-size: 0; max-height: 0; opacity: 0; margin-top: 0; }
+    }
+
+    /* ── Clickable deliverable card links ────────────── */
+    a.deliv-link {
+        display: block;
+        text-decoration: none !important;
+        cursor: pointer;
+    }
+    a.deliv-link:hover {
+        opacity: 1 !important;
+        border-color: #F97316 !important;
+        background: rgba(249,115,22,0.12) !important;
+        box-shadow: inset 3px 0 0 #F97316, 0 0 24px rgba(249,115,22,0.2) !important;
+        transform: scale(1.04);
+    }
+    a.deliv-link:hover .deliv-card-name {
+        color: #F97316 !important;
+    }
+    a.deliv-link:hover .deliv-card-desc {
+        font-size: 0.95rem !important;
+        max-height: 80px !important;
+        opacity: 1 !important;
+        margin-top: 0.3rem !important;
+    }
+    a.deliv-link:hover .deliv-card-step {
+        font-size: 0.85rem !important;
+        max-height: 40px !important;
+        opacity: 1 !important;
+        margin-top: 0.2rem !important;
     }
 
     /* ── Wizard step page links — full width clickable ─ */
