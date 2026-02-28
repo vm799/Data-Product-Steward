@@ -168,27 +168,45 @@ def _css() -> str:
         line-height: 1.5 !important;
     }
 
-    /* ── Glass inputs ───────────────────────────────── */
+    /* ── Frosted white inputs — dark text for readability ─ */
     .stTextInput input, .stTextArea textarea, .stNumberInput input {
-        background: rgba(255,255,255,0.04) !important;
-        border: 1px solid rgba(255,255,255,0.10) !important;
+        background: rgba(255,255,255,0.92) !important;
+        border: 1px solid rgba(255,255,255,0.60) !important;
         border-radius: 0.5rem !important;
-        color: #E8ECF1 !important;
+        color: #1A1D23 !important;
         font-size: 1.1rem !important;
         backdrop-filter: blur(8px);
     }
+    .stTextInput input::placeholder, .stTextArea textarea::placeholder,
+    .stNumberInput input::placeholder {
+        color: #8B95A5 !important;
+    }
     .stTextInput input:focus, .stTextArea textarea:focus, .stNumberInput input:focus {
         border-color: #2DD4BF !important;
-        box-shadow: 0 0 0 2px rgba(45,212,191,0.25) !important;
+        box-shadow: 0 0 0 2px rgba(45,212,191,0.35),
+                    0 0 16px rgba(45,212,191,0.15) !important;
     }
     .stSelectbox [data-baseweb="select"], .stMultiSelect [data-baseweb="select"] {
-        background: rgba(255,255,255,0.04) !important;
-        border-color: rgba(255,255,255,0.10) !important;
+        background: rgba(255,255,255,0.92) !important;
+        border-color: rgba(255,255,255,0.60) !important;
     }
     .stSelectbox [data-baseweb="select"] > div, .stMultiSelect [data-baseweb="select"] > div {
-        background: rgba(255,255,255,0.04) !important;
+        background: rgba(255,255,255,0.92) !important;
+        color: #1A1D23 !important;
+    }
+    /* Dropdown menu — dark background for contrast */
+    [data-baseweb="popover"] [data-baseweb="menu"],
+    [data-baseweb="popover"] ul {
+        background: #1A1D23 !important;
+    }
+    [data-baseweb="popover"] li {
         color: #E8ECF1 !important;
     }
+    [data-baseweb="popover"] li:hover {
+        background: rgba(45,212,191,0.12) !important;
+    }
+    /* Checkbox — keep dark theme */
+    .stCheckbox label span { color: #E8ECF1 !important; }
 
     /* ── Metrics ────────────────────────────────────── */
     [data-testid="stMetric"] {
@@ -230,6 +248,40 @@ def _css() -> str:
         border-radius: 0.75rem;
         padding: 1.5rem;
         box-shadow: 0 8px 32px rgba(0,0,0,0.20);
+    }
+
+    /* ── Glowing form panel — wraps the active form ──── */
+    @keyframes formGlow {
+        0%   { box-shadow: 0 0 12px rgba(45,212,191,0.08), 0 0 30px rgba(45,212,191,0.04); border-color: rgba(45,212,191,0.15); }
+        50%  { box-shadow: 0 0 24px rgba(45,212,191,0.20), 0 0 50px rgba(45,212,191,0.10); border-color: rgba(45,212,191,0.35); }
+        100% { box-shadow: 0 0 12px rgba(45,212,191,0.08), 0 0 30px rgba(45,212,191,0.04); border-color: rgba(45,212,191,0.15); }
+    }
+    .form-glow {
+        background: rgba(255,255,255,0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(45,212,191,0.15);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        animation: formGlow 3s ease-in-out infinite;
+    }
+
+    /* ── Step complete prompt ──────────────────────────── */
+    .step-complete-prompt {
+        background: rgba(45,212,191,0.06);
+        border: 1px solid rgba(45,212,191,0.25);
+        border-radius: 0.75rem;
+        padding: 1.2rem 1.5rem;
+        margin-top: 1rem;
+        text-align: center;
+    }
+    .step-complete-prompt-title {
+        font-size: 1.25rem; font-weight: 700;
+        color: #2DD4BF; margin-bottom: 0.3rem;
+    }
+    .step-complete-prompt-desc {
+        font-size: 1rem; color: #8B95A5;
+        margin-bottom: 0.5rem;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -323,10 +375,15 @@ def _css() -> str:
         background: rgba(255,255,255,0.06) !important;
         color: #E8ECF1 !important;
         border: 1px solid rgba(255,255,255,0.12) !important;
+        font-size: 0.9rem !important;
+        padding: 0.35rem 0.8rem !important;
+        width: 100%;
     }
     .canvas-panel .stDownloadButton button:hover { background: rgba(255,255,255,0.10) !important; }
+    .canvas-panel .stDownloadButton { margin-bottom: 0.3rem; }
     .canvas-panel .streamlit-expanderHeader,
     .canvas-panel .streamlit-expanderHeader p { background: rgba(255,255,255,0.04) !important; color: #E8ECF1 !important; }
+    .canvas-panel [data-testid="stExpander"] { overflow: visible; }
 
     /* ── LIVE CANVAS label — mono, pulsing glow ─────── */
     @keyframes labelPulse {

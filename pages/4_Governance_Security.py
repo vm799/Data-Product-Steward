@@ -6,7 +6,7 @@ from state_manager import initialize_state, mark_step_complete
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
 from components.canvas import render_canvas
-from components.helpers import render_step_nav
+from components.helpers import render_step_nav, render_step_complete
 from config import CLASSIFICATION_OPTIONS, RETENTION_OPTIONS
 
 initialize_state()
@@ -25,6 +25,7 @@ product = st.session_state.product
 form_col, canvas_col = st.columns([5, 3])
 
 with form_col:
+    st.markdown('<div class="form-glow">', unsafe_allow_html=True)
     with st.form("governance_form"):
         c1, c2 = st.columns(2)
 
@@ -116,6 +117,12 @@ with form_col:
 
     if product.get("pii") and not product.get("compliance_frameworks"):
         st.warning("PII is present but no compliance frameworks selected. Consider adding GDPR or CCPA.")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Step complete prompt ──────────────────────────────
+    step_done = bool(product.get("classification"))
+    render_step_complete(4, step_done)
 
 with canvas_col:
     render_canvas()
