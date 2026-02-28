@@ -86,9 +86,11 @@ def _landing():
         # Direction arrows at the very top
         p_col, label_col, n_col = st.columns([1, 3, 1])
         with p_col:
+            st.markdown('<div class="arrow-prev">', unsafe_allow_html=True)
             if st.button("←", key="deliv_prev", use_container_width=True):
                 st.session_state.deliv_idx = (didx - 1) % len(_DELIVERABLES)
                 st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
         with label_col:
             st.markdown(
                 f'<div style="text-align:center;color:#5A6478;font-size:0.85rem;'
@@ -96,9 +98,11 @@ def _landing():
                 unsafe_allow_html=True,
             )
         with n_col:
+            st.markdown('<div class="arrow-next">', unsafe_allow_html=True)
             if st.button("→", key="deliv_next", use_container_width=True):
                 st.session_state.deliv_idx = (didx + 1) % len(_DELIVERABLES)
                 st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown('<div class="canvas-panel" style="min-height:500px;">', unsafe_allow_html=True)
         st.markdown(

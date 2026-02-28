@@ -354,10 +354,32 @@ def _css() -> str:
         background: rgba(45,212,191,0.03);
         backdrop-filter: blur(20px);
         border: 1px solid rgba(45,212,191,0.15);
-        border-radius: 0.75rem;
+        border-radius: 2px;
         padding: 1.25rem;
         min-height: 480px;
         animation: canvasPulse 3s ease-in-out infinite;
+        box-shadow: inset 3px 0 0 rgba(45,212,191,0.4);
+        border-left: 3px solid rgba(45,212,191,0.35);
+        border-top: none;
+        border-right: none;
+        border-bottom: none;
+        position: relative;
+    }
+    .canvas-panel::before {
+        content: "";
+        position: absolute;
+        top: 0; right: 0;
+        width: 0; height: 0;
+        border-style: solid;
+        border-width: 0 28px 28px 0;
+        border-color: transparent #0D1117 transparent transparent;
+    }
+    .canvas-panel::after {
+        content: "";
+        position: absolute;
+        top: 0; right: 0;
+        width: 28px; height: 28px;
+        border-bottom: 1px solid rgba(45,212,191,0.25);
     }
     .canvas-panel, .canvas-panel p, .canvas-panel li,
     .canvas-panel span, .canvas-panel strong, .canvas-panel b { color: #E8ECF1 !important; }
@@ -724,15 +746,18 @@ def _css() -> str:
     .wiz-step-hero {
         background: rgba(249,115,22,0.06);
         border: 2px solid rgba(249,115,22,0.35);
-        border-radius: 0.75rem;
+        border-radius: 0;
+        clip-path: polygon(0 12px, 12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
         padding: 1.6rem 1.8rem;
         margin-bottom: 1rem;
         cursor: pointer;
         transition: border-color 0.3s, box-shadow 0.3s;
+        position: relative;
+        box-shadow: inset 4px 0 0 #F97316;
     }
     .wiz-step-hero:hover {
         border-color: #F97316;
-        box-shadow: 0 0 20px rgba(249,115,22,0.15);
+        box-shadow: inset 4px 0 0 #F97316, 0 0 24px rgba(249,115,22,0.18);
     }
     .wiz-step-hero-num {
         font-family: 'Share Tech Mono', monospace !important;
@@ -856,13 +881,23 @@ def _css() -> str:
     .landing-stat-card {
         background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 0.75rem;
+        border-radius: 0;
+        clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
         padding: 1.2rem 1.5rem;
         text-align: center;
         flex: 1;
+        position: relative;
     }
-    .landing-stat-card.before { border-color: rgba(239,68,68,0.3); }
-    .landing-stat-card.after { border-color: rgba(45,212,191,0.3); }
+    .landing-stat-card.before {
+        border-color: rgba(239,68,68,0.3);
+        background: rgba(239,68,68,0.04);
+        box-shadow: inset 3px 0 0 #EF4444;
+    }
+    .landing-stat-card.after {
+        border-color: rgba(45,212,191,0.3);
+        background: rgba(45,212,191,0.04);
+        box-shadow: inset 3px 0 0 #2DD4BF;
+    }
     .landing-stat-num {
         font-size: 2.8rem;
         font-weight: 700;
@@ -891,7 +926,8 @@ def _css() -> str:
     .deliv-card {
         background: rgba(255,255,255,0.03);
         border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 0.6rem;
+        border-radius: 0;
+        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
         padding: 0.6rem 1rem;
         margin-bottom: 0.4rem;
         opacity: 0.4;
@@ -900,9 +936,10 @@ def _css() -> str:
     .deliv-card.deliv-active {
         background: rgba(45,212,191,0.06);
         border-color: rgba(45,212,191,0.35);
+        clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
         padding: 1.1rem 1.2rem;
         opacity: 1;
-        box-shadow: 0 0 20px rgba(45,212,191,0.12);
+        box-shadow: inset 3px 0 0 #2DD4BF, 0 0 20px rgba(45,212,191,0.12);
         transform: scale(1.04);
     }
     .deliv-card-name {
@@ -926,6 +963,38 @@ def _css() -> str:
         font-size: 1.05rem;
         margin-top: 0.3rem;
         line-height: 1.5;
+    }
+
+    /* ── Direction arrow buttons — diff colours ─────── */
+    .arrow-prev, .arrow-next {
+        overflow: visible;
+        margin-bottom: 0.3rem;
+    }
+    .arrow-prev button {
+        background: rgba(45,212,191,0.10) !important;
+        border: 1px solid rgba(45,212,191,0.3) !important;
+        color: #2DD4BF !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+        border-radius: 0 !important;
+    }
+    .arrow-prev button:hover {
+        background: rgba(45,212,191,0.20) !important;
+        border-color: #2DD4BF !important;
+    }
+    .arrow-next button {
+        background: rgba(249,115,22,0.10) !important;
+        border: 1px solid rgba(249,115,22,0.3) !important;
+        color: #F97316 !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+        border-radius: 0 !important;
+    }
+    .arrow-next button:hover {
+        background: rgba(249,115,22,0.20) !important;
+        border-color: #F97316 !important;
     }
 
     /* ── Wizard step page links — full width clickable ─ */
