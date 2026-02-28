@@ -11,8 +11,8 @@ initialize_state()
 inject_custom_css()
 render_sidebar(step=1)
 
-step_header(1, "1️⃣ Business Context", "Define the purpose, ownership, and regulatory scope of your data product.")
 render_step_nav(1)
+step_header(1, "1️⃣ Business Context", "Define the purpose, ownership, and regulatory scope of your data product.")
 
 product = st.session_state.product
 

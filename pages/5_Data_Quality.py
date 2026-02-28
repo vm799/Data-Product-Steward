@@ -11,12 +11,12 @@ initialize_state()
 inject_custom_css()
 render_sidebar(step=5)
 
+render_step_nav(5)
 step_header(
     5,
     "5️⃣ Data Quality",
     "Set quality thresholds that become automated checks in your data pipeline.",
 )
-render_step_nav(5)
 
 product = st.session_state.product
 qr = product.get("quality_rules", {})
