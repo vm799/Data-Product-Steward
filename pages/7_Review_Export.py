@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import json
 import streamlit as st
 from state_manager import initialize_state, mark_step_complete, get_progress
+from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
 from core.validation_engine import ValidationEngine
 from core.scoring_engine import ScoringEngine
@@ -13,10 +14,14 @@ from core.collibra_generator import CollibraGenerator
 from core.document_engine import DocumentEngine
 
 initialize_state()
-render_sidebar()
+inject_custom_css()
+render_sidebar(step=7)
 
-st.header("7️⃣ Review & Export")
-st.caption("Validate your data product and generate deployment artifacts.")
+step_header(
+    7,
+    "7️⃣ Review & Export",
+    "Validate your data product definition and generate deployment-ready artifacts.",
+)
 
 product = st.session_state.product
 progress = get_progress(product)
@@ -25,10 +30,11 @@ progress = get_progress(product)
 scorer = ScoringEngine(product)
 score = scorer.overall_score()
 
-col1, col2, col3 = st.columns(3)
-col1.metric("Readiness Score", f"{score}/100")
-col2.metric("Completion", f"{progress['pct']}%")
-col3.metric("Entities", len(product.get("entities", [])))
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Readiness", f"{score}/100")
+c2.metric("Completion", f"{progress['pct']}%")
+c3.metric("Entities", len(product.get("entities", [])))
+c4.metric("Sources", len(product.get("sources", [])))
 
 st.progress(score / 100)
 
@@ -40,17 +46,17 @@ validator = ValidationEngine(product)
 results = validator.validate()
 
 if results["valid"]:
-    st.success(f"Data product passes all validation checks. Score: {results['score']}/100")
+    st.success(f"All validation checks passed. Readiness score: {results['score']}/100")
 else:
-    st.error(f"Validation failed — {len(results['errors'])} error(s) found.")
+    st.error(f"Validation found {len(results['errors'])} error(s). Fix these before exporting.")
 
 if results["errors"]:
     for err in results["errors"]:
-        st.error(f"**Error:** {err}")
+        st.error(f"{err}")
 
 if results["warnings"]:
     for warn in results["warnings"]:
-        st.warning(f"**Warning:** {warn}")
+        st.warning(f"{warn}")
 
 # ── Step Completion ─────────────────────────────────────────────────────
 st.divider()
@@ -60,16 +66,14 @@ for step_name, done in progress["steps"].items():
     icon = "✅" if done else "❌"
     st.markdown(f"{icon} {step_name}")
 
-# ── Canvas Preview ──────────────────────────────────────────────────────
-st.divider()
-st.subheader("📋 Data Product Canvas")
-
-with st.expander("View Full Product Definition (JSON)", expanded=False):
+# ── Full Product JSON ───────────────────────────────────────────────────
+with st.expander("View Full Product Definition (JSON)"):
     st.json(product)
 
 # ── Generated Artifacts ─────────────────────────────────────────────────
 st.divider()
 st.subheader("🚀 Generated Artifacts")
+st.caption("Each tab shows a preview of the generated artifact with a download button.")
 
 tab_ddl, tab_mask, tab_dbt, tab_collibra, tab_docs = st.tabs([
     "Snowflake DDL",
@@ -87,12 +91,7 @@ doc = DocumentEngine(product)
 with tab_ddl:
     ddl = sf.generate_ddl()
     st.code(ddl, language="sql")
-    st.download_button(
-        "Download DDL",
-        data=ddl,
-        file_name="snowflake_ddl.sql",
-        mime="text/plain",
-    )
+    st.download_button("Download DDL", data=ddl, file_name="snowflake_ddl.sql", mime="text/plain")
 
     grants = sf.generate_grants()
     if grants and "No access roles" not in grants:
@@ -124,12 +123,7 @@ with tab_dbt:
         st.markdown(f"#### {filename}")
         st.code(sql, language="sql")
 
-    st.download_button(
-        "Download schema.yml",
-        data=schema_yaml,
-        file_name="schema.yml",
-        mime="text/plain",
-    )
+    st.download_button("Download schema.yml", data=schema_yaml, file_name="schema.yml", mime="text/plain")
 
 with tab_collibra:
     collibra_json = collibra.to_json()

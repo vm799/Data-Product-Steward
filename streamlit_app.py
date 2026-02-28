@@ -1,6 +1,8 @@
 import streamlit as st
 from state_manager import initialize_state, get_progress
+from components.layout import inject_custom_css
 from components.sidebar import render_sidebar
+from components.canvas import render_canvas
 
 st.set_page_config(
     page_title="GDP Data Product Steward",
@@ -9,80 +11,69 @@ st.set_page_config(
 )
 
 initialize_state()
+inject_custom_css()
 render_sidebar()
 
 product = st.session_state.product
 progress = get_progress(product)
 
-# ── Header ──────────────────────────────────────────────────────────────
+# ── Hero ────────────────────────────────────────────────────────────────
 st.title("🏛️ GDP Data Product Steward")
 st.caption("Governed. Structured. Production-Ready.")
 
-# ── Dashboard Metrics ───────────────────────────────────────────────────
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Completion", f"{progress['pct']}%")
-col2.metric("Entities", len(product.get("entities", [])))
-col3.metric("Sources", len(product.get("sources", [])))
-pii_label = "Yes" if product.get("pii") else "No"
-col4.metric("PII Detected", pii_label)
+# ── Dashboard + Canvas ──────────────────────────────────────────────────
+main_col, canvas_col = st.columns([5, 3])
 
-st.divider()
+with main_col:
+    # Metrics
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Completion", f"{progress['pct']}%")
+    c2.metric("Entities", len(product.get("entities", [])))
+    c3.metric("Sources", len(product.get("sources", [])))
+    c4.metric("PII Detected", "Yes" if product.get("pii") else "No")
 
-# ── Live Canvas ─────────────────────────────────────────────────────────
-if product.get("name"):
-    st.subheader("📋 Live Data Product Canvas")
+    st.divider()
 
-    left, right = st.columns(2)
+    if product.get("name"):
+        # Live summary for returning users
+        st.subheader("Welcome back")
+        st.markdown(
+            f"You're building **{product['name']}** in the **{product.get('domain', '—')}** domain. "
+            f"Continue where you left off using the sidebar navigation."
+        )
 
-    with left:
-        st.markdown(f"**Product Name:** {product['name']}")
-        st.markdown(f"**Domain:** {product.get('domain', '—')}")
-        st.markdown(f"**Geographic Scope:** {product.get('geo_scope', '—')}")
-        st.markdown(f"**Classification:** {product.get('classification') or '—'}")
-        if product.get("regulatory_scope"):
-            st.markdown(f"**Regulatory:** {', '.join(product['regulatory_scope'])}")
+        # Show what's done and what's next
+        pending = [name for name, done in progress["steps"].items() if not done]
+        if pending:
+            st.markdown(f"**Next up:** {pending[0]}")
+        else:
+            st.success(
+                "All steps complete — head to **Review & Export** to generate your artifacts."
+            )
 
-    with right:
-        st.markdown(f"**Consumers:** {product.get('consumers') or '—'}")
-        st.markdown(f"**Retention:** {product.get('retention_policy') or '—'}")
-        st.markdown(f"**PII:** {'Yes' if product.get('pii') else 'No'}")
-        if product.get("compliance_frameworks"):
-            st.markdown(f"**Compliance:** {', '.join(product['compliance_frameworks'])}")
+    else:
+        # First-time guided experience
+        st.subheader("Build your data product in 7 guided steps")
+        st.markdown(
+            "This wizard walks you through defining a **complete, governed data product** — "
+            "from business context to deployment-ready Snowflake DDL, dbt models, and Collibra metadata."
+        )
 
-    # Entity summary
-    if product.get("entities"):
-        st.markdown("---")
-        st.markdown("**Entities:**")
-        for ent in product["entities"]:
-            attr_count = len(ent.get("attributes", []))
-            pii_count = sum(1 for a in ent.get("attributes", []) if a.get("pii"))
-            suffix = f" ({pii_count} PII)" if pii_count else ""
-            st.markdown(f"- `{ent['name']}` — {attr_count} attributes{suffix}")
+        st.markdown(
+            """
+| Step | What You'll Define | What Gets Generated |
+|------|-------------------|-------------------|
+| **1. Business Context** | Purpose, domain, regulatory scope | Regulatory detection, Collibra mapping |
+| **2. Data Sources** | Source systems, ownership, SLAs | dbt sources, lineage docs |
+| **3. Data Model** | Entities, attributes, PII tags | Snowflake DDL, dbt schema, Collibra attributes |
+| **4. Governance** | Classification, retention, compliance | Masking policies, secure views, grants |
+| **5. Data Quality** | Completeness, accuracy, timeliness | dbt tests, monitoring rules |
+| **6. Transformations** | Processing steps, SQL logic | dbt models, transformation docs |
+| **7. Review & Export** | Validate and download everything | All artifacts in one click |
+            """
+        )
 
-    # Sources summary
-    if product.get("sources"):
-        st.markdown("**Sources:**")
-        for src in product["sources"]:
-            st.markdown(f"- `{src['name']}` — {src['type']} · {src['frequency']}")
+        st.info("👈 **Start with Business Context** from the sidebar to begin.")
 
-else:
-    # Getting started
-    st.subheader("Getting Started")
-    st.markdown(
-        """
-        This wizard guides you through building a **complete, governed data product definition**.
-        Navigate using the sidebar pages:
-
-        | Step | Page | What You Define |
-        |------|------|-----------------|
-        | 1 | **Business Context** | Purpose, domain, stakeholders, regulatory scope |
-        | 2 | **Data Sources** | Source systems, ownership, SLAs, risk flags |
-        | 3 | **Data Model** | Entities, attributes, data types, PII tagging |
-        | 4 | **Governance & Security** | Classification, retention, compliance frameworks |
-        | 5 | **Data Quality** | Completeness, accuracy, timeliness thresholds |
-        | 6 | **Transformations** | Processing steps and transformation logic |
-        | 7 | **Review & Export** | Validate and generate Snowflake DDL, dbt, Collibra metadata |
-
-        👈 **Start with Business Context** from the sidebar.
-        """
-    )
+with canvas_col:
+    render_canvas()
