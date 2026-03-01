@@ -9,8 +9,5 @@ font = "sans serif"
 [server]
 headless = true
 
-[ui]
-initialSidebarState = "expanded"
-
 [browser]
 gatherUsageStats = false
