@@ -363,6 +363,40 @@ def _css() -> str:
         background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
     }
 
+    /* ── Theme toggle slider ─────────────────────────── */
+    section[data-testid="stSidebar"] [data-testid="stToggle"] label span {
+        color: #8B95A5 !important;
+        font-size: 0.85rem !important;
+        font-family: 'Share Tech Mono', monospace !important;
+        letter-spacing: 0.06em;
+    }
+
+    /* ── Glossary expanders — compact, clickable ─────── */
+    section[data-testid="stSidebar"] [data-testid="stExpander"] {
+        border: none !important;
+        background: transparent !important;
+        margin-bottom: -0.5rem;
+    }
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary {
+        padding: 0.3rem 0.5rem !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        color: #C8D0DC !important;
+        border-radius: 0.3rem;
+    }
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover {
+        background: rgba(45,212,191,0.08) !important;
+        color: #2DD4BF !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderDetails"] {
+        padding: 0.2rem 0.5rem 0.5rem 0.5rem !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderDetails"] p {
+        font-size: 0.82rem !important;
+        line-height: 1.55 !important;
+        color: #8B95A5 !important;
+    }
+
     /* ── Dashboard link ─────────────────────────────── */
     [data-testid="stSidebarNav"] li:first-child span { font-size: 0 !important; }
     [data-testid="stSidebarNav"] li:first-child span::after {
