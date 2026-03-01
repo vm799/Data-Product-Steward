@@ -1,13 +1,30 @@
 """
 Theme — dark glassmorphism, Space Grotesk + mono accent.
-Wider, heavier font for body. Mono only for labels and code.
-SVG data bot icon, typewriter canvas demo.
+Two palettes: TERMINAL (teal/orange) and ENTERPRISE (BlackRock green / Aladdin blue).
+Background stays dark in both modes — only accent colours change.
 """
 
 import streamlit as st
 
+# ── Color mapping: enterprise overrides terminal defaults ──────────
+_ENTERPRISE_SWAPS = [
+    # (terminal, enterprise)
+    ("#2DD4BF", "#00B140"),   # teal  → BlackRock green
+    ("#22D3EE", "#33C464"),   # cyan  → lighter green
+    ("#5EEAD4", "#4DD978"),   # lt teal hover → lt green hover
+    ("#F97316", "#0078D4"),   # orange → Aladdin blue
+    ("#FB923C", "#3D9BE9"),   # lt orange → lt blue
+    ("45,212,191", "0,177,64"),   # teal rgb
+    ("249,115,22", "0,120,212"),  # orange rgb
+]
+
+
+def _get_theme() -> str:
+    return st.session_state.get("theme", "terminal")
+
+
 # ── SVG data bot icon (inline, teal on transparent) ─────────────────
-DATA_BOT_SVG = """
+_DATA_BOT_SVG_RAW = """
 <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" class="data-bot-svg">
   <defs>
     <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -71,8 +88,26 @@ DATA_BOT_SVG = """
 """
 
 
+def _apply_theme(raw: str) -> str:
+    """Swap terminal colours for enterprise colours when active."""
+    if _get_theme() != "enterprise":
+        return raw
+    for old, new in _ENTERPRISE_SWAPS:
+        raw = raw.replace(old, new)
+    return raw
+
+
+def get_bot_svg() -> str:
+    """Return the bot SVG with theme-appropriate colours."""
+    return _apply_theme(_DATA_BOT_SVG_RAW)
+
+
+# Keep backward-compat import name — points to terminal version
+DATA_BOT_SVG = _DATA_BOT_SVG_RAW
+
+
 def _css() -> str:
-    return """
+    return _apply_theme("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
 
@@ -1361,11 +1396,14 @@ def _css() -> str:
         border-color: #2DD4BF;
     }
 </style>
-"""
+""")
 
 
 def inject_custom_css():
-    """Inject theme CSS."""
+    """Inject theme CSS with active palette applied."""
+    # Re-point the compat alias so callers that read DATA_BOT_SVG get themed version
+    global DATA_BOT_SVG
+    DATA_BOT_SVG = get_bot_svg()
     st.markdown(_css(), unsafe_allow_html=True)
 
 

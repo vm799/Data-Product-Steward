@@ -66,6 +66,28 @@ def render_sidebar(step: int = None):
         # ── Dashboard link — always at top ────────────────
         st.page_link("streamlit_app.py", label="⌂ DASHBOARD")
 
+        # ── Theme toggle ─────────────────────────────────
+        if "theme" not in st.session_state:
+            st.session_state.theme = "terminal"
+
+        _th_left, _th_right = st.columns(2)
+        with _th_left:
+            if st.button(
+                "TERMINAL",
+                use_container_width=True,
+                disabled=st.session_state.theme == "terminal",
+            ):
+                st.session_state.theme = "terminal"
+                st.rerun()
+        with _th_right:
+            if st.button(
+                "ENTERPRISE",
+                use_container_width=True,
+                disabled=st.session_state.theme == "enterprise",
+            ):
+                st.session_state.theme = "enterprise"
+                st.rerun()
+
         st.markdown(
             '<div class="sidebar-label">// navigation & tools</div>',
             unsafe_allow_html=True,
