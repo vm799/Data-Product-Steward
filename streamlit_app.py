@@ -1,6 +1,6 @@
 import streamlit as st
 from state_manager import initialize_state, get_progress, get_next_step
-from components.layout import inject_custom_css, DATA_BOT_SVG
+from components.layout import inject_custom_css, get_bot_svg
 from components.sidebar import render_sidebar
 from components.helpers import PAGE_MAP, STEP_NAMES
 
@@ -41,78 +41,67 @@ _DELIVERABLES = [
 def _landing():
     render_sidebar()
 
-    # ── Progress bar at the very top ──────────────────────────────
+    # ── Hero — centred, full width ────────────────────────────────
     st.markdown(
-        f'<div class="top-progress-bar">'
-        f'<div class="top-progress-fill" style="width:{progress["pct"]}%;"></div>'
-        f'</div>'
-        f'<div class="top-progress-label">{progress["pct"]}% complete — '
-        f'{progress["done"]}/{progress["total"]} steps</div>',
+        '<div class="landing-hero">'
+        + get_bot_svg()
+        + "<h1>Data Product Builder</h1>"
+        '<div class="landing-tagline">'
+        "7 weeks of manual work → 1 guided session"
+        "</div>"
+        '<div class="landing-value">'
+        "A guided wizard that turns business requirements into production-ready "
+        "Snowflake DDL, dbt models, masking policies, and governance metadata — "
+        "so data teams ship compliant data products in hours, not weeks."
+        "</div>"
+        "</div>",
         unsafe_allow_html=True,
     )
 
-    left_col, right_col = st.columns([3, 2])
+    # ── Before / After stat cards — centred row ───────────────────
+    st.markdown(
+        '<div class="landing-stat-row">'
+        '<div class="landing-stat-card before">'
+        '<div class="landing-stat-num">11</div>'
+        '<div class="landing-stat-label">iterations across teams</div>'
+        "</div>"
+        '<div class="landing-arrow">→</div>'
+        '<div class="landing-stat-card after">'
+        '<div class="landing-stat-num">1</div>'
+        '<div class="landing-stat-label">guided wizard session</div>'
+        "</div>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
 
-    with left_col:
-        st.markdown(
-            '<div class="landing">'
-            + DATA_BOT_SVG
-            + "<h1>Data Product Builder</h1>"
-            '<div class="landing-tagline">'
-            "7 weeks of manual work → 1 guided session"
-            "</div>"
-            '<div class="landing-value">'
-            "A guided wizard that turns business requirements into production-ready "
-            "Snowflake DDL, dbt models, masking policies, and governance metadata — "
-            "so data teams ship compliant data products in hours, not weeks."
-            "</div>"
-            "</div>",
-            unsafe_allow_html=True,
+    # ── Big CTA button ────────────────────────────────────────────
+    st.markdown('<div class="hero-cta-wrap">', unsafe_allow_html=True)
+    _, btn_col, _ = st.columns([1, 1, 1])
+    with btn_col:
+        if st.button("Begin →", key="hero_cta", use_container_width=True):
+            st.session_state.onboard = 1
+            st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── Deliverables — full width grid below hero ─────────────────
+    st.markdown(
+        '<div class="landing-deliv-header">What you walk away with</div>',
+        unsafe_allow_html=True,
+    )
+
+    cards_html = '<div class="deliv-carousel">'
+    for i, (name, desc, step_num) in enumerate(_DELIVERABLES):
+        href = PAGE_MAP[step_num]
+        cards_html += (
+            f'<a class="deliv-card deliv-auto deliv-link" style="--d:{i};" href="/{href}">'
+            f'<div class="deliv-card-name">{name}</div>'
+            f'<div class="deliv-card-desc">{desc}</div>'
+            f'<div class="deliv-card-step">→ Step {step_num}: {STEP_NAMES[step_num - 1]}</div>'
+            f"</a>"
         )
+    cards_html += "</div>"
 
-        # Before / After stat cards
-        st.markdown(
-            '<div class="landing-stat-row">'
-            '<div class="landing-stat-card before">'
-            '<div class="landing-stat-num">11</div>'
-            '<div class="landing-stat-label">iterations across teams</div>'
-            "</div>"
-            '<div class="landing-arrow">→</div>'
-            '<div class="landing-stat-card after">'
-            '<div class="landing-stat-num">1</div>'
-            '<div class="landing-stat-label">guided wizard session</div>'
-            "</div>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
-
-        _, btn_col, _ = st.columns([1, 2, 1])
-        with btn_col:
-            if st.button("Begin →", use_container_width=True):
-                st.session_state.onboard = 1
-                st.rerun()
-
-    with right_col:
-        st.markdown(
-            '<div class="deliv-panel-title">What you walk away with</div>',
-            unsafe_allow_html=True,
-        )
-
-        # Build all deliverable cards — CSS auto-cycles the orange focus
-        # Each card is a clickable link to the step that produces it
-        cards_html = '<div class="deliv-carousel">'
-        for i, (name, desc, step_num) in enumerate(_DELIVERABLES):
-            href = PAGE_MAP[step_num]
-            cards_html += (
-                f'<a class="deliv-card deliv-auto deliv-link" style="--d:{i};" href="/{href}">'
-                f'<div class="deliv-card-name">{name}</div>'
-                f'<div class="deliv-card-desc">{desc}</div>'
-                f'<div class="deliv-card-step">→ Step {step_num}: {STEP_NAMES[step_num - 1]}</div>'
-                f"</a>"
-            )
-        cards_html += "</div>"
-
-        st.markdown(cards_html, unsafe_allow_html=True)
+    st.markdown(cards_html, unsafe_allow_html=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════

@@ -1,12 +1,13 @@
 """
-Sidebar: progress tracker, clickable step navigation, step guide, glossary.
-Glass panel on dark gradient — always dark theme.
+Sidebar: progress tracker, page tree navigation, theme toggle, glossary.
 """
 
 import streamlit as st
 from state_manager import get_progress, get_next_step
 from components.helpers import STEP_GUIDES, PAGE_MAP, STEP_NAMES
 
+
+# ── Glossary: each term is individually expandable ─────────────────
 GLOSSARY = {
     "Data Product": (
         "A curated, governed dataset built for a specific business purpose — "
@@ -14,28 +15,43 @@ GLOSSARY = {
     ),
     "PII": (
         "Personally Identifiable Information — any data that can identify "
-        "a real person (name, SSN, email, account number)."
+        "a real person (name, SSN, email, account number). Triggers masking "
+        "policies and stricter access controls automatically."
     ),
     "Classification": (
         "Sensitivity label that controls access: "
-        "Public, Internal, Confidential, or Restricted."
+        "Public, Internal, Confidential, or Restricted. Determines who "
+        "can see the data and what security controls are applied."
     ),
-    "Grain": "The level of detail in a table — what one row represents.",
+    "Grain": (
+        "The level of detail in a table — what one row represents. "
+        "e.g. one row per trade, per customer, or per day."
+    ),
     "SLA": (
         "Service Level Agreement — how quickly data must arrive. "
         "e.g. 'refreshed within 4 hours of market close'."
     ),
     "dbt": (
         "Data Build Tool — industry-standard framework for writing "
-        "and testing SQL transformations."
+        "and testing SQL transformations. The wizard generates "
+        "schema.yml and staging models you can deploy directly."
     ),
     "Lineage": (
         "The documented path data follows from source to consumption — "
-        "regulators require this for audit."
+        "regulators require this for audit trails."
+    ),
+    "DDL": (
+        "Data Definition Language — SQL commands (CREATE TABLE, ALTER, "
+        "GRANT) that define Snowflake database structures."
+    ),
+    "Masking Policy": (
+        "A Snowflake rule that hides sensitive column values "
+        "from unauthorized users automatically. Auto-generated "
+        "when you tag columns as PII."
     ),
     "Retention Policy": (
         "How long data is kept before archival or deletion. "
-        "Regulated firms typically need 3–7 years."
+        "Regulated firms typically need 3-7 years."
     ),
     "Data Domain": (
         "A business area that owns the data — Finance, Risk, "
@@ -45,33 +61,33 @@ GLOSSARY = {
         "The named person responsible for quality and governance "
         "of a data asset. Every product needs one."
     ),
-    "DDL": (
-        "Data Definition Language — SQL commands (CREATE TABLE, etc.) "
-        "that define Snowflake structures."
+    "Secure View": (
+        "A Snowflake view with row-level security that restricts "
+        "which rows a user can see based on their role."
     ),
-    "Masking Policy": (
-        "A Snowflake rule that hides sensitive column values "
-        "from unauthorized users automatically."
+    "Collibra": (
+        "A data governance catalogue. The wizard exports a JSON "
+        "import file with all your product metadata."
     ),
 }
 
 
 def render_sidebar(step: int = None):
-    """Render sidebar with progress, clickable steps, guide, and glossary."""
+    """Render sidebar with progress, page tree, theme toggle, and glossary."""
     product = st.session_state.product
     progress = get_progress(product)
     next_step = get_next_step(product)
 
     with st.sidebar:
-        # ── Dashboard link — always at top ────────────────
-        st.page_link("streamlit_app.py", label="⌂ DASHBOARD")
+        # ── Dashboard ─────────────────────────────────────
+        st.page_link("streamlit_app.py", label="⌂ Dashboard")
 
         # ── Theme toggle ─────────────────────────────────
         if "theme" not in st.session_state:
             st.session_state.theme = "terminal"
 
-        _th_left, _th_right = st.columns(2)
-        with _th_left:
+        _th_l, _th_r = st.columns(2)
+        with _th_l:
             if st.button(
                 "TERMINAL",
                 use_container_width=True,
@@ -79,7 +95,7 @@ def render_sidebar(step: int = None):
             ):
                 st.session_state.theme = "terminal"
                 st.rerun()
-        with _th_right:
+        with _th_r:
             if st.button(
                 "ENTERPRISE",
                 use_container_width=True,
@@ -88,74 +104,62 @@ def render_sidebar(step: int = None):
                 st.session_state.theme = "enterprise"
                 st.rerun()
 
-        st.markdown(
-            '<div class="sidebar-label">// navigation & tools</div>',
-            unsafe_allow_html=True,
-        )
-        st.caption("Click any step to navigate. Progress saves automatically.")
-
         st.divider()
 
-        # ── Progress ───────────────────────────────────────
-        st.markdown("### Progress")
+        # ══════════════════════════════════════════════════
+        # PROGRESS TRACKER
+        # ══════════════════════════════════════════════════
         st.progress(progress["pct"] / 100)
         st.caption(
-            f"**{progress['pct']}%** — "
+            f"**{progress['pct']}%** complete — "
             f"{progress['done']}/{progress['total']} steps"
         )
 
-        # ── Clickable step list ────────────────────────────
+        st.divider()
+
+        # ══════════════════════════════════════════════════
+        # PAGE TREE — clickable navigation
+        # ══════════════════════════════════════════════════
         step_names = list(progress["steps"].keys())
         for i, step_name in enumerate(step_names, 1):
             done = progress["steps"][step_name]
-            icon = "✅" if done else "⬜"
             is_current = step is not None and i == step
             is_next = i == next_step
 
             if is_current:
-                label = f"{icon} ▶ {step_name}"
+                icon = "▶"
+            elif done:
+                icon = "✅"
             elif is_next:
-                label = f"🔶 {step_name}"
+                icon = "◆"
             else:
-                label = f"{icon} {step_name}"
+                icon = f"{i}."
 
-            st.page_link(PAGE_MAP[i], label=label)
+            st.page_link(PAGE_MAP[i], label=f"{icon} {step_name}")
 
-        # ── Product Canvas link ──────────────────────────
-        st.divider()
+        # ── Canvas link ───────────────────────────────────
         st.page_link(
             "pages/8_Product_Canvas.py",
             label="📋 Product Canvas",
         )
 
-        # ── Step guide ─────────────────────────────────────
+        # ══════════════════════════════════════════════════
+        # STEP GUIDE — context-sensitive tips
+        # ══════════════════════════════════════════════════
         if step is not None and step in STEP_GUIDES:
             st.divider()
             guide = STEP_GUIDES[step]
-            st.markdown(f"### {guide['title']}")
-            st.markdown(
-                f'<div class="guide-card">{guide["why"]}</div>',
-                unsafe_allow_html=True,
-            )
-            st.markdown("**Tips:**")
+            st.markdown(f"**{guide['title']}**")
+            st.caption(guide["why"])
             for tip in guide["tips"]:
-                st.markdown(f"- {tip}")
-            st.caption(f"Feeds into: {guide['feeds']}")
-        elif step is None:
-            st.divider()
-            st.markdown("### Getting Started")
-            st.markdown(
-                '<div class="guide-card">'
-                "Select <b>Business Context</b> above to begin. "
-                "Each step builds on the last — work through them in order."
-                "</div>",
-                unsafe_allow_html=True,
-            )
+                st.caption(f"- {tip}")
 
-        # ── Glossary ───────────────────────────────────────
+        # ══════════════════════════════════════════════════
+        # GLOSSARY — each term individually expandable
+        # ══════════════════════════════════════════════════
         st.divider()
-        st.markdown("### Glossary")
-        st.caption("Key terms — expand to look up unfamiliar concepts.")
-        with st.expander("Open Glossary", expanded=False):
-            for term, defn in GLOSSARY.items():
-                st.markdown(f"**{term}:** {defn}")
+        st.caption("**GLOSSARY** — click a term to learn more")
+
+        for term, definition in GLOSSARY.items():
+            with st.expander(term, expanded=False):
+                st.markdown(definition)
