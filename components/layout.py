@@ -1375,6 +1375,17 @@ def _css() -> str:
     }
 
     /* ═══════════════════════════════════════════════════
+       HIDE STREAMLIT DEFAULT ARROWS ON LINKS & BUTTONS
+       ═══════════════════════════════════════════════════ */
+    [data-testid="stPageLink"] span[data-testid="stIconEmoji"],
+    [data-testid="stPageLink"] .arrow,
+    [data-testid="stBaseButton-secondary"] .arrow,
+    button .arrow,
+    a .arrow {
+        display: none !important;
+    }
+
+    /* ═══════════════════════════════════════════════════
        PAGE LINK STYLING — theme overrides
        ═══════════════════════════════════════════════════ */
     [data-testid="stPageLink"] a {

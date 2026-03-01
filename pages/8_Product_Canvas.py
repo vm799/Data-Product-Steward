@@ -15,6 +15,9 @@ initialize_state()
 inject_custom_css()
 render_sidebar()
 
+# ── Back navigation ────────────────────────────────────────────────
+st.page_link("streamlit_app.py", label="← Back to Dashboard")
+
 product = st.session_state.product
 progress = get_progress(product)
 name = product.get("name")
