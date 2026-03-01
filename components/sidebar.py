@@ -82,27 +82,19 @@ def render_sidebar(step: int = None):
         # ── Dashboard ─────────────────────────────────────
         st.page_link("streamlit_app.py", label="⌂ Dashboard")
 
-        # ── Theme toggle ─────────────────────────────────
+        # ── Theme toggle slider ──────────────────────────
         if "theme" not in st.session_state:
             st.session_state.theme = "terminal"
 
-        _th_l, _th_r = st.columns(2)
-        with _th_l:
-            if st.button(
-                "TERMINAL",
-                use_container_width=True,
-                disabled=st.session_state.theme == "terminal",
-            ):
-                st.session_state.theme = "terminal"
-                st.rerun()
-        with _th_r:
-            if st.button(
-                "ENTERPRISE",
-                use_container_width=True,
-                disabled=st.session_state.theme == "enterprise",
-            ):
-                st.session_state.theme = "enterprise"
-                st.rerun()
+        is_enterprise = st.toggle(
+            "Enterprise theme",
+            value=st.session_state.theme == "enterprise",
+            key="theme_toggle",
+        )
+        new_theme = "enterprise" if is_enterprise else "terminal"
+        if new_theme != st.session_state.theme:
+            st.session_state.theme = new_theme
+            st.rerun()
 
         st.divider()
 
