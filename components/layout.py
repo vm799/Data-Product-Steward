@@ -133,7 +133,7 @@ def _css() -> str:
 
     /* ── Kill top whitespace ────────────────────────── */
     .main .block-container {
-        padding: 0.6rem 1.8rem 2rem 1.8rem !important;
+        padding: 0.3rem 1.8rem 2rem 1.8rem !important;
         max-width: 100%;
     }
     [data-testid="stHeader"] {
@@ -802,29 +802,25 @@ def _css() -> str:
     /* ═══════════════════════════════════════════════════
        LANDING PAGE
        ═══════════════════════════════════════════════════ */
-    .landing {
+    /* ── Landing hero — centred, punchy ────────────── */
+    .landing-hero {
         text-align: center;
-        padding: 3rem 1rem 1.5rem 1rem;
+        padding: 1rem 1rem 0.5rem 1rem;
+        max-width: 700px;
+        margin: 0 auto;
     }
     .data-bot-svg {
-        width: 180px;
-        height: 200px;
-        margin: 0 auto 1.5rem auto;
+        width: 120px;
+        height: 130px;
+        margin: 0 auto 1rem auto;
         display: block;
-        filter: drop-shadow(0 0 25px rgba(45,212,191,0.3));
+        filter: drop-shadow(0 0 30px rgba(45,212,191,0.35));
     }
-    .landing h1 {
-        font-size: 2.8rem !important;
-        letter-spacing: 0.06em;
-        margin-bottom: 0.8rem !important;
-    }
-    .landing-sub {
-        font-size: 1.25rem;
-        color: #8B95A5;
-        max-width: 620px;
-        margin: 0 auto;
-        line-height: 1.75;
-        font-weight: 400;
+    .landing-hero h1 {
+        font-size: 3.2rem !important;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.1 !important;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -996,20 +992,60 @@ def _css() -> str:
        LANDING PAGE — value prop + deliverables grid
        ═══════════════════════════════════════════════════ */
     .landing-tagline {
-        font-size: 1.6rem;
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 1.3rem;
         color: #2DD4BF;
         font-weight: 600;
+        letter-spacing: 0.04em;
+        margin: 0 auto 0.6rem auto;
+        line-height: 1.4;
+    }
+    /* ── Landing value proposition ──────────────────── */
+    .landing-value {
+        font-size: 1rem;
+        color: #8B95A5;
+        line-height: 1.7;
+        margin: 0 auto 0.5rem auto;
         max-width: 580px;
-        margin: 0 auto 1.5rem auto;
-        line-height: 1.5;
     }
     .landing-stat-row {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 1.5rem;
-        margin: 1.5rem auto;
-        max-width: 650px;
+        margin: 1rem auto;
+        max-width: 520px;
+    }
+    /* ── Big CTA button ───────────────────────────── */
+    .hero-cta-wrap button {
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+        padding: 1.1rem 3rem !important;
+        letter-spacing: 0.08em !important;
+        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
+        color: #06080D !important;
+        border: none !important;
+        border-radius: 0.5rem !important;
+        box-shadow: 0 0 30px rgba(45,212,191,0.3), 0 4px 15px rgba(0,0,0,0.3) !important;
+        transition: box-shadow 0.3s, transform 0.2s !important;
+        cursor: pointer;
+    }
+    .hero-cta-wrap button:hover {
+        box-shadow: 0 0 50px rgba(45,212,191,0.5), 0 6px 20px rgba(0,0,0,0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+    .hero-cta-wrap button p {
+        color: #06080D !important;
+        font-weight: 700 !important;
+    }
+    .landing-deliv-header {
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #8B95A5;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin: 1.5rem auto 0.8rem auto;
     }
     .landing-stat-card {
         background: rgba(255,255,255,0.04);
@@ -1048,15 +1084,6 @@ def _css() -> str:
         color: #2DD4BF;
         flex-shrink: 0;
     }
-    /* ── Landing value proposition ──────────────────── */
-    .landing-value {
-        font-size: 0.95rem;
-        color: #8B95A5;
-        line-height: 1.6;
-        margin-top: 0.75rem;
-        max-width: 38rem;
-    }
-
     /* ── Deliverable panel (landing right side) ──────── */
     .deliv-panel-title {
         font-size: 1.4rem;
@@ -1068,9 +1095,11 @@ def _css() -> str:
 
     /* ── Auto-cycling deliverable carousel ──────────── */
     .deliv-carousel {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.4rem;
+        max-width: 900px;
+        margin: 0 auto;
     }
     .deliv-card.deliv-auto {
         background: rgba(255,255,255,0.03);
