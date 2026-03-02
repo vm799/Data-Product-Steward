@@ -401,8 +401,9 @@ def _css() -> str:
         color: #8B95A5 !important;
     }
 
-    /* ── Hide default Streamlit auto-nav (we use our own) ── */
-    [data-testid="stSidebarNav"] {
+    /* ── Hide icons inside default Streamlit auto-nav ── */
+    [data-testid="stSidebarNav"] [data-testid="stIconMaterial"],
+    [data-testid="stSidebarNav"] svg {
         display: none !important;
     }
 
