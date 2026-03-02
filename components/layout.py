@@ -1414,20 +1414,43 @@ def _css() -> str:
 
     /* ═══════════════════════════════════════════════════
        HIDE STREAMLIT DEFAULT ARROWS ON LINKS & BUTTONS
+       Streamlit renders arrows as Material Symbols font
+       icons (arrow_forward, arrow_right, etc.) AND as SVGs.
+       We must target both.
        ═══════════════════════════════════════════════════ */
+    /* Material Symbols font icons in page links (the main culprit) */
+    [data-testid="stPageLink"] .material-symbols-rounded,
+    [data-testid="stPageLink"] .material-symbols-outlined,
+    [data-testid="stPageLink"] [data-testid="stIconMaterial"],
+    /* SVG-based arrows */
     [data-testid="stPageLink"] span[data-testid="stIconEmoji"],
     [data-testid="stPageLink"] .arrow,
     [data-testid="stBaseButton-secondary"] .arrow,
     button .arrow,
     a .arrow,
-    /* Hide all Streamlit-injected arrow SVGs on page links */
-    [data-testid="stPageLink"] a > span:last-child:not(:first-child),
     [data-testid="stPageLink"] [data-testid="stIconArrow"],
     [data-testid="stPageLink"] svg[viewBox] {
         display: none !important;
         width: 0 !important;
         height: 0 !important;
         overflow: hidden !important;
+        font-size: 0 !important;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HIDE EXPANDER TOGGLE ARROWS (glossary + all)
+       Streamlit expanders inject a Material Symbols
+       chevron (expand_more / chevron_right) that overlaps
+       the summary text.
+       ═══════════════════════════════════════════════════ */
+    [data-testid="stExpander"] summary .material-symbols-rounded,
+    [data-testid="stExpander"] summary .material-symbols-outlined,
+    [data-testid="stExpander"] [data-testid="stExpanderToggleIcon"],
+    [data-testid="stExpander"] summary svg {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        font-size: 0 !important;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -1487,12 +1510,26 @@ def _css() -> str:
     section[data-testid="stSidebar"] [data-testid="stPageLink"] svg,
     section[data-testid="stSidebar"] [data-testid="stPageLink"] .arrow,
     section[data-testid="stSidebar"] [data-testid="stPageLink"] [data-testid="stIconArrow"],
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] [data-testid="stIconMaterial"],
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] .material-symbols-rounded,
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] .material-symbols-outlined,
     section[data-testid="stSidebar"] [data-testid="stPageLink"] span[data-testid] svg,
     section[data-testid="stSidebar"] [data-testid="stPageLink"] a > span:last-child svg {
         display: none !important;
         width: 0 !important;
         height: 0 !important;
         overflow: hidden !important;
+        font-size: 0 !important;
+    }
+    /* Hide expander arrows in sidebar glossary */
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary .material-symbols-rounded,
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary .material-symbols-outlined,
+    section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderToggleIcon"],
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary svg {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        font-size: 0 !important;
     }
 
     /* ── Guide subtitle ───────────────────────────────── */
