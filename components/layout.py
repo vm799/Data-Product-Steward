@@ -401,12 +401,6 @@ def _css() -> str:
         color: #C8D0DC !important;
     }
 
-    /* ── Hide icons inside default Streamlit auto-nav ── */
-    [data-testid="stSidebarNav"] [data-testid="stIconMaterial"],
-    [data-testid="stSidebarNav"] svg {
-        display: none !important;
-    }
-
     /* ── Guide card ─────────────────────────────────── */
     .guide-card {
         background: rgba(45,212,191,0.06);

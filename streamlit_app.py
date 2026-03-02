@@ -8,6 +8,7 @@ st.set_page_config(
     page_title="Data Product Builder",
     page_icon="📊",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 initialize_state()
