@@ -1413,51 +1413,30 @@ def _css() -> str:
     }
 
     /* ═══════════════════════════════════════════════════
-       NUCLEAR ICON REMOVAL
-       Kill ALL icons, SVGs, chevrons, arrows everywhere.
-       We disable the Material Symbols font entirely, hide
-       every SVG inside interactive elements, and remove
-       the native <details> disclosure triangle.
+       HIDE ALL STREAMLIT-INJECTED ICONS
+       -----------------------------------------------
+       Confirmed from Streamlit 1.54 source:
+       • Material icons render as <span data-testid="stIconMaterial">
+         with the ligature text (e.g. "arrow_forward") as children
+         and class target "exvv1vr0".
+       • Emoji icons render as <span data-testid="stIconEmoji">.
+       • Expander chevrons use the same DynamicIcon component.
+       • The native <details> element adds a browser disclosure ▶.
        ═══════════════════════════════════════════════════ */
 
-    /* 1) Disable Material Symbols font globally so ligature
-          text like "arrow_forward" never renders as an icon.
-          The font-family override makes the browser treat it
-          as invisible / zero-width text we then hide. */
-    @font-face {
-        font-family: 'Material Symbols Rounded';
-        src: local('__disabled__');
-    }
-    @font-face {
-        font-family: 'Material Symbols Outlined';
-        src: local('__disabled__');
+    /* 1) THE key selector — Streamlit's Material icon span.
+          This catches every arrow, chevron, expand icon, etc. */
+    [data-testid="stIconMaterial"] {
+        display: none !important;
     }
 
-    /* 2) Hide ALL SVGs inside page links, buttons, expanders */
+    /* 2) Also hide SVGs Streamlit may inject as fallback */
     [data-testid="stPageLink"] svg,
-    [data-testid="stBaseButton-secondary"] svg,
-    [data-testid="stBaseButton-primary"] svg,
     [data-testid="stExpander"] svg {
         display: none !important;
-        width: 0 !important;
-        height: 0 !important;
     }
 
-    /* 3) Hide any span that uses Material Symbols font anywhere */
-    span[class*="material-symbols"],
-    span[class*="Material"],
-    i[class*="material-symbols"],
-    i[class*="Material"] {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        font-size: 0 !important;
-        overflow: hidden !important;
-    }
-
-    /* 4) Hide the NATIVE browser <details> disclosure triangle.
-          This is NOT an SVG or font icon — it's the built-in
-          marker that no class-based selector can reach. */
+    /* 3) Native <details> disclosure triangle removal */
     summary {
         list-style: none !important;
     }
@@ -1468,35 +1447,6 @@ def _css() -> str:
         display: none !important;
         content: "" !important;
         font-size: 0 !important;
-    }
-
-    /* 5) Hide Streamlit icon containers by data-testid pattern
-          (scoped to page links & expanders to avoid collateral) */
-    [data-testid="stPageLink"] [data-testid*="Icon"],
-    [data-testid="stPageLink"] [data-testid*="icon"],
-    [data-testid="stExpander"] [data-testid*="Icon"],
-    [data-testid="stExpander"] [data-testid*="icon"],
-    [data-testid="stSidebar"] [data-testid*="Icon"],
-    [data-testid="stSidebar"] [data-testid*="icon"] {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-    }
-
-    /* 6) Kill leftover ligature text that leaked through
-          (e.g. "arrow_forward", "expand_more" rendered as
-          plain text after we broke the Material Symbols font).
-          We hide every <span> inside page-link anchors that
-          is NOT the label text, plus catch the stIcon pattern. */
-    [data-testid="stPageLink"] [class*="Icon"],
-    [data-testid="stPageLink"] [class*="icon"],
-    [data-testid="stExpander"] [class*="Icon"],
-    [data-testid="stExpander"] [class*="icon"] {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        font-size: 0 !important;
-        overflow: hidden !important;
     }
 
     /* ═══════════════════════════════════════════════════
