@@ -12,7 +12,7 @@ inject_custom_css()
 render_sidebar(step=3)
 
 render_step_nav(3)
-step_header(3, "3️⃣ Data Model", "Design entities (tables) and their attributes (columns) with PII classification.")
+step_header(3, "Data Model", "Design entities (tables) and their attributes (columns) with PII classification.")
 
 product = st.session_state.product
 
@@ -38,10 +38,10 @@ if product["entities"]:
     for idx, entity in enumerate(product["entities"]):
         n_attr = len(entity["attributes"])
         n_pii = sum(1 for a in entity["attributes"] if a.get("pii"))
-        pii_tag = f" · 🔴 {n_pii} PII" if n_pii else ""
+        pii_tag = f" / {n_pii} PII" if n_pii else ""
 
         with st.expander(
-            f"📦 {entity['name']} — {n_attr} attributes{pii_tag}",
+            f"{entity['name']} -- {n_attr} attributes{pii_tag}",
             expanded=(n_attr == 0),
         ):
             st.markdown("**Add Attribute**")
@@ -89,7 +89,7 @@ if product["entities"]:
             if entity["attributes"]:
                 st.markdown("**Current Attributes:**")
                 for attr in entity["attributes"]:
-                    pii_badge = " 🔴 PII" if attr.get("pii") else ""
+                    pii_badge = " [PII]" if attr.get("pii") else ""
                     null_badge = "NULL" if attr.get("nullable") else "NOT NULL"
                     desc = f" — _{attr['description']}_" if attr.get("description") else ""
                     st.markdown(f"- `{attr['name']}` · {attr['data_type']} · {null_badge}{pii_badge}{desc}")

@@ -47,7 +47,7 @@ def _landing():
         + get_bot_svg()
         + "<h1>Data Product Builder</h1>"
         '<div class="landing-tagline">'
-        "7 weeks of manual work → 1 guided session"
+        "7 weeks of manual work to 1 guided session"
         "</div>"
         '<div class="landing-value">'
         "A guided wizard that turns business requirements into production-ready "
@@ -65,7 +65,7 @@ def _landing():
         '<div class="landing-stat-num">11</div>'
         '<div class="landing-stat-label">iterations across teams</div>'
         "</div>"
-        '<div class="landing-arrow">→</div>'
+        '<div class="landing-arrow">to</div>'
         '<div class="landing-stat-card after">'
         '<div class="landing-stat-num">1</div>'
         '<div class="landing-stat-label">guided wizard session</div>'
@@ -78,7 +78,7 @@ def _landing():
     st.markdown('<div class="hero-cta-wrap">', unsafe_allow_html=True)
     _, btn_col, _ = st.columns([1, 1, 1])
     with btn_col:
-        if st.button("Begin →", key="hero_cta", use_container_width=True):
+        if st.button("Begin", key="hero_cta", use_container_width=True):
             st.session_state.onboard = 1
             st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
@@ -96,7 +96,7 @@ def _landing():
             f'<a class="deliv-card deliv-auto deliv-link" style="--d:{i};" href="/{href}">'
             f'<div class="deliv-card-name">{name}</div>'
             f'<div class="deliv-card-desc">{desc}</div>'
-            f'<div class="deliv-card-step">→ Step {step_num}: {STEP_NAMES[step_num - 1]}</div>'
+            f'<div class="deliv-card-step">Step {step_num}: {STEP_NAMES[step_num - 1]}</div>'
             f"</a>"
         )
     cards_html += "</div>"
@@ -112,7 +112,7 @@ _SB_SECTIONS = [
     (
         "1",
         "Dashboard Link",
-        "Always visible at the top. Click <b>⌂ Dashboard</b> from any step "
+        "Always visible at the top. Click <b>Dashboard</b> from any step "
         "to return to the overview — your progress is saved automatically.",
     ),
     (
@@ -126,7 +126,7 @@ _SB_SECTIONS = [
         "3",
         "Step List",
         "Every step is a <b>clickable link</b>. Jump to any step directly — "
-        "no need to go in strict order. Completed steps show ✅, and the "
+        "no need to go in strict order. Completed steps are marked, and the "
         "next suggested step is marked.",
     ),
     (
@@ -166,7 +166,7 @@ def _sidebar_guide():
         '<div class="sm-section-inline">'
         '<div class="sm-section-content">'
         '<span class="sm-callout">1</span>'
-        '<div class="sm-brand">⌂ DASHBOARD</div>'
+        '<div class="sm-brand">DASHBOARD</div>'
         '</div>'
         '<div class="sm-inline-desc">'
         '<span class="sm-inline-title">Dashboard Link</span>'
@@ -198,13 +198,13 @@ def _sidebar_guide():
         '<div class="sm-section-inline">'
         '<div class="sm-section-content">'
         '<span class="sm-callout">3</span>'
-        '<div class="sm-step done">✅ Business Context</div>'
-        '<div class="sm-step done">✅ Data Sources</div>'
-        '<div class="sm-step current">⬜ ▶ Data Model ← here</div>'
-        '<div class="sm-step">⬜ Governance &amp; Security</div>'
-        '<div class="sm-step">⬜ Data Quality</div>'
-        '<div class="sm-step">⬜ Transformations</div>'
-        '<div class="sm-step">⬜ Review &amp; Export</div>'
+        '<div class="sm-step done">1. Business Context</div>'
+        '<div class="sm-step done">2. Data Sources</div>'
+        '<div class="sm-step current">3. Data Model  (here)</div>'
+        '<div class="sm-step">4. Governance &amp; Security</div>'
+        '<div class="sm-step">5. Data Quality</div>'
+        '<div class="sm-step">6. Transformations</div>'
+        '<div class="sm-step">7. Review &amp; Export</div>'
         '</div>'
         '<div class="sm-inline-desc">'
         '<span class="sm-inline-title">Step List</span>'
@@ -256,12 +256,12 @@ def _sidebar_guide():
     _, back_col, _, fwd_col, _ = st.columns([1, 1, 1, 1, 1])
 
     with back_col:
-        if st.button("← Landing", use_container_width=True):
+        if st.button("Landing", use_container_width=True):
             st.session_state.onboard = 0
             st.rerun()
 
     with fwd_col:
-        if st.button("Canvas Guide →", use_container_width=True):
+        if st.button("Canvas Guide", use_container_width=True):
             st.session_state.onboard = 2
             st.rerun()
 
@@ -295,9 +295,9 @@ def _canvas_guide():
             '<div class="typewriter-line tw-dim tw-d3">Domain: Risk &middot; Region: UK</div>'
             '<div class="typewriter-line tw-d4">Entities: 3 &middot; Sources: 2 &middot; PII: 4 cols</div>'
             '<div class="typewriter-line tw-dim tw-d5">Classification: Confidential &middot; Retention: 7yr</div>'
-            '<div class="typewriter-line tw-check tw-d6">&check; Snowflake DDL</div>'
-            '<div class="typewriter-line tw-check tw-d7">&check; dbt Models &middot; &check; Masking Policies</div>'
-            '<div class="typewriter-line tw-check tw-d8 tw-cursor">&check; Collibra Import &middot; &check; Docs</div>'
+            '<div class="typewriter-line tw-check tw-d6">Snowflake DDL</div>'
+            '<div class="typewriter-line tw-check tw-d7">dbt Models &middot; Masking Policies</div>'
+            '<div class="typewriter-line tw-check tw-d8 tw-cursor">Collibra Import &middot; Docs</div>'
             "</div>"
             "</div>",
             unsafe_allow_html=True,
@@ -334,7 +334,7 @@ def _canvas_guide():
             st.session_state.onboard = 1
             st.rerun()
     with fwd_col:
-        if st.button("Go to Wizard Agent →", use_container_width=True):
+        if st.button("Go to Wizard Agent", use_container_width=True):
             st.session_state.onboard = 3
             st.rerun()
 
@@ -381,7 +381,7 @@ def _dashboard():
         if done:
             st.page_link(
                 PAGE_MAP[i],
-                label=f"✅  {name}  —  {desc}",
+                label=f"{name}  --  {desc}",
                 use_container_width=True,
             )
         elif is_next:
@@ -390,13 +390,13 @@ def _dashboard():
                 f'<div class="wiz-step-hero-num">STEP {i} OF 7</div>'
                 f'<div class="wiz-step-hero-name">{name}</div>'
                 f'<div class="wiz-step-hero-desc">{desc}</div>'
-                f'<span class="wiz-step-hero-arrow">→ START HERE</span>'
+                f'<span class="wiz-step-hero-arrow">START HERE</span>'
                 f"</div>",
                 unsafe_allow_html=True,
             )
             st.page_link(
                 PAGE_MAP[i],
-                label=f"▶  Open {name}",
+                label=f"Open {name}",
                 use_container_width=True,
             )
         else:
@@ -410,7 +410,7 @@ def _dashboard():
     st.divider()
     st.page_link(
         "pages/8_Product_Canvas.py",
-        label="📋  Product Canvas — Live Contract View",
+        label="Product Canvas -- Live Contract View",
         use_container_width=True,
     )
 

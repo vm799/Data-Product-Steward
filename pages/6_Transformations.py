@@ -14,7 +14,7 @@ render_sidebar(step=6)
 render_step_nav(6)
 step_header(
     6,
-    "6️⃣ Transformations",
+    "Transformations",
     "Document the processing steps that produce your data product. This creates audit trails and dbt models.",
 )
 
@@ -81,8 +81,8 @@ if product["transformations"]:
     st.divider()
     st.markdown(f"#### Defined Transformations ({len(product['transformations'])})")
     for i, t in enumerate(product["transformations"]):
-        with st.expander(f"⚙️ {t['name']} ({t['type']})"):
-            st.markdown(f"`{t.get('source_entity', '?')}` → `{t.get('target_entity', '?')}`")
+        with st.expander(f"{t['name']} ({t['type']})"):
+            st.markdown(f"`{t.get('source_entity', '?')}` > `{t.get('target_entity', '?')}`")
             if t.get("description"):
                 st.markdown(t["description"])
             if t.get("logic"):

@@ -16,7 +16,7 @@ inject_custom_css()
 render_sidebar()
 
 # ── Back navigation ────────────────────────────────────────────────
-st.page_link("streamlit_app.py", label="← Back to Dashboard")
+st.page_link("streamlit_app.py", label="Back to Dashboard")
 
 product = st.session_state.product
 progress = get_progress(product)
@@ -35,7 +35,7 @@ def _cv_section(title: str, step_num: int):
     with col_e:
         st.page_link(
             PAGE_MAP[step_num],
-            label=f"Edit →",
+            label="Edit",
         )
 
 
@@ -79,7 +79,7 @@ else:
 
 st.caption(
     "Single source of truth — dynamically populated as you build. "
-    "Click **Edit →** on any section to jump to that wizard step."
+    "Click **Edit** on any section to jump to that wizard step."
 )
 
 # ── Readiness metrics ─────────────────────────────────────────────────
@@ -120,8 +120,8 @@ st.markdown(
 d_cols = st.columns(3)
 for i, (label, ready, _step) in enumerate(deliverables):
     with d_cols[i % 3]:
-        icon = "✅" if ready else "⬜"
-        st.markdown(f"{icon} {label}")
+        mark = "Done" if ready else "Pending"
+        st.markdown(f"**{mark}** -- {label}")
 
 # ── Quick downloads ───────────────────────────────────────────────────
 with st.expander("Download Artifacts", expanded=False):
@@ -342,7 +342,7 @@ if st.session_state.get("signed_off"):
     so = st.session_state["signed_off"]
     st.markdown(
         f'<div class="step-complete-prompt">'
-        f'<div class="step-complete-prompt-title">✅ Contract Approved</div>'
+        f'<div class="step-complete-prompt-title">Contract Approved</div>'
         f'<div class="step-complete-prompt-desc">'
         f'Signed off by <b>{so["approver"]}</b> on {so["timestamp"]}'
         f'</div></div>',
@@ -374,5 +374,5 @@ else:
         remaining.append(f"completion at {progress['pct']}% (need 85%+)")
     st.warning(
         f"Cannot sign off yet — {' and '.join(remaining)}. "
-        "Use the **Edit →** links above to complete each section."
+        "Use the **Edit** links above to complete each section."
     )

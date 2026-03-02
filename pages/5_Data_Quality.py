@@ -14,7 +14,7 @@ render_sidebar(step=5)
 render_step_nav(5)
 step_header(
     5,
-    "5️⃣ Data Quality",
+    "Data Quality",
     "Set quality thresholds that become automated checks in your data pipeline.",
 )
 
@@ -91,7 +91,7 @@ with st.form("data_quality_form"):
 saved = product.get("quality_rules", {})
 if saved:
     st.divider()
-    st.markdown("#### 📊 Current Quality Profile")
+    st.markdown("#### Current Quality Profile")
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Completeness", f"{saved.get('completeness', 0)}%")
     m2.metric("Accuracy", f"{saved.get('accuracy', 0)}%")

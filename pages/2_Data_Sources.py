@@ -12,7 +12,7 @@ inject_custom_css()
 render_sidebar(step=2)
 
 render_step_nav(2)
-step_header(2, "2️⃣ Data Sources", "Register every source system that feeds into this data product.")
+step_header(2, "Data Sources", "Register every source system that feeds into this data product.")
 
 product = st.session_state.product
 
@@ -86,7 +86,7 @@ if product["sources"]:
     st.divider()
     st.markdown(f"#### Registered Sources ({len(product['sources'])})")
     for i, src in enumerate(product["sources"]):
-        with st.expander(f"📡 {src['name']} — {src['type']} · {src['frequency']}"):
+        with st.expander(f"{src['name']} -- {src['type']} / {src['frequency']}"):
             c1, c2 = st.columns(2)
             with c1:
                 st.markdown(f"**Owner:** {src['owner']}")

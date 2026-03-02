@@ -80,7 +80,7 @@ def render_sidebar(step: int = None):
 
     with st.sidebar:
         # ── Dashboard ─────────────────────────────────────
-        st.page_link("streamlit_app.py", label="⌂ Dashboard")
+        st.page_link("streamlit_app.py", label="Dashboard")
 
         # ── Theme toggle slider ──────────────────────────
         if "theme" not in st.session_state:
@@ -118,21 +118,17 @@ def render_sidebar(step: int = None):
             is_current = step is not None and i == step
             is_next = i == next_step
 
-            if is_current:
-                icon = "▶"
-            elif done:
-                icon = "✅"
-            elif is_next:
-                icon = "◆"
+            if done:
+                prefix = f"{i}. "
             else:
-                icon = f"{i}."
+                prefix = f"{i}. "
 
-            st.page_link(PAGE_MAP[i], label=f"{icon} {step_name}")
+            st.page_link(PAGE_MAP[i], label=f"{prefix}{step_name}")
 
         # ── Canvas link ───────────────────────────────────
         st.page_link(
             "pages/8_Product_Canvas.py",
-            label="📋 Product Canvas",
+            label="Product Canvas",
         )
 
         # ══════════════════════════════════════════════════
