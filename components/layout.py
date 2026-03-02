@@ -401,19 +401,9 @@ def _css() -> str:
         color: #8B95A5 !important;
     }
 
-    /* ── Dashboard link ─────────────────────────────── */
-    [data-testid="stSidebarNav"] li:first-child span { font-size: 0 !important; }
-    [data-testid="stSidebarNav"] li:first-child span::after {
-        content: "> DASHBOARD_";
-        font-family: 'Share Tech Mono', monospace !important;
-        font-size: 1.05rem;
-        letter-spacing: 0.06em;
-        color: #2DD4BF !important;
-        text-shadow: 0 0 8px rgba(45,212,191,0.4);
-    }
-    [data-testid="stSidebarNav"] li:first-child:hover span::after {
-        text-shadow: 0 0 14px rgba(45,212,191,0.7);
-        color: #5EEAD4 !important;
+    /* ── Hide default Streamlit auto-nav (we use our own) ── */
+    [data-testid="stSidebarNav"] {
+        display: none !important;
     }
 
     /* ── Guide card ─────────────────────────────────── */
