@@ -344,10 +344,10 @@ def _css() -> str:
         border-right: 1px solid rgba(255,255,255,0.06) !important;
         font-size: 1.08rem;
     }
-    section[data-testid="stSidebar"] * { color: #8B95A5 !important; }
+    section[data-testid="stSidebar"] * { color: #E8ECF1 !important; }
     section[data-testid="stSidebar"] h1,
     section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3 { color: #E8ECF1 !important; }
+    section[data-testid="stSidebar"] h3 { color: #FFFFFF !important; }
     section[data-testid="stSidebar"] h1 {
         font-size: 1.35rem !important;
         font-weight: 700 !important;
@@ -360,7 +360,7 @@ def _css() -> str:
     }
     section[data-testid="stSidebar"] .stCaption *,
     section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {
-        color: #5A6478 !important;
+        color: #A0AABB !important;
     }
     section[data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.08) !important; }
     section[data-testid="stSidebar"] .stProgress > div > div > div {
@@ -369,7 +369,7 @@ def _css() -> str:
 
     /* ── Theme toggle slider ─────────────────────────── */
     section[data-testid="stSidebar"] [data-testid="stToggle"] label span {
-        color: #8B95A5 !important;
+        color: #C8D0DC !important;
         font-size: 0.85rem !important;
         font-family: 'Share Tech Mono', monospace !important;
         letter-spacing: 0.06em;
@@ -385,12 +385,12 @@ def _css() -> str:
         padding: 0.3rem 0.5rem !important;
         font-size: 0.9rem !important;
         font-weight: 600 !important;
-        color: #C8D0DC !important;
+        color: #E8ECF1 !important;
         border-radius: 0.3rem;
     }
     section[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover {
         background: rgba(45,212,191,0.08) !important;
-        color: #2DD4BF !important;
+        color: #F97316 !important;
     }
     section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderDetails"] {
         padding: 0.2rem 0.5rem 0.5rem 0.5rem !important;
@@ -398,7 +398,7 @@ def _css() -> str:
     section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderDetails"] p {
         font-size: 0.82rem !important;
         line-height: 1.55 !important;
-        color: #8B95A5 !important;
+        color: #C8D0DC !important;
     }
 
     /* ── Hide icons inside default Streamlit auto-nav ── */
@@ -1456,16 +1456,26 @@ def _css() -> str:
         background: rgba(45,212,191,0.08) !important;
         border-color: #2DD4BF !important;
     }
-    /* Sidebar page links — more compact */
+    /* Sidebar page links — bright white, teal/orange hover */
     section[data-testid="stSidebar"] [data-testid="stPageLink"] a {
         background: transparent !important;
         border: none !important;
-        padding: 0.2rem 0.4rem !important;
+        padding: 0.25rem 0.5rem !important;
         font-size: 0.95rem !important;
+        color: #E8ECF1 !important;
+        border-left: 2px solid transparent !important;
+        border-radius: 0 !important;
     }
     section[data-testid="stSidebar"] [data-testid="stPageLink"] a:hover {
-        background: rgba(45,212,191,0.08) !important;
-        border-radius: 0.3rem;
+        background: rgba(45,212,191,0.10) !important;
+        color: #2DD4BF !important;
+        border-left: 2px solid #F97316 !important;
+    }
+    /* Active / current page highlight */
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] a[aria-current="page"] {
+        color: #2DD4BF !important;
+        border-left: 2px solid #F97316 !important;
+        background: rgba(45,212,191,0.06) !important;
     }
 
     /* ── Guide subtitle ───────────────────────────────── */

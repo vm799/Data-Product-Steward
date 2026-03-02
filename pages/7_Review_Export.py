@@ -21,7 +21,7 @@ render_sidebar(step=7)
 render_step_nav(7)
 step_header(
     7,
-    "7️⃣ Review & Export",
+    "Review & Export",
     "Validate your data product definition and generate deployment-ready artifacts.",
 )
 
@@ -42,7 +42,7 @@ st.progress(score / 100)
 
 # ── Validation ──────────────────────────────────────────────────────────
 st.divider()
-st.subheader("🔍 Validation Results")
+st.subheader("Validation Results")
 
 validator = ValidationEngine(product)
 results = validator.validate()
@@ -62,11 +62,11 @@ if results["warnings"]:
 
 # ── Step Completion ─────────────────────────────────────────────────────
 st.divider()
-st.subheader("📋 Step Completion")
+st.subheader("Step Completion")
 
 for step_name, done in progress["steps"].items():
-    icon = "✅" if done else "❌"
-    st.markdown(f"{icon} {step_name}")
+    mark = "Done" if done else "Incomplete"
+    st.markdown(f"**{mark}** — {step_name}")
 
 # ── Full Product JSON ───────────────────────────────────────────────────
 with st.expander("View Full Product Definition (JSON)"):
@@ -74,7 +74,7 @@ with st.expander("View Full Product Definition (JSON)"):
 
 # ── Generated Artifacts ─────────────────────────────────────────────────
 st.divider()
-st.subheader("🚀 Generated Artifacts")
+st.subheader("Generated Artifacts")
 st.caption("Each tab shows a preview of the generated artifact with a download button.")
 
 tab_ddl, tab_mask, tab_dbt, tab_collibra, tab_docs = st.tabs([
@@ -149,7 +149,7 @@ with tab_docs:
 
 # ── Full Export ─────────────────────────────────────────────────────────
 st.divider()
-st.subheader("📦 Full Export")
+st.subheader("Full Export")
 
 full_json = json.dumps(product, indent=2, default=str)
 st.download_button(

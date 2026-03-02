@@ -35,7 +35,7 @@ def render_step_complete(current_step: int, is_complete: bool):
         return
     st.markdown(
         '<div class="step-complete-prompt">'
-        '<div class="step-complete-prompt-title">✅ Step complete</div>'
+        '<div class="step-complete-prompt-title">Step complete</div>'
         '<div class="step-complete-prompt-desc">Nice work — continue to the next step</div>'
         "</div>",
         unsafe_allow_html=True,
@@ -43,10 +43,10 @@ def render_step_complete(current_step: int, is_complete: bool):
     if current_step < 7:
         st.page_link(
             PAGE_MAP[current_step + 1],
-            label=f"Continue to {STEP_NAMES[current_step]} →",
+            label=f"Continue to {STEP_NAMES[current_step]}",
         )
     else:
-        st.page_link("streamlit_app.py", label="⌂ Back to Wizard Agent")
+        st.page_link("streamlit_app.py", label="Back to Wizard Agent")
 
 
 def render_step_nav(current_step: int):
@@ -96,22 +96,22 @@ def render_step_nav(current_step: int):
         if current_step > 1:
             st.page_link(
                 PAGE_MAP[current_step - 1],
-                label=f"← {STEP_NAMES[current_step - 2]}",
+                label=f"Back: {STEP_NAMES[current_step - 2]}",
             )
         else:
-            st.page_link("streamlit_app.py", label="← Wizard Agent")
+            st.page_link("streamlit_app.py", label="Wizard Agent")
 
     with dash_col:
-        st.page_link("streamlit_app.py", label="⌂ Wizard Agent")
+        st.page_link("streamlit_app.py", label="Wizard Agent")
 
     with next_col:
         if current_step < 7:
             st.page_link(
                 PAGE_MAP[current_step + 1],
-                label=f"{STEP_NAMES[current_step]} →",
+                label=f"Next: {STEP_NAMES[current_step]}",
             )
         else:
-            st.page_link("streamlit_app.py", label="⌂ Wizard Agent")
+            st.page_link("streamlit_app.py", label="Wizard Agent")
 
 STEP_GUIDES = {
     1: {
@@ -192,7 +192,7 @@ STEP_GUIDES = {
         ),
         "tips": [
             "95% completeness is standard — adjust up or down based on how critical the data is",
-            "Timeliness should match the SLAs you set in Step 2 (e.g. daily source → 24h SLA)",
+            "Timeliness should match the SLAs you set in Step 2 (e.g. daily source = 24h SLA)",
             "Custom rules become dbt tests — write things like 'amount > 0' or 'currency IN (USD, GBP)'",
             "Set an alerting channel so quality failures notify the right people",
         ],
@@ -208,7 +208,7 @@ STEP_GUIDES = {
         ),
         "tips": [
             "Reference entity names from Step 3 — the tool suggests them for consistency",
-            "Chain transforms: raw source → staging (clean) → final (business-ready)",
+            "Chain transforms: raw source > staging (clean) > final (business-ready)",
             "SQL logic becomes the body of generated dbt models — write production SQL",
             "Every step should have a clear description explaining the business logic",
         ],

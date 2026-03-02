@@ -84,8 +84,8 @@ def render_canvas():
     ready_count = sum(1 for _, r in deliverables if r)
     _section(f"Deliverables ({ready_count}/{len(deliverables)})")
     for label, ready in deliverables:
-        icon = "✅" if ready else "⬜"
-        st.markdown(f"{icon} {label}")
+        mark = "Done" if ready else "Pending"
+        st.markdown(f"**{mark}** — {label}")
 
     # ── Downloads ──────────────────────────────────────────────
     with st.expander("Download", expanded=False):

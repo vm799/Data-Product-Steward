@@ -15,7 +15,7 @@ render_sidebar(step=4)
 render_step_nav(4)
 step_header(
     4,
-    "4️⃣ Governance & Security",
+    "Governance & Security",
     "Set data classification, retention, and compliance. These directly shape the security artifacts generated.",
 )
 
@@ -92,7 +92,7 @@ with st.form("governance_form"):
 
 # ── Auto-Detection Alerts ───────────────────────────────────────
 st.divider()
-st.markdown("#### 🔍 Auto-Detected Policies")
+st.markdown("#### Auto-Detected Policies")
 st.caption("These alerts are generated dynamically from your data model and selections.")
 
 pii_attrs = []
