@@ -1413,70 +1413,90 @@ def _css() -> str:
     }
 
     /* ═══════════════════════════════════════════════════
-       HIDE STREAMLIT DEFAULT ARROWS ON LINKS & BUTTONS
-       Streamlit renders arrows as Material Symbols font
-       icons (arrow_forward, arrow_right, etc.) AND as SVGs.
-       We must target both.
+       NUCLEAR ICON REMOVAL
+       Kill ALL icons, SVGs, chevrons, arrows everywhere.
+       We disable the Material Symbols font entirely, hide
+       every SVG inside interactive elements, and remove
+       the native <details> disclosure triangle.
        ═══════════════════════════════════════════════════ */
-    /* Material Symbols font icons in page links (the main culprit) */
-    [data-testid="stPageLink"] .material-symbols-rounded,
-    [data-testid="stPageLink"] .material-symbols-outlined,
-    [data-testid="stPageLink"] [data-testid="stIconMaterial"],
-    /* SVG-based arrows */
-    [data-testid="stPageLink"] span[data-testid="stIconEmoji"],
-    [data-testid="stPageLink"] .arrow,
-    [data-testid="stBaseButton-secondary"] .arrow,
-    button .arrow,
-    a .arrow,
-    [data-testid="stPageLink"] [data-testid="stIconArrow"],
-    [data-testid="stPageLink"] svg[viewBox] {
+
+    /* 1) Disable Material Symbols font globally so ligature
+          text like "arrow_forward" never renders as an icon.
+          The font-family override makes the browser treat it
+          as invisible / zero-width text we then hide. */
+    @font-face {
+        font-family: 'Material Symbols Rounded';
+        src: local('__disabled__');
+    }
+    @font-face {
+        font-family: 'Material Symbols Outlined';
+        src: local('__disabled__');
+    }
+
+    /* 2) Hide ALL SVGs inside page links, buttons, expanders */
+    [data-testid="stPageLink"] svg,
+    [data-testid="stBaseButton-secondary"] svg,
+    [data-testid="stBaseButton-primary"] svg,
+    [data-testid="stExpander"] svg {
         display: none !important;
         width: 0 !important;
         height: 0 !important;
+    }
+
+    /* 3) Hide any span that uses Material Symbols font anywhere */
+    span[class*="material-symbols"],
+    span[class*="Material"],
+    i[class*="material-symbols"],
+    i[class*="Material"] {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        font-size: 0 !important;
         overflow: hidden !important;
+    }
+
+    /* 4) Hide the NATIVE browser <details> disclosure triangle.
+          This is NOT an SVG or font icon — it's the built-in
+          marker that no class-based selector can reach. */
+    summary {
+        list-style: none !important;
+    }
+    summary::-webkit-details-marker {
+        display: none !important;
+    }
+    summary::marker {
+        display: none !important;
+        content: "" !important;
         font-size: 0 !important;
     }
 
-    /* ═══════════════════════════════════════════════════
-       HIDE EXPANDER TOGGLE ARROWS (glossary + all)
-       Streamlit expanders inject a Material Symbols
-       chevron (expand_more / chevron_right) that overlaps
-       the summary text.
-       ═══════════════════════════════════════════════════ */
-    [data-testid="stExpander"] summary .material-symbols-rounded,
-    [data-testid="stExpander"] summary .material-symbols-outlined,
-    [data-testid="stExpander"] [data-testid="stExpanderToggleIcon"],
-    [data-testid="stExpander"] summary svg {
+    /* 5) Hide Streamlit icon containers by data-testid pattern
+          (scoped to page links & expanders to avoid collateral) */
+    [data-testid="stPageLink"] [data-testid*="Icon"],
+    [data-testid="stPageLink"] [data-testid*="icon"],
+    [data-testid="stExpander"] [data-testid*="Icon"],
+    [data-testid="stExpander"] [data-testid*="icon"],
+    [data-testid="stSidebar"] [data-testid*="Icon"],
+    [data-testid="stSidebar"] [data-testid*="icon"] {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    /* 6) Kill leftover ligature text that leaked through
+          (e.g. "arrow_forward", "expand_more" rendered as
+          plain text after we broke the Material Symbols font).
+          We hide every <span> inside page-link anchors that
+          is NOT the label text, plus catch the stIcon pattern. */
+    [data-testid="stPageLink"] [class*="Icon"],
+    [data-testid="stPageLink"] [class*="icon"],
+    [data-testid="stExpander"] [class*="Icon"],
+    [data-testid="stExpander"] [class*="icon"] {
         display: none !important;
         width: 0 !important;
         height: 0 !important;
         font-size: 0 !important;
-    }
-
-    /* ═══════════════════════════════════════════════════
-       HIDE ALL ARIA-LABEL OVERLAPPING TEXT
-       ═══════════════════════════════════════════════════ */
-    [aria-label]::before,
-    [aria-label]::after {
-        display: none !important;
-        content: none !important;
-    }
-    [data-testid="stPageLink"] [aria-label],
-    [data-testid="stBaseButton-secondary"] [aria-label],
-    [data-testid="stBaseButton-primary"] [aria-label],
-    [data-baseweb="tooltip"],
-    [role="tooltip"] {
-        visibility: visible !important;
-    }
-    /* Prevent aria-label tooltips / overlays from showing */
-    [data-testid="stTooltipHoverTarget"],
-    [data-testid="stTooltipIcon"] {
-        display: none !important;
-    }
-    /* Hide any stale Streamlit aria overlay divs */
-    .stTooltipIcon,
-    div[data-baseweb="tooltip"] {
-        display: none !important;
+        overflow: hidden !important;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -1505,31 +1525,6 @@ def _css() -> str:
     section[data-testid="stSidebar"] [data-testid="stPageLink"] a:hover {
         background: rgba(45,212,191,0.08) !important;
         border-radius: 0.3rem;
-    }
-    /* Hide ALL arrow icons in sidebar links (Streamlit injects these) */
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] svg,
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] .arrow,
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] [data-testid="stIconArrow"],
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] [data-testid="stIconMaterial"],
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] .material-symbols-rounded,
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] .material-symbols-outlined,
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] span[data-testid] svg,
-    section[data-testid="stSidebar"] [data-testid="stPageLink"] a > span:last-child svg {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        font-size: 0 !important;
-    }
-    /* Hide expander arrows in sidebar glossary */
-    section[data-testid="stSidebar"] [data-testid="stExpander"] summary .material-symbols-rounded,
-    section[data-testid="stSidebar"] [data-testid="stExpander"] summary .material-symbols-outlined,
-    section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderToggleIcon"],
-    section[data-testid="stSidebar"] [data-testid="stExpander"] summary svg {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        font-size: 0 !important;
     }
 
     /* ── Guide subtitle ───────────────────────────────── */
