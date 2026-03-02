@@ -115,7 +115,11 @@ def _css() -> str:
        GLOBAL — Space Grotesk body, Share Tech Mono accents
        ═══════════════════════════════════════════════════ */
     .stApp {
-        background: linear-gradient(160deg, #06080D 0%, #0B1220 50%, #091018 100%) !important;
+        background:
+            radial-gradient(ellipse 80% 60% at 10% 90%, rgba(45,212,191,0.07) 0%, transparent 55%),
+            radial-gradient(ellipse 60% 50% at 90% 10%, rgba(34,211,238,0.06) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 40% at 50% 50%, rgba(45,212,191,0.03) 0%, transparent 60%),
+            linear-gradient(160deg, #06080D 0%, #0A1628 30%, #0D1B2A 55%, #091018 100%) !important;
         color: #E8ECF1;
         font-family: 'Space Grotesk', sans-serif !important;
     }
@@ -1415,7 +1419,40 @@ def _css() -> str:
     [data-testid="stPageLink"] .arrow,
     [data-testid="stBaseButton-secondary"] .arrow,
     button .arrow,
-    a .arrow {
+    a .arrow,
+    /* Hide all Streamlit-injected arrow SVGs on page links */
+    [data-testid="stPageLink"] a > span:last-child:not(:first-child),
+    [data-testid="stPageLink"] [data-testid="stIconArrow"],
+    [data-testid="stPageLink"] svg[viewBox] {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HIDE ALL ARIA-LABEL OVERLAPPING TEXT
+       ═══════════════════════════════════════════════════ */
+    [aria-label]::before,
+    [aria-label]::after {
+        display: none !important;
+        content: none !important;
+    }
+    [data-testid="stPageLink"] [aria-label],
+    [data-testid="stBaseButton-secondary"] [aria-label],
+    [data-testid="stBaseButton-primary"] [aria-label],
+    [data-baseweb="tooltip"],
+    [role="tooltip"] {
+        visibility: visible !important;
+    }
+    /* Prevent aria-label tooltips / overlays from showing */
+    [data-testid="stTooltipHoverTarget"],
+    [data-testid="stTooltipIcon"] {
+        display: none !important;
+    }
+    /* Hide any stale Streamlit aria overlay divs */
+    .stTooltipIcon,
+    div[data-baseweb="tooltip"] {
         display: none !important;
     }
 
@@ -1445,6 +1482,17 @@ def _css() -> str:
     section[data-testid="stSidebar"] [data-testid="stPageLink"] a:hover {
         background: rgba(45,212,191,0.08) !important;
         border-radius: 0.3rem;
+    }
+    /* Hide ALL arrow icons in sidebar links (Streamlit injects these) */
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] svg,
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] .arrow,
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] [data-testid="stIconArrow"],
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] span[data-testid] svg,
+    section[data-testid="stSidebar"] [data-testid="stPageLink"] a > span:last-child svg {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
     }
 
     /* ── Guide subtitle ───────────────────────────────── */
