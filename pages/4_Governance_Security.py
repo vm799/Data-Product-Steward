@@ -5,7 +5,7 @@ import streamlit as st
 from state_manager import initialize_state, mark_step_complete
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
-from components.helpers import render_step_nav, render_step_complete
+from components.helpers import render_step_nav, render_step_nav_bottom, render_step_complete
 from config import CLASSIFICATION_OPTIONS, RETENTION_OPTIONS
 
 initialize_state()
@@ -117,3 +117,6 @@ if product.get("pii") and not product.get("compliance_frameworks"):
 # ── Step complete prompt ──────────────────────────────
 step_done = bool(product.get("classification"))
 render_step_complete(4, step_done)
+
+# ── Navigation buttons at bottom ─────────────────────
+render_step_nav_bottom(4)

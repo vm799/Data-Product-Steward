@@ -50,7 +50,7 @@ def render_step_complete(current_step: int, is_complete: bool):
 
 
 def render_step_nav(current_step: int):
-    """Render step indicator bar with prev/next navigation at top of page."""
+    """Render step indicator bar at top of page."""
     product = st.session_state.product
     progress = get_progress(product)
     next_step = get_next_step(product)
@@ -89,7 +89,11 @@ def render_step_nav(current_step: int):
         unsafe_allow_html=True,
     )
 
+
+def render_step_nav_bottom(current_step: int):
+    """Render prev/next navigation buttons at bottom of page."""
     # ── Prev / Home / Next buttons ───────────────────────
+    st.divider()
     prev_col, dash_col, next_col = st.columns(3)
 
     with prev_col:
