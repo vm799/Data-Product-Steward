@@ -5,7 +5,7 @@ import streamlit as st
 from state_manager import initialize_state
 from components.layout import inject_custom_css, step_header
 from components.sidebar import render_sidebar
-from components.helpers import render_step_nav, render_step_complete
+from components.helpers import render_step_nav, render_step_nav_bottom, render_step_complete
 
 initialize_state()
 inject_custom_css()
@@ -105,3 +105,6 @@ else:
 # ── Step complete prompt ──────────────────────────────
 step_done = any(len(e.get("attributes", [])) > 0 for e in product.get("entities", []))
 render_step_complete(3, step_done)
+
+# ── Navigation buttons at bottom ─────────────────────
+render_step_nav_bottom(3)
