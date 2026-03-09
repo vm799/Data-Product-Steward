@@ -77,11 +77,17 @@ def _landing():
 
     # ── Big CTA button ────────────────────────────────────────────
     st.markdown('<div class="hero-cta-wrap">', unsafe_allow_html=True)
-    _, btn_col, _ = st.columns([1, 1, 1])
-    with btn_col:
-        if st.button("Begin", key="hero_cta", use_container_width=True):
+    cta_col1, cta_col2, cta_col3 = st.columns([1, 1, 1])
+    with cta_col1:
+        if st.button("🤖 AI Agent", key="ai_agent_cta", use_container_width=True):
+            st.page_link("pages/0_AI_Requirements_Agent.py", label="Start with AI Agent")
+    with cta_col2:
+        if st.button("📋 Wizard", key="hero_cta", use_container_width=True):
             st.session_state.onboard = 1
             st.rerun()
+    with cta_col3:
+        if st.button("⚙️ Settings", key="settings_cta", use_container_width=True):
+            st.page_link("pages/9_Settings.py", label="Settings")
     st.markdown('</div>', unsafe_allow_html=True)
 
     # ── Deliverables — full width grid below hero ─────────────────

@@ -1,5 +1,6 @@
 """
-Sidebar: progress tracker, page tree navigation, theme toggle, glossary.
+Sidebar: progress tracker, page tree navigation, glossary.
+Aligned with Collibra brand colors and design.
 """
 
 import streamlit as st
@@ -73,7 +74,7 @@ GLOSSARY = {
 
 
 def render_sidebar(step: int = None):
-    """Render sidebar with progress, page tree, theme toggle, and glossary."""
+    """Render sidebar with progress, page tree, and glossary."""
     product = st.session_state.product
     progress = get_progress(product)
     next_step = get_next_step(product)
@@ -81,20 +82,6 @@ def render_sidebar(step: int = None):
     with st.sidebar:
         # ── Dashboard ─────────────────────────────────────
         st.page_link("streamlit_app.py", label="Dashboard")
-
-        # ── Theme toggle slider ──────────────────────────
-        if "theme" not in st.session_state:
-            st.session_state.theme = "terminal"
-
-        is_enterprise = st.toggle(
-            "Enterprise theme",
-            value=st.session_state.theme == "enterprise",
-            key="theme_toggle",
-        )
-        new_theme = "enterprise" if is_enterprise else "terminal"
-        if new_theme != st.session_state.theme:
-            st.session_state.theme = new_theme
-            st.rerun()
 
         st.divider()
 
