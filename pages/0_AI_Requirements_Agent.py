@@ -131,12 +131,19 @@ st.caption("Tell me about your data product. I'll ask clarifying questions to bu
 if "agent_chat" not in st.session_state:
     st.session_state.agent_chat = []
 
-# Display chat history
-for message in st.session_state.agent_chat:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+# Create a container for better layout control
+chat_container = st.container(border=True)
 
-# Chat input
+with chat_container:
+    # Display chat history
+    if st.session_state.agent_chat:
+        for message in st.session_state.agent_chat:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+    else:
+        st.info("💬 Start a conversation to build your data product definition")
+
+# Chat input (outside container for better UX)
 if prompt := st.chat_input("Start describing your data product..."):
     # Initialize agent if needed
     if st.session_state.agent is None:
@@ -176,12 +183,12 @@ if st.session_state.agent:
             st.json(definition)
 
     with col2:
-        if st.button("🚀 Import to Wizard", use_container_width=True):
+        if st.button("🚀 Import to Workflow", use_container_width=True):
             # Import agent's extracted product into the workflow
             definition = st.session_state.agent.get_product_definition()
             st.session_state.product.update(definition)
             st.success("Imported into workflow! Go to Step 1 to refine details.")
-            st.page_link("pages/1_Business_Context.py", label="Go to Wizard")
+            st.page_link("pages/1_Business_Context.py", label="Go to Workflow")
 
     with col3:
         if st.button("💾 Download JSON", use_container_width=True):
@@ -198,7 +205,7 @@ if st.session_state.agent:
 st.divider()
 with st.expander("❓ How This Works"):
     st.markdown("""
-    **The AI Requirements Agent** is designed for business people who want to build data products
+    **The AI Requirements Agent** is designed for anyone who wants to build data products
     without learning technical details. Here's the workflow:
 
     1. **Configure APIs** — Add your OpenAI API key (required for the agent to work)
