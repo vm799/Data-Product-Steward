@@ -5,7 +5,7 @@ Calculates a readiness score for the data product based on completeness.
 
 
 class ScoringEngine:
-    """Computes a weighted readiness score across all wizard steps."""
+    """Computes a weighted readiness score across all workflow steps."""
 
     def __init__(self, product: dict):
         self.product = product

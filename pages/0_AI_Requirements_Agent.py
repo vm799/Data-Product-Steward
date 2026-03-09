@@ -117,7 +117,7 @@ with st.expander("📥 Import from Collibra", expanded=False):
                     # Store in session
                     st.session_state.product = model
                     st.session_state.collibra_domain = collibra_domain
-                    st.info("Domain imported! Start the conversation or click 'Begin' to use the wizard.")
+                    st.info("Domain imported! Start the conversation or click 'Begin' to use the workflow.")
 
             except Exception as e:
                 st.error(f"Import failed: {str(e)}")
@@ -177,10 +177,10 @@ if st.session_state.agent:
 
     with col2:
         if st.button("🚀 Import to Wizard", use_container_width=True):
-            # Import agent's extracted product into the wizard
+            # Import agent's extracted product into the workflow
             definition = st.session_state.agent.get_product_definition()
             st.session_state.product.update(definition)
-            st.success("Imported into wizard! Go to Step 1 to refine details.")
+            st.success("Imported into workflow! Go to Step 1 to refine details.")
             st.page_link("pages/1_Business_Context.py", label="Go to Wizard")
 
     with col3:
@@ -204,7 +204,7 @@ with st.expander("❓ How This Works"):
     1. **Configure APIs** — Add your OpenAI API key (required for the agent to work)
     2. **Start Conversation** — Describe what you want. Ask for clarifications.
     3. **Review Definition** — See the extracted data product definition
-    4. **Import or Export** — Load into the wizard for detailed refinement, or download as JSON
+    4. **Import or Export** — Load into the workflow for detailed refinement, or download as JSON
 
     ### What the Agent Learns
     - Product name and business objective

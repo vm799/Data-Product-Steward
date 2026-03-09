@@ -25,7 +25,7 @@ name = product.get("name")
 
 # ── Helpers ───────────────────────────────────────────────────────────
 def _cv_section(title: str, step_num: int):
-    """Section header with inline edit link to the wizard step."""
+    """Section header with inline edit link to the workflow step."""
     col_t, col_e = st.columns([5, 1])
     with col_t:
         st.markdown(
@@ -79,7 +79,7 @@ else:
 
 st.caption(
     "Single source of truth — dynamically populated as you build. "
-    "Click **Edit** on any section to jump to that wizard step."
+    "Click **Edit** on any section to jump to that workflow step."
 )
 
 # ── Readiness metrics ─────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 """
-Theme — Collibra-aligned design with dark glassmorphism.
-Primary colors: Collibra Navy (#003D82) and Light Blue (#0066CC).
+Theme — Collibra-aligned corporate design with white background.
+Primary colors: Collibra Navy (#003D82), Teal (#00A0E9), and Green (#00B050).
 """
 
 import streamlit as st
@@ -9,10 +9,12 @@ import streamlit as st
 COLLIBRA_COLORS = {
     "navy": "#003D82",        # Primary brand color
     "blue": "#0066CC",        # Secondary brand color
-    "light_blue": "#00A0E9",  # Accent/hover color
-    "white": "#FFFFFF",       # Text on dark
-    "gray_light": "#E0E0E0",  # Light borders
-    "gray_dark": "#1A1A1A",   # Dark backgrounds
+    "light_blue": "#00A0E9",  # Teal accent/hover color
+    "white": "#FFFFFF",       # Clean white background
+    "gray_light": "#F5F5F5",  # Light gray for subtle elements
+    "gray_dark": "#333333",   # Dark text on light
+    "teal": "#00A0E9",        # Teal accent
+    "green": "#00B050",       # Green accent
 }
 
 # Maintain consistency with Collibra palette
@@ -110,30 +112,26 @@ DATA_BOT_SVG = _DATA_BOT_SVG_RAW
 def _css() -> str:
     return _apply_theme("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
 
     /* ═══════════════════════════════════════════════════
-       GLOBAL — Space Grotesk body, Share Tech Mono accents
+       GLOBAL — Inter corporate body font, Roboto Mono accents
        ═══════════════════════════════════════════════════ */
     .stApp {
-        background:
-            radial-gradient(ellipse 80% 60% at 10% 90%, rgba(45,212,191,0.07) 0%, transparent 55%),
-            radial-gradient(ellipse 60% 50% at 90% 10%, rgba(34,211,238,0.06) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 40% at 50% 50%, rgba(45,212,191,0.03) 0%, transparent 60%),
-            linear-gradient(160deg, #06080D 0%, #0A1628 30%, #0D1B2A 55%, #091018 100%) !important;
-        color: #E8ECF1;
-        font-family: 'Space Grotesk', sans-serif !important;
+        background: #FFFFFF !important;
+        color: #333333;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     }
     .stApp p, .stApp span, .stApp label, .stApp input,
     .stApp textarea, .stApp select, .stApp button,
     .stApp h1, .stApp h2, .stApp h3, .stApp h4,
     .stApp li, .stApp td, .stApp th, .stApp a, .stApp div {
-        font-family: 'Space Grotesk', sans-serif !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     }
     /* Mono only for code and accents */
     .stApp code, .canvas-label, .step-badge,
     .sidebar-label, .typewriter-line {
-        font-family: 'Share Tech Mono', monospace !important;
+        font-family: 'Roboto Mono', monospace !important;
     }
 
     /* ── Kill top whitespace ────────────────────────── */
@@ -152,73 +150,72 @@ def _css() -> str:
     .top-progress-bar {
         width: 100%;
         height: 6px;
-        background: rgba(255,255,255,0.06);
+        background: #E8E8E8;
         border-radius: 3px;
         overflow: hidden;
         margin-bottom: 0.25rem;
     }
     .top-progress-fill {
         height: 100%;
-        background: linear-gradient(135deg, #F97316 0%, #FB923C 50%, #2DD4BF 100%);
+        background: linear-gradient(135deg, #003D82 0%, #0066CC 50%, #00A0E9 100%);
         border-radius: 3px;
         transition: width 0.6s ease;
-        box-shadow: 0 0 8px rgba(249,115,22,0.4);
+        box-shadow: 0 0 8px rgba(0,61,130,0.3);
     }
     .top-progress-label {
-        font-family: 'Share Tech Mono', monospace !important;
-        font-size: 0.72rem;
-        letter-spacing: 0.12em;
-        color: #5A6478;
+        font-family: 'Roboto Mono', monospace !important;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        color: #666666;
         text-align: right;
         margin-bottom: 0.6rem;
     }
 
     /* ═══════════════════════════════════════════════════
-       TYPOGRAPHY — larger, heavier
+       TYPOGRAPHY — corporate style on white background
        ═══════════════════════════════════════════════════ */
     [data-testid="stAppViewContainer"] > .main {
-        font-size: 1.18rem;
-        line-height: 1.75;
-        color: #E8ECF1;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #333333;
     }
     h1 {
         font-size: 2.2rem !important;
         font-weight: 700 !important;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        color: #2DD4BF !important;
-        line-height: 1.25 !important;
+        letter-spacing: -0.01em;
+        color: #003D82 !important;
+        line-height: 1.2 !important;
         margin-bottom: 0.4rem !important;
     }
     h2 {
         font-size: 1.65rem !important;
         font-weight: 600 !important;
-        letter-spacing: 0.01em;
-        color: #2DD4BF !important;
+        letter-spacing: -0.005em;
+        color: #003D82 !important;
         line-height: 1.3 !important;
         margin-bottom: 0.3rem !important;
     }
     h3 {
         font-size: 1.35rem !important;
         font-weight: 600 !important;
-        color: #2DD4BF !important;
+        color: #0066CC !important;
         line-height: 1.35 !important;
         margin-bottom: 0.25rem !important;
     }
     [data-testid="stMarkdownContainer"] p,
     [data-testid="stMarkdownContainer"] li {
-        color: #E8ECF1;
-        font-size: 1.15rem;
-        line-height: 1.75;
+        color: #333333;
+        font-size: 1.05rem;
+        line-height: 1.6;
         font-weight: 400;
     }
     [data-testid="stMarkdownContainer"] strong {
-        color: #E8ECF1;
+        color: #003D82;
         font-weight: 600;
     }
     .stCaption, [data-testid="stCaptionContainer"] {
-        color: #8B95A5 !important;
-        font-size: 1rem !important;
+        color: #666666 !important;
+        font-size: 0.95rem !important;
         line-height: 1.5 !important;
     }
 
@@ -227,69 +224,68 @@ def _css() -> str:
     .stMultiSelect label p, .stTextArea label p,
     .stSlider label p, .stNumberInput label p,
     .stCheckbox label p {
-        font-size: 1.1rem !important;
+        font-size: 1.05rem !important;
         font-weight: 500 !important;
-        color: #E8ECF1 !important;
+        color: #333333 !important;
         line-height: 1.5 !important;
     }
 
-    /* ── Frosted glass inputs — teal text for readability ─ */
+    /* ── Clean white inputs with teal border ─ */
     .stTextInput input, .stTextArea textarea, .stNumberInput input {
-        background: rgba(255,255,255,0.06) !important;
-        border: 1px solid rgba(45,212,191,0.25) !important;
+        background: #FFFFFF !important;
+        border: 1px solid #00A0E9 !important;
         border-radius: 0.5rem !important;
-        color: #2DD4BF !important;
-        font-size: 1.1rem !important;
-        backdrop-filter: blur(12px);
+        color: #333333 !important;
+        font-size: 1.05rem !important;
     }
     .stTextInput input::placeholder, .stTextArea textarea::placeholder,
     .stNumberInput input::placeholder {
-        color: rgba(45,212,191,0.40) !important;
+        color: #999999 !important;
     }
     .stTextInput input:focus, .stTextArea textarea:focus, .stNumberInput input:focus {
-        border-color: #2DD4BF !important;
-        box-shadow: 0 0 0 2px rgba(45,212,191,0.25),
-                    0 0 16px rgba(45,212,191,0.12) !important;
-        background: rgba(255,255,255,0.08) !important;
+        border-color: #0066CC !important;
+        box-shadow: 0 0 0 2px rgba(0,102,204,0.1),
+                    0 0 8px rgba(0,102,204,0.2) !important;
+        background: #FFFFFF !important;
     }
     .stSelectbox [data-baseweb="select"], .stMultiSelect [data-baseweb="select"] {
-        background: rgba(255,255,255,0.06) !important;
-        border-color: rgba(45,212,191,0.25) !important;
+        background: #FFFFFF !important;
+        border-color: #00A0E9 !important;
     }
     .stSelectbox [data-baseweb="select"] > div, .stMultiSelect [data-baseweb="select"] > div {
-        background: rgba(255,255,255,0.06) !important;
-        color: #2DD4BF !important;
+        background: #FFFFFF !important;
+        color: #333333 !important;
     }
-    /* Dropdown menu — dark background for contrast */
+    /* Dropdown menu — light background */
     [data-baseweb="popover"] [data-baseweb="menu"],
     [data-baseweb="popover"] ul {
-        background: #1A1D23 !important;
+        background: #F5F5F5 !important;
+        border: 1px solid #00A0E9 !important;
     }
     [data-baseweb="popover"] li {
-        color: #E8ECF1 !important;
+        color: #333333 !important;
     }
     [data-baseweb="popover"] li:hover {
-        background: rgba(45,212,191,0.12) !important;
+        background: #E8F4F8 !important;
     }
-    /* Checkbox — keep dark theme */
-    .stCheckbox label span { color: #E8ECF1 !important; }
+    /* Checkbox — light theme */
+    .stCheckbox label span { color: #333333 !important; }
 
     /* ── Metrics ────────────────────────────────────── */
     [data-testid="stMetric"] {
-        background: rgba(255,255,255,0.04);
-        backdrop-filter: blur(16px);
+        background: #F9F9F9;
         padding: 0.9rem 1rem;
         border-radius: 0.75rem;
-        border: 1px solid rgba(255,255,255,0.08);
-        box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+        border: 1px solid #E0E0E0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     [data-testid="stMetric"] label {
-        color: #8B95A5 !important;
-        font-size: 0.92rem !important;
+        color: #666666 !important;
+        font-size: 0.95rem !important;
         line-height: 1.3 !important;
     }
     [data-testid="stMetric"] [data-testid="stMetricValue"] {
-        color: #2DD4BF !important;
+        color: #003D82 !important;
         font-weight: 700 !important;
         font-size: 1.4rem !important;
         line-height: 1.3 !important;
@@ -304,24 +300,22 @@ def _css() -> str:
     }
 
     /* ═══════════════════════════════════════════════════
-       WIZARD PANEL — frosted glass
+       WORKFLOW PANEL — clean light style
        ═══════════════════════════════════════════════════ */
-    .wizard-panel {
-        background: rgba(255,255,255,0.05);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(255,255,255,0.10);
+    .workflow-panel {
+        background: #F9F9F9;
+        border: 1px solid #E0E0E0;
         border-radius: 0.75rem;
         padding: 1.5rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.20);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     /* (form glow removed — full-width layout) */
 
     /* ── Step complete prompt ──────────────────────────── */
     .step-complete-prompt {
-        background: rgba(45,212,191,0.06);
-        border: 1px solid rgba(45,212,191,0.25);
+        background: #E8F4F8;
+        border: 1px solid #00A0E9;
         border-radius: 0.75rem;
         padding: 1.2rem 1.5rem;
         margin-top: 1rem;
@@ -329,26 +323,25 @@ def _css() -> str:
     }
     .step-complete-prompt-title {
         font-size: 1.25rem; font-weight: 700;
-        color: #2DD4BF; margin-bottom: 0.3rem;
+        color: #003D82; margin-bottom: 0.3rem;
     }
     .step-complete-prompt-desc {
-        font-size: 1rem; color: #8B95A5;
+        font-size: 1rem; color: #0066CC;
         margin-bottom: 0.5rem;
     }
 
     /* ═══════════════════════════════════════════════════
-       SIDEBAR
+       SIDEBAR — clean corporate white
        ═══════════════════════════════════════════════════ */
     section[data-testid="stSidebar"] {
-        background: rgba(8,12,22,0.85) !important;
-        backdrop-filter: blur(20px) !important;
-        border-right: 1px solid rgba(255,255,255,0.06) !important;
-        font-size: 1.08rem;
+        background: #F5F5F5 !important;
+        border-right: 1px solid #E0E0E0 !important;
+        font-size: 1.05rem;
     }
-    section[data-testid="stSidebar"] * { color: #E8ECF1 !important; }
+    section[data-testid="stSidebar"] * { color: #333333 !important; }
     section[data-testid="stSidebar"] h1,
     section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3 { color: #FFFFFF !important; }
+    section[data-testid="stSidebar"] h3 { color: #003D82 !important; }
     section[data-testid="stSidebar"] h1 {
         font-size: 1.35rem !important;
         font-weight: 700 !important;
@@ -361,19 +354,19 @@ def _css() -> str:
     }
     section[data-testid="stSidebar"] .stCaption *,
     section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {
-        color: #A0AABB !important;
+        color: #666666 !important;
     }
-    section[data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.08) !important; }
+    section[data-testid="stSidebar"] hr { border-color: #E0E0E0 !important; }
     section[data-testid="stSidebar"] .stProgress > div > div > div {
-        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
+        background: linear-gradient(135deg, #00A0E9 0%, #0066CC 100%) !important;
     }
 
     /* ── Theme toggle slider ─────────────────────────── */
     section[data-testid="stSidebar"] [data-testid="stToggle"] label span {
-        color: #C8D0DC !important;
-        font-size: 0.85rem !important;
-        font-family: 'Share Tech Mono', monospace !important;
-        letter-spacing: 0.06em;
+        color: #333333 !important;
+        font-size: 0.95rem !important;
+        font-family: 'Roboto Mono', monospace !important;
+        letter-spacing: 0.02em;
     }
 
     /* ── Glossary expanders — compact, clickable ─────── */
@@ -384,22 +377,22 @@ def _css() -> str:
     }
     section[data-testid="stSidebar"] [data-testid="stExpander"] summary {
         padding: 0.3rem 0.5rem !important;
-        font-size: 0.9rem !important;
+        font-size: 0.95rem !important;
         font-weight: 600 !important;
-        color: #E8ECF1 !important;
+        color: #333333 !important;
         border-radius: 0.3rem;
     }
     section[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover {
-        background: rgba(45,212,191,0.08) !important;
-        color: #F97316 !important;
+        background: #E8F4F8 !important;
+        color: #003D82 !important;
     }
     section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderDetails"] {
         padding: 0.2rem 0.5rem 0.5rem 0.5rem !important;
     }
     section[data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpanderDetails"] p {
-        font-size: 0.82rem !important;
+        font-size: 0.9rem !important;
         line-height: 1.55 !important;
-        color: #C8D0DC !important;
+        color: #666666 !important;
     }
 
     /* ── Guide card ─────────────────────────────────── */
@@ -703,7 +696,7 @@ def _css() -> str:
     }
 
     /* ═══════════════════════════════════════════════════
-       STEP INDICATOR BAR — top-of-page wizard progress
+       STEP INDICATOR BAR — top-of-page workflow progress
        ═══════════════════════════════════════════════════ */
     .step-bar-wrap {
         display: flex;
@@ -798,29 +791,30 @@ def _css() -> str:
 
     /* ── Buttons ─────────────────────────────────────── */
     .stDownloadButton button {
-        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
-        color: #06080D !important; border: none !important;
+        background: linear-gradient(135deg, #003D82 0%, #0066CC 100%) !important;
+        color: #FFFFFF !important; border: none !important;
         border-radius: 0.5rem !important; font-weight: 600 !important;
         font-size: 1.05rem !important;
     }
     .stFormSubmitButton button {
-        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
-        color: #06080D !important; border: none !important;
+        background: linear-gradient(135deg, #003D82 0%, #0066CC 100%) !important;
+        color: #FFFFFF !important; border: none !important;
         border-radius: 0.5rem !important; font-weight: 600 !important;
         padding: 0.5rem 2rem !important; font-size: 1.05rem !important;
     }
     .stButton > button {
-        border: 1px solid rgba(255,255,255,0.12) !important;
-        color: #2DD4BF !important;
+        border: 1px solid #00A0E9 !important;
+        color: #003D82 !important;
         border-radius: 0.5rem !important;
-        background: transparent !important;
-        font-size: 1.1rem !important;
+        background: #FFFFFF !important;
+        font-size: 1.05rem !important;
         padding: 0.55rem 1.5rem !important;
         font-weight: 500 !important;
     }
     .stButton > button:hover {
-        background: rgba(45,212,191,0.08) !important;
-        border-color: #2DD4BF !important;
+        background: #E8F4F8 !important;
+        border-color: #0066CC !important;
+        color: #0066CC !important;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -838,7 +832,7 @@ def _css() -> str:
         height: 130px;
         margin: 0 auto 1rem auto;
         display: block;
-        filter: drop-shadow(0 0 30px rgba(45,212,191,0.35));
+        filter: drop-shadow(0 0 15px rgba(0,102,204,0.2));
     }
     .landing-hero h1 {
         font-size: 3.2rem !important;
@@ -855,50 +849,49 @@ def _css() -> str:
         padding: 2rem 0 1rem 0;
     }
     .guide-step-num {
-        font-family: 'Share Tech Mono', monospace !important;
+        font-family: 'Roboto Mono', monospace !important;
         font-size: 0.9rem;
-        letter-spacing: 0.15em;
-        color: #5A6478;
+        letter-spacing: 0.1em;
+        color: #999999;
         margin-bottom: 0.3rem;
     }
     .guide-page h2 { text-align: center; margin-bottom: 0.6rem !important; }
     .guide-panel {
-        background: rgba(255,255,255,0.04);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255,255,255,0.08);
+        background: #F9F9F9;
+        border: 1px solid #E0E0E0;
         border-radius: 0.75rem;
         padding: 1.5rem;
         min-height: 280px;
     }
     .guide-panel p, .guide-panel li {
-        font-size: 1.12rem !important;
-        line-height: 1.75 !important;
-        color: #C8D0DC !important;
+        font-size: 1.05rem !important;
+        line-height: 1.6 !important;
+        color: #333333 !important;
     }
-    .guide-panel b { color: #E8ECF1 !important; }
+    .guide-panel b { color: #003D82 !important; }
     .guide-panel-label {
-        font-family: 'Share Tech Mono', monospace !important;
-        font-size: 0.78rem;
-        letter-spacing: 0.12em;
+        font-family: 'Roboto Mono', monospace !important;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #2DD4BF;
+        color: #00A0E9;
         margin-bottom: 0.5rem;
         font-weight: 600;
     }
 
     /* ═══════════════════════════════════════════════════
-       WIZARD AGENT — step hierarchy + orange next
+       WORKFLOW AGENT — step hierarchy + blue next
        ═══════════════════════════════════════════════════ */
     .wiz-thin-rule {
         border: none;
-        border-top: 1px solid rgba(255,255,255,0.08);
+        border-top: 1px solid #E0E0E0;
         margin: 0.4rem 0 1.2rem 0;
     }
 
     /* ── Hero step — the next incomplete step ────────── */
     .wiz-step-hero {
-        background: rgba(249,115,22,0.06);
-        border: 2px solid rgba(249,115,22,0.35);
+        background: #E8F4F8;
+        border: 2px solid #00A0E9;
         border-radius: 0;
         clip-path: polygon(0 12px, 12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
         padding: 1.6rem 1.8rem;
@@ -906,32 +899,32 @@ def _css() -> str:
         cursor: pointer;
         transition: border-color 0.3s, box-shadow 0.3s;
         position: relative;
-        box-shadow: inset 4px 0 0 #F97316;
+        box-shadow: inset 4px 0 0 #0066CC;
     }
     .wiz-step-hero:hover {
-        border-color: #F97316;
-        box-shadow: inset 4px 0 0 #F97316, 0 0 24px rgba(249,115,22,0.18);
+        border-color: #0066CC;
+        box-shadow: inset 4px 0 0 #0066CC, 0 0 24px rgba(0,102,204,0.15);
     }
     .wiz-step-hero-num {
-        font-family: 'Share Tech Mono', monospace !important;
-        font-size: 0.82rem; letter-spacing: 0.1em;
-        color: #F97316; font-weight: 700;
+        font-family: 'Roboto Mono', monospace !important;
+        font-size: 0.85rem; letter-spacing: 0.08em;
+        color: #0066CC; font-weight: 700;
         text-transform: uppercase;
         margin-bottom: 0.3rem;
     }
     .wiz-step-hero-name {
         font-size: 1.8rem; font-weight: 700;
-        color: #E8ECF1; line-height: 1.3;
+        color: #003D82; line-height: 1.3;
         margin-bottom: 0.3rem;
     }
     .wiz-step-hero-desc {
-        font-size: 1.15rem; color: #C8D0DC;
+        font-size: 1.15rem; color: #666666;
         line-height: 1.6;
     }
     .wiz-step-hero-arrow {
-        font-family: 'Share Tech Mono', monospace !important;
+        font-family: 'Roboto Mono', monospace !important;
         font-size: 1rem; font-weight: 700;
-        color: #F97316 !important;
+        color: #0066CC !important;
         animation: flashArrow 1.2s ease-in-out infinite;
         margin-top: 0.6rem;
         display: inline-block;
@@ -941,8 +934,8 @@ def _css() -> str:
     .wiz-step-done {
         display: flex; align-items: center; gap: 0.8rem;
         padding: 0.7rem 1rem;
-        background: rgba(45,212,191,0.04);
-        border: 1px solid rgba(45,212,191,0.12);
+        background: #E8F4F8;
+        border: 1px solid #00A0E9;
         border-radius: 0.5rem;
         margin-bottom: 0.5rem;
     }
@@ -951,10 +944,10 @@ def _css() -> str:
     }
     .wiz-step-done-name {
         font-size: 1.25rem; font-weight: 600;
-        color: #2DD4BF;
+        color: #003D82;
     }
     .wiz-step-done-desc {
-        font-size: 0.95rem; color: #5A6478;
+        font-size: 0.95rem; color: #999999;
         margin-left: auto;
     }
 
@@ -962,53 +955,53 @@ def _css() -> str:
     .wiz-step-pending {
         display: flex; align-items: center; gap: 0.7rem;
         padding: 0.5rem 1rem;
-        border-bottom: 1px solid rgba(255,255,255,0.04);
-        opacity: 0.5;
+        border-bottom: 1px solid #F0F0F0;
+        opacity: 0.7;
     }
     .wiz-step-pending:last-child { border-bottom: none; }
     .wiz-step-pending-num {
         flex-shrink: 0;
         width: 24px; height: 24px; border-radius: 50%;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.08);
-        color: #5A6478;
-        font-size: 0.72rem; font-weight: 600;
+        background: #F5F5F5;
+        border: 1px solid #E0E0E0;
+        color: #999999;
+        font-size: 0.75rem; font-weight: 600;
         display: inline-flex; align-items: center; justify-content: center;
     }
     .wiz-step-pending-name {
-        font-size: 1rem; color: #5A6478; font-weight: 500;
+        font-size: 1rem; color: #999999; font-weight: 500;
     }
 
     /* ── Deliverables row ─────────────────────────────── */
     .deliv-row { display: flex; gap: 0.75rem; margin: 0.4rem 0; }
     .deliv-item {
         flex: 1;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
+        background: #F9F9F9;
+        border: 1px solid #E0E0E0;
         border-radius: 0.5rem;
         padding: 0.8rem 1rem;
         font-size: 1rem; line-height: 1.55;
-        color: #8B95A5;
+        color: #666666;
     }
-    .deliv-item b { display: block; margin-bottom: 0.15rem; color: #E8ECF1; font-size: 1.05rem; }
+    .deliv-item b { display: block; margin-bottom: 0.15rem; color: #333333; font-size: 1.05rem; }
 
     /* ── Empty canvas placeholder ─────────────────────── */
     .wiz-canvas-empty {
         display: flex; align-items: center; justify-content: center;
         min-height: 400px;
-        color: #3A4250;
+        color: #999999;
         font-size: 1.15rem;
         font-style: italic;
     }
 
     /* ── Sidebar label (mono accent) ────────────────── */
     .sidebar-label {
-        font-family: 'Share Tech Mono', monospace !important;
-        font-size: 0.72rem;
+        font-family: 'Roboto Mono', monospace !important;
+        font-size: 0.8rem;
         font-weight: 600;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: #5A6478 !important;
+        color: #999999 !important;
         margin-bottom: 0.2rem;
     }
 
@@ -1016,18 +1009,18 @@ def _css() -> str:
        LANDING PAGE — value prop + deliverables grid
        ═══════════════════════════════════════════════════ */
     .landing-tagline {
-        font-family: 'Share Tech Mono', monospace !important;
+        font-family: 'Roboto Mono', monospace !important;
         font-size: 1.3rem;
-        color: #2DD4BF;
+        color: #00A0E9;
         font-weight: 600;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.02em;
         margin: 0 auto 0.6rem auto;
         line-height: 1.4;
     }
     /* ── Landing value proposition ──────────────────── */
     .landing-value {
         font-size: 1rem;
-        color: #8B95A5;
+        color: #666666;
         line-height: 1.7;
         margin: 0 auto 0.5rem auto;
         max-width: 580px;
@@ -1045,35 +1038,35 @@ def _css() -> str:
         font-size: 1.4rem !important;
         font-weight: 700 !important;
         padding: 1.1rem 3rem !important;
-        letter-spacing: 0.08em !important;
-        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
-        color: #06080D !important;
+        letter-spacing: 0.05em !important;
+        background: linear-gradient(135deg, #003D82 0%, #0066CC 100%) !important;
+        color: #FFFFFF !important;
         border: none !important;
         border-radius: 0.5rem !important;
-        box-shadow: 0 0 30px rgba(45,212,191,0.3), 0 4px 15px rgba(0,0,0,0.3) !important;
+        box-shadow: 0 4px 15px rgba(0,61,130,0.2) !important;
         transition: box-shadow 0.3s, transform 0.2s !important;
         cursor: pointer;
     }
     .hero-cta-wrap button:hover {
-        box-shadow: 0 0 50px rgba(45,212,191,0.5), 0 6px 20px rgba(0,0,0,0.4) !important;
+        box-shadow: 0 6px 25px rgba(0,61,130,0.35) !important;
         transform: translateY(-2px) !important;
     }
     .hero-cta-wrap button p {
-        color: #06080D !important;
+        color: #FFFFFF !important;
         font-weight: 700 !important;
     }
     .landing-deliv-header {
         text-align: center;
         font-size: 1.1rem;
         font-weight: 700;
-        color: #8B95A5;
-        letter-spacing: 0.1em;
+        color: #666666;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         margin: 1.5rem auto 0.8rem auto;
     }
     .landing-stat-card {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
+        background: #F9F9F9;
+        border: 1px solid #E0E0E0;
         border-radius: 0;
         clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
         padding: 1.2rem 1.5rem;
@@ -1082,30 +1075,30 @@ def _css() -> str:
         position: relative;
     }
     .landing-stat-card.before {
-        border-color: rgba(239,68,68,0.3);
-        background: rgba(239,68,68,0.04);
-        box-shadow: inset 3px 0 0 #EF4444;
+        border-color: rgba(220,53,69,0.3);
+        background: rgba(220,53,69,0.04);
+        box-shadow: inset 3px 0 0 #DC3545;
     }
     .landing-stat-card.after {
-        border-color: rgba(45,212,191,0.3);
-        background: rgba(45,212,191,0.04);
-        box-shadow: inset 3px 0 0 #2DD4BF;
+        border-color: rgba(0,160,233,0.3);
+        background: rgba(0,160,233,0.04);
+        box-shadow: inset 3px 0 0 #00A0E9;
     }
     .landing-stat-num {
         font-size: 2.8rem;
         font-weight: 700;
-        color: #2DD4BF;
+        color: #00A0E9;
         line-height: 1.2;
     }
-    .before .landing-stat-num { color: #EF4444; }
+    .before .landing-stat-num { color: #DC3545; }
     .landing-stat-label {
         font-size: 0.95rem;
-        color: #8B95A5;
+        color: #999999;
         margin-top: 0.2rem;
     }
     .landing-arrow {
         font-size: 2.5rem;
-        color: #2DD4BF;
+        color: #00A0E9;
         flex-shrink: 0;
     }
     /* ── Deliverable panel (landing right side) ──────── */
@@ -1126,8 +1119,8 @@ def _css() -> str:
         margin: 0 auto;
     }
     .deliv-card.deliv-auto {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.06);
+        background: #F5F5F5;
+        border: 1px solid #E8E8E8;
         border-radius: 0;
         clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
         padding: 0.55rem 1rem;
@@ -1138,33 +1131,33 @@ def _css() -> str:
         animation-delay: calc(var(--d) * 3s);
     }
     @keyframes delivCycle {
-        0%      { opacity: 0.35; transform: scale(1); background: rgba(255,255,255,0.03);
-                  border-color: rgba(255,255,255,0.06); box-shadow: none; padding: 0.55rem 1rem; }
+        0%      { opacity: 0.35; transform: scale(1); background: #F5F5F5;
+                  border-color: #E8E8E8; box-shadow: none; padding: 0.55rem 1rem; }
         2%      { opacity: 1; transform: scale(1.04);
-                  background: rgba(249,115,22,0.08);
-                  border-color: rgba(249,115,22,0.5);
-                  box-shadow: inset 3px 0 0 #F97316, 0 0 22px rgba(249,115,22,0.15);
+                  background: rgba(0,160,233,0.08);
+                  border-color: rgba(0,160,233,0.5);
+                  box-shadow: inset 3px 0 0 #00A0E9, 0 0 22px rgba(0,160,233,0.15);
                   padding: 1rem 1.2rem; }
         14%     { opacity: 1; transform: scale(1.04);
-                  background: rgba(249,115,22,0.08);
-                  border-color: rgba(249,115,22,0.5);
-                  box-shadow: inset 3px 0 0 #F97316, 0 0 22px rgba(249,115,22,0.15);
+                  background: rgba(0,160,233,0.08);
+                  border-color: rgba(0,160,233,0.5);
+                  box-shadow: inset 3px 0 0 #00A0E9, 0 0 22px rgba(0,160,233,0.15);
                   padding: 1rem 1.2rem; }
-        18%     { opacity: 0.35; transform: scale(1); background: rgba(255,255,255,0.03);
-                  border-color: rgba(255,255,255,0.06); box-shadow: none; padding: 0.55rem 1rem; }
-        100%    { opacity: 0.35; transform: scale(1); background: rgba(255,255,255,0.03);
-                  border-color: rgba(255,255,255,0.06); box-shadow: none; padding: 0.55rem 1rem; }
+        18%     { opacity: 0.35; transform: scale(1); background: #F5F5F5;
+                  border-color: #E8E8E8; box-shadow: none; padding: 0.55rem 1rem; }
+        100%    { opacity: 0.35; transform: scale(1); background: #F5F5F5;
+                  border-color: #E8E8E8; box-shadow: none; padding: 0.55rem 1rem; }
     }
     .deliv-card.deliv-auto .deliv-card-name {
         font-size: 1.05rem;
         font-weight: 700;
-        color: #8B95A5;
-        font-family: 'Share Tech Mono', monospace !important;
+        color: #999999;
+        font-family: 'Roboto Mono', monospace !important;
         transition: color 0.3s, font-size 0.3s;
     }
     .deliv-card.deliv-auto .deliv-card-desc {
         font-size: 0;
-        color: #C8D0DC;
+        color: #666666;
         max-height: 0;
         overflow: hidden;
         line-height: 1.5;

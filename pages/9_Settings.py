@@ -256,7 +256,7 @@ st.markdown(
 
     Built to help data teams ship production-ready data products in hours, not weeks.
 
-    - 🏗️ Guided wizard for data product definitions
+    - 🏗️ Guided workflow for data product definitions
     - 🤖 AI-powered requirements agent for non-technical users
     - 📊 Automatic artifact generation (DDL, dbt, policies, metadata)
     - 🔐 Enterprise security (PII masking, RLS, encryption)

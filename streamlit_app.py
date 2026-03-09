@@ -51,7 +51,7 @@ def _landing():
         "7 weeks of manual work to 1 guided session"
         "</div>"
         '<div class="landing-value">'
-        "A guided wizard that turns business requirements into production-ready "
+        "A guided workflow that turns business requirements into production-ready "
         "Snowflake DDL, dbt models, masking policies, and governance metadata — "
         "so data teams ship compliant data products in hours, not weeks."
         "</div>"
@@ -69,7 +69,7 @@ def _landing():
         '<div class="landing-arrow">to</div>'
         '<div class="landing-stat-card after">'
         '<div class="landing-stat-num">1</div>'
-        '<div class="landing-stat-label">guided wizard session</div>'
+        '<div class="landing-stat-label">guided workflow session</div>'
         "</div>"
         "</div>",
         unsafe_allow_html=True,
@@ -79,10 +79,10 @@ def _landing():
     st.markdown('<div class="hero-cta-wrap">', unsafe_allow_html=True)
     cta_col1, cta_col2, cta_col3 = st.columns([1, 1, 1])
     with cta_col1:
-        if st.button("🤖 AI Agent", key="ai_agent_cta", use_container_width=True):
+        if st.button("🧠 AI Agent", key="ai_agent_cta", use_container_width=True):
             st.page_link("pages/0_AI_Requirements_Agent.py", label="Start with AI Agent")
     with cta_col2:
-        if st.button("📋 Wizard", key="hero_cta", use_container_width=True):
+        if st.button("⚡ Workflow", key="hero_cta", use_container_width=True):
             st.session_state.onboard = 1
             st.rerun()
     with cta_col3:

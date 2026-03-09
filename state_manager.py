@@ -35,12 +35,12 @@ def initialize_state():
 
 
 def mark_step_complete(step_key):
-    """Mark a wizard step as completed."""
+    """Mark a workflow step as completed."""
     st.session_state.steps_completed.add(step_key)
 
 
 def get_progress(product):
-    """Compute wizard progress from actual product state."""
+    """Compute workflow progress from actual product state."""
     completed = st.session_state.get("steps_completed", set())
 
     steps = {
