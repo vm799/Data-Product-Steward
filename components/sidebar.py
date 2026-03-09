@@ -34,7 +34,7 @@ GLOSSARY = {
     ),
     "dbt": (
         "Data Build Tool — industry-standard framework for writing "
-        "and testing SQL transformations. The wizard generates "
+        "and testing SQL transformations. The workflow generates "
         "schema.yml and staging models you can deploy directly."
     ),
     "Lineage": (
@@ -67,7 +67,7 @@ GLOSSARY = {
         "which rows a user can see based on their role."
     ),
     "Collibra": (
-        "A data governance catalogue. The wizard exports a JSON "
+        "A data governance catalogue. The workflow exports a JSON "
         "import file with all your product metadata."
     ),
 }

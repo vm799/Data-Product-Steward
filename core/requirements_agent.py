@@ -203,7 +203,7 @@ You can now:
 2. **Export Definition** - Download as JSON for version control
 3. **Start Over** - Begin a new conversation for another data product
 
-Would you like to import this into the wizard builder or export it?
+Would you like to import this into the workflow builder or export it?
 """
         return summary.strip()
 
