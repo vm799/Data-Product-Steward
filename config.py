@@ -2,6 +2,8 @@
 Data Product Builder — Configuration
 """
 
+import os
+
 APP_CONFIG = {
     "title": "Data Product Builder — Asset Management",
     "icon": "📊",
@@ -38,3 +40,31 @@ SCORING_WEIGHTS = {
     "data_quality": 0.20,
     "transformations": 0.15,
 }
+
+# ── API Configuration ────────────────────────────────────────────────────
+
+# OpenAI API settings
+OPENAI_CONFIG = {
+    "api_key": os.getenv("OPENAI_API_KEY", ""),
+    "base_url": os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+    "model": os.getenv("OPENAI_MODEL", "gpt-4-turbo"),
+    "timeout": 30,
+    "max_retries": 3,
+}
+
+# Collibra API settings
+COLLIBRA_CONFIG = {
+    "base_url": os.getenv("COLLIBRA_BASE_URL", ""),
+    "username": os.getenv("COLLIBRA_USERNAME", ""),
+    "password": os.getenv("COLLIBRA_PASSWORD", ""),
+    "timeout": 30,
+    "max_retries": 3,
+    "verify_ssl": True,
+}
+
+# Caching settings for Collibra data
+CACHE_CONFIG = {
+    "ttl_seconds": 3600,  # 1 hour cache
+    "max_size_mb": 100,
+}
+
