@@ -1,35 +1,32 @@
 """
-Theme — dark glassmorphism, Space Grotesk + mono accent.
-Two palettes: TERMINAL (teal/orange) and ENTERPRISE (BlackRock green / Aladdin blue).
-Background stays dark in both modes — only accent colours change.
+Theme — Collibra-aligned design with dark glassmorphism.
+Primary colors: Collibra Navy (#003D82) and Light Blue (#0066CC).
 """
 
 import streamlit as st
 
-# ── Color mapping: enterprise overrides terminal defaults ──────────
-_ENTERPRISE_SWAPS = [
-    # (terminal, enterprise)
-    ("#2DD4BF", "#00B140"),   # teal  → BlackRock green
-    ("#22D3EE", "#33C464"),   # cyan  → lighter green
-    ("#5EEAD4", "#4DD978"),   # lt teal hover → lt green hover
-    ("#F97316", "#0078D4"),   # orange → Aladdin blue
-    ("#FB923C", "#3D9BE9"),   # lt orange → lt blue
-    ("45,212,191", "0,177,64"),   # teal rgb
-    ("249,115,22", "0,120,212"),  # orange rgb
-]
+# ── Collibra Brand Colors ────────────────────────────────────────
+COLLIBRA_COLORS = {
+    "navy": "#003D82",        # Primary brand color
+    "blue": "#0066CC",        # Secondary brand color
+    "light_blue": "#00A0E9",  # Accent/hover color
+    "white": "#FFFFFF",       # Text on dark
+    "gray_light": "#E0E0E0",  # Light borders
+    "gray_dark": "#1A1A1A",   # Dark backgrounds
+}
 
-
+# Maintain consistency with Collibra palette
 def _get_theme() -> str:
-    return st.session_state.get("theme", "terminal")
+    return "collibra"  # Single theme now
 
 
-# ── SVG data bot icon (inline, teal on transparent) ─────────────────
+# ── SVG data bot icon (Collibra navy/blue) ──────────────────────────
 _DATA_BOT_SVG_RAW = """
 <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" class="data-bot-svg">
   <defs>
-    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2DD4BF;stop-opacity:1"/>
-      <stop offset="100%" style="stop-color:#22D3EE;stop-opacity:1"/>
+    <linearGradient id="collibraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#003D82;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0066CC;stop-opacity:1"/>
     </linearGradient>
     <filter id="glow">
       <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -38,62 +35,66 @@ _DATA_BOT_SVG_RAW = """
   </defs>
 
   <!-- Antenna -->
-  <line x1="100" y1="12" x2="100" y2="38" stroke="#2DD4BF" stroke-width="2.5" opacity="0.7"/>
-  <circle cx="100" cy="10" r="5" fill="#2DD4BF" filter="url(#glow)" opacity="0.9"/>
+  <line x1="100" y1="12" x2="100" y2="38" stroke="#00A0E9" stroke-width="2.5" opacity="0.7"/>
+  <circle cx="100" cy="10" r="5" fill="#00A0E9" filter="url(#glow)" opacity="0.9"/>
 
   <!-- Head -->
   <rect x="40" y="38" width="120" height="90" rx="18" ry="18"
-        fill="none" stroke="url(#tealGrad)" stroke-width="2.5"/>
+        fill="none" stroke="url(#collibraGrad)" stroke-width="2.5"/>
 
   <!-- Visor / screen -->
   <rect x="55" y="52" width="90" height="50" rx="8" ry="8"
-        fill="rgba(45,212,191,0.08)" stroke="#2DD4BF" stroke-width="1.5"/>
+        fill="rgba(0,102,204,0.08)" stroke="#0066CC" stroke-width="1.5"/>
 
   <!-- Data lines on screen -->
-  <line x1="65" y1="65" x2="105" y2="65" stroke="#2DD4BF" stroke-width="2" opacity="0.8"/>
-  <line x1="65" y1="75" x2="130" y2="75" stroke="#22D3EE" stroke-width="2" opacity="0.5"/>
-  <line x1="65" y1="85" x2="115" y2="85" stroke="#2DD4BF" stroke-width="2" opacity="0.6"/>
-  <rect x="120" y="62" width="15" height="8" rx="2" fill="#2DD4BF" opacity="0.3"/>
-  <rect x="120" y="82" width="10" height="8" rx="2" fill="#22D3EE" opacity="0.3"/>
+  <line x1="65" y1="65" x2="105" y2="65" stroke="#00A0E9" stroke-width="2" opacity="0.8"/>
+  <line x1="65" y1="75" x2="130" y2="75" stroke="#0066CC" stroke-width="2" opacity="0.5"/>
+  <line x1="65" y1="85" x2="115" y2="85" stroke="#00A0E9" stroke-width="2" opacity="0.6"/>
+  <rect x="120" y="62" width="15" height="8" rx="2" fill="#00A0E9" opacity="0.3"/>
+  <rect x="120" y="82" width="10" height="8" rx="2" fill="#0066CC" opacity="0.3"/>
 
   <!-- Eyes -->
-  <circle cx="78" cy="70" r="3.5" fill="#2DD4BF" filter="url(#glow)"/>
-  <circle cx="122" cy="70" r="3.5" fill="#22D3EE" filter="url(#glow)"/>
+  <circle cx="78" cy="70" r="3.5" fill="#00A0E9" filter="url(#glow)"/>
+  <circle cx="122" cy="70" r="3.5" fill="#0066CC" filter="url(#glow)"/>
 
   <!-- Body -->
   <rect x="55" y="138" width="90" height="55" rx="12" ry="12"
-        fill="none" stroke="url(#tealGrad)" stroke-width="2"/>
+        fill="none" stroke="url(#collibraGrad)" stroke-width="2"/>
 
   <!-- Neck connector -->
   <rect x="85" y="128" width="30" height="14" rx="4"
-        fill="rgba(45,212,191,0.1)" stroke="#2DD4BF" stroke-width="1.5"/>
+        fill="rgba(0,102,204,0.1)" stroke="#0066CC" stroke-width="1.5"/>
 
   <!-- Body circuit lines -->
-  <line x1="75" y1="155" x2="95" y2="155" stroke="#2DD4BF" stroke-width="1.5" opacity="0.5"/>
-  <line x1="105" y1="155" x2="125" y2="155" stroke="#22D3EE" stroke-width="1.5" opacity="0.5"/>
-  <circle cx="100" cy="155" r="4" fill="none" stroke="#2DD4BF" stroke-width="1.5" opacity="0.7"/>
-  <line x1="75" y1="168" x2="125" y2="168" stroke="#2DD4BF" stroke-width="1" opacity="0.3"/>
-  <line x1="75" y1="178" x2="110" y2="178" stroke="#22D3EE" stroke-width="1" opacity="0.3"/>
+  <line x1="75" y1="155" x2="95" y2="155" stroke="#00A0E9" stroke-width="1.5" opacity="0.5"/>
+  <line x1="105" y1="155" x2="125" y2="155" stroke="#0066CC" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="100" cy="155" r="4" fill="none" stroke="#00A0E9" stroke-width="1.5" opacity="0.7"/>
+  <line x1="75" y1="168" x2="125" y2="168" stroke="#00A0E9" stroke-width="1" opacity="0.3"/>
+  <line x1="75" y1="178" x2="110" y2="178" stroke="#0066CC" stroke-width="1" opacity="0.3"/>
 
   <!-- Side nodes -->
-  <circle cx="32" cy="80" r="4" fill="none" stroke="#2DD4BF" stroke-width="1.5" opacity="0.5"/>
-  <line x1="36" y1="80" x2="40" y2="80" stroke="#2DD4BF" stroke-width="1.5" opacity="0.5"/>
-  <circle cx="168" cy="80" r="4" fill="none" stroke="#22D3EE" stroke-width="1.5" opacity="0.5"/>
-  <line x1="160" y1="80" x2="164" y2="80" stroke="#22D3EE" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="32" cy="80" r="4" fill="none" stroke="#00A0E9" stroke-width="1.5" opacity="0.5"/>
+  <line x1="36" y1="80" x2="40" y2="80" stroke="#00A0E9" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="168" cy="80" r="4" fill="none" stroke="#0066CC" stroke-width="1.5" opacity="0.5"/>
+  <line x1="160" y1="80" x2="164" y2="80" stroke="#0066CC" stroke-width="1.5" opacity="0.5"/>
 
   <!-- Base -->
   <rect x="70" y="198" width="60" height="8" rx="4"
-        fill="rgba(45,212,191,0.15)" stroke="#2DD4BF" stroke-width="1"/>
+        fill="rgba(0,102,204,0.15)" stroke="#00A0E9" stroke-width="1"/>
 </svg>
 """
 
 
 def _apply_theme(raw: str) -> str:
-    """Swap terminal colours for enterprise colours when active."""
-    if _get_theme() != "enterprise":
-        return raw
-    for old, new in _ENTERPRISE_SWAPS:
-        raw = raw.replace(old, new)
+    """Apply Collibra theme colors."""
+    # Swap teal/orange to Collibra navy/blue
+    raw = raw.replace("#2DD4BF", COLLIBRA_COLORS["light_blue"])  # teal → light blue
+    raw = raw.replace("#22D3EE", COLLIBRA_COLORS["blue"])        # cyan → blue
+    raw = raw.replace("#5EEAD4", COLLIBRA_COLORS["light_blue"])  # lt teal → light blue
+    raw = raw.replace("#F97316", COLLIBRA_COLORS["navy"])        # orange → navy
+    raw = raw.replace("#FB923C", COLLIBRA_COLORS["blue"])        # lt orange → blue
+    raw = raw.replace("45,212,191", "0,102,204")                 # teal rgb → blue rgb
+    raw = raw.replace("249,115,22", "0,61,130")                  # orange rgb → navy rgb
     return raw
 
 
