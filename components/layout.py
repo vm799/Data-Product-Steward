@@ -11,7 +11,7 @@ COLLIBRA_COLORS = {
     "blue": "#0066CC",        # Secondary brand color
     "light_blue": "#00A0E9",  # Teal accent/hover color
     "white": "#FFFFFF",       # Clean white background
-    "gray_light": "#F5F5F5",  # Light gray for subtle elements
+    "gray_light": "#F0F7FF",  # Modern light blue for subtle elements
     "gray_dark": "#333333",   # Dark text on light
     "teal": "#00A0E9",        # Teal accent
     "green": "#00B050",       # Green accent
@@ -150,7 +150,7 @@ def _css() -> str:
     .top-progress-bar {
         width: 100%;
         height: 6px;
-        background: #E8E8E8;
+        background: #D4E8FF;
         border-radius: 3px;
         overflow: hidden;
         margin-bottom: 0.25rem;
@@ -259,7 +259,7 @@ def _css() -> str:
     /* Dropdown menu — light background */
     [data-baseweb="popover"] [data-baseweb="menu"],
     [data-baseweb="popover"] ul {
-        background: #F5F5F5 !important;
+        background: #F0F7FF !important;
         border: 1px solid #00A0E9 !important;
     }
     [data-baseweb="popover"] li {
@@ -273,10 +273,10 @@ def _css() -> str:
 
     /* ── Metrics ────────────────────────────────────── */
     [data-testid="stMetric"] {
-        background: #F9F9F9;
+        background: #F0F7FF;
         padding: 0.9rem 1rem;
         border-radius: 0.75rem;
-        border: 1px solid #E0E0E0;
+        border: 1px solid #D4E8FF;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     [data-testid="stMetric"] label {
@@ -293,7 +293,7 @@ def _css() -> str:
 
     /* ── Progress bar ───────────────────────────────── */
     .stProgress > div > div > div {
-        background: linear-gradient(135deg, #2DD4BF 0%, #22D3EE 100%) !important;
+        background: linear-gradient(135deg, #00A0E9 0%, #0066CC 100%) !important;
     }
     .stProgress > div > div {
         background: rgba(45,212,191,0.08) !important;
@@ -303,8 +303,8 @@ def _css() -> str:
        WORKFLOW PANEL — clean light style
        ═══════════════════════════════════════════════════ */
     .workflow-panel {
-        background: #F9F9F9;
-        border: 1px solid #E0E0E0;
+        background: #F0F7FF;
+        border: 1px solid #D4E8FF;
         border-radius: 0.75rem;
         padding: 1.5rem;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -334,8 +334,8 @@ def _css() -> str:
        SIDEBAR — clean corporate white
        ═══════════════════════════════════════════════════ */
     section[data-testid="stSidebar"] {
-        background: #F5F5F5 !important;
-        border-right: 1px solid #E0E0E0 !important;
+        background: #F0F7FF !important;
+        border-right: 1px solid #D4E8FF !important;
         font-size: 1.05rem;
     }
     section[data-testid="stSidebar"] * { color: #333333 !important; }
@@ -356,7 +356,7 @@ def _css() -> str:
     section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] * {
         color: #666666 !important;
     }
-    section[data-testid="stSidebar"] hr { border-color: #E0E0E0 !important; }
+    section[data-testid="stSidebar"] hr { border-color: #D4E8FF !important; }
     section[data-testid="stSidebar"] .stProgress > div > div > div {
         background: linear-gradient(135deg, #00A0E9 0%, #0066CC 100%) !important;
     }
@@ -735,10 +735,10 @@ def _css() -> str:
         letter-spacing: 0.03em;
         white-space: nowrap;
     }
-    /* Current step — solid orange */
+    /* Current step — solid blue */
     .step-pip.current .pip-circle {
-        background: #F97316;
-        border-color: #F97316;
+        background: #0066CC;
+        border-color: #0066CC;
         color: #fff;
         box-shadow: 0 0 14px rgba(249,115,22,0.5);
     }
@@ -773,7 +773,7 @@ def _css() -> str:
         flex-shrink: 0;
     }
     .pip-line.done {
-        background: #2DD4BF;
+        background: #00A0E9;
     }
     @keyframes pulse-next {
         0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.35); }
@@ -857,8 +857,8 @@ def _css() -> str:
     }
     .guide-page h2 { text-align: center; margin-bottom: 0.6rem !important; }
     .guide-panel {
-        background: #F9F9F9;
-        border: 1px solid #E0E0E0;
+        background: #F0F7FF;
+        border: 1px solid #D4E8FF;
         border-radius: 0.75rem;
         padding: 1.5rem;
         min-height: 280px;
@@ -884,7 +884,7 @@ def _css() -> str:
        ═══════════════════════════════════════════════════ */
     .wiz-thin-rule {
         border: none;
-        border-top: 1px solid #E0E0E0;
+        border-top: 1px solid #D4E8FF;
         margin: 0.4rem 0 1.2rem 0;
     }
 
@@ -962,8 +962,8 @@ def _css() -> str:
     .wiz-step-pending-num {
         flex-shrink: 0;
         width: 24px; height: 24px; border-radius: 50%;
-        background: #F5F5F5;
-        border: 1px solid #E0E0E0;
+        background: #F0F7FF;
+        border: 1px solid #D4E8FF;
         color: #999999;
         font-size: 0.75rem; font-weight: 600;
         display: inline-flex; align-items: center; justify-content: center;
@@ -976,8 +976,8 @@ def _css() -> str:
     .deliv-row { display: flex; gap: 0.75rem; margin: 0.4rem 0; }
     .deliv-item {
         flex: 1;
-        background: #F9F9F9;
-        border: 1px solid #E0E0E0;
+        background: #F0F7FF;
+        border: 1px solid #D4E8FF;
         border-radius: 0.5rem;
         padding: 0.8rem 1rem;
         font-size: 1rem; line-height: 1.55;
@@ -1065,8 +1065,8 @@ def _css() -> str:
         margin: 1.5rem auto 0.8rem auto;
     }
     .landing-stat-card {
-        background: #F9F9F9;
-        border: 1px solid #E0E0E0;
+        background: #F0F7FF;
+        border: 1px solid #D4E8FF;
         border-radius: 0;
         clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
         padding: 1.2rem 1.5rem;
@@ -1119,8 +1119,8 @@ def _css() -> str:
         margin: 0 auto;
     }
     .deliv-card.deliv-auto {
-        background: #F5F5F5;
-        border: 1px solid #E8E8E8;
+        background: #F0F7FF;
+        border: 1px solid #D4E8FF;
         border-radius: 0;
         clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
         padding: 0.55rem 1rem;
@@ -1131,8 +1131,8 @@ def _css() -> str:
         animation-delay: calc(var(--d) * 3s);
     }
     @keyframes delivCycle {
-        0%      { opacity: 0.35; transform: scale(1); background: #F5F5F5;
-                  border-color: #E8E8E8; box-shadow: none; padding: 0.55rem 1rem; }
+        0%      { opacity: 0.35; transform: scale(1); background: #F0F7FF;
+                  border-color: #D4E8FF; box-shadow: none; padding: 0.55rem 1rem; }
         2%      { opacity: 1; transform: scale(1.04);
                   background: rgba(0,160,233,0.08);
                   border-color: rgba(0,160,233,0.5);
@@ -1143,10 +1143,10 @@ def _css() -> str:
                   border-color: rgba(0,160,233,0.5);
                   box-shadow: inset 3px 0 0 #00A0E9, 0 0 22px rgba(0,160,233,0.15);
                   padding: 1rem 1.2rem; }
-        18%     { opacity: 0.35; transform: scale(1); background: #F5F5F5;
-                  border-color: #E8E8E8; box-shadow: none; padding: 0.55rem 1rem; }
-        100%    { opacity: 0.35; transform: scale(1); background: #F5F5F5;
-                  border-color: #E8E8E8; box-shadow: none; padding: 0.55rem 1rem; }
+        18%     { opacity: 0.35; transform: scale(1); background: #F0F7FF;
+                  border-color: #D4E8FF; box-shadow: none; padding: 0.55rem 1rem; }
+        100%    { opacity: 0.35; transform: scale(1); background: #F0F7FF;
+                  border-color: #D4E8FF; box-shadow: none; padding: 0.55rem 1rem; }
     }
     .deliv-card.deliv-auto .deliv-card-name {
         font-size: 1.05rem;
@@ -1278,8 +1278,8 @@ def _css() -> str:
         transition: background 0.3s, color 0.3s;
     }
     .sm-section.active .sm-callout {
-        background: #2DD4BF; color: #06080D;
-        box-shadow: 0 0 10px rgba(45,212,191,0.5);
+        background: #00A0E9; color: #FFFFFF;
+        box-shadow: 0 0 10px rgba(0,160,233,0.3);
     }
     .sm-brand {
         font-family: 'Share Tech Mono', monospace !important;
@@ -1297,7 +1297,7 @@ def _css() -> str:
         border-radius: 3px; margin-bottom: 0.2rem;
     }
     .sm-bar-fill {
-        background: linear-gradient(135deg, #2DD4BF, #22D3EE);
+        background: linear-gradient(135deg, #00A0E9, #0066CC);
         height: 100%; width: 28%; border-radius: 3px;
     }
     .sm-bar-text { font-size: 0.8rem; color: #5A6478; }
@@ -1358,7 +1358,7 @@ def _css() -> str:
     .sm-explain-item b { color: #E8ECF1 !important; }
     .sm-explain-num {
         flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
-        background: #2DD4BF; color: #06080D;
+        background: #00A0E9; color: #FFFFFF;
         font-size: 0.7rem; font-weight: 700;
         display: inline-flex; align-items: center; justify-content: center;
     }
